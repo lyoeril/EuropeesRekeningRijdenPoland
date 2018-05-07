@@ -12,4 +12,5 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 Simulator/target/
 RegistratieCentrale/target/
-/RegistratieCentrale/nbproject/
+RegistratieCentrale/nbproject/
+Rekeningadministratie_Overheid/target/
