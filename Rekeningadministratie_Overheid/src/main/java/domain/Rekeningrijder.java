@@ -8,22 +8,33 @@ package domain;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Laurent
  */
+
+@Entity
 public class Rekeningrijder {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String address;
     private boolean useRRApp;
     
+    @OneToMany
     private List<Invoice> invoices;
+    
+    @OneToMany
     private List<Vehicle> ownedVehicles;
     
-
     public Rekeningrijder(String name, String address, boolean useRRApp) {
         this.name = name;
         this.address = address;

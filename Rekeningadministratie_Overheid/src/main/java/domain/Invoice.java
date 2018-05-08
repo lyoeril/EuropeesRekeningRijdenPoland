@@ -8,9 +8,12 @@ package domain;
 import enums.InvoiceStatus;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -31,12 +34,17 @@ public class Invoice {
     @Temporal(TemporalType.DATE)
     private Date date;
     
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
+    
+    @ManyToOne
+    private Rekeningrijder rekeningrijder;
 
-    public Invoice(long carTrackerId, double totalAmount, Date date) {
+    public Invoice(long carTrackerId, double totalAmount, Date date, Rekeningrijder rekeningrijder) {
         this.carTrackerId = carTrackerId;
         this.totalAmount = totalAmount;
         this.date = date;
+        this.rekeningrijder = rekeningrijder;
         status = InvoiceStatus.OPEN;
     }
 
@@ -79,6 +87,16 @@ public class Invoice {
     public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
+
+    public Rekeningrijder getRekeningrijder() {
+        return rekeningrijder;
+    }
+
+    public void setRekeningrijder(Rekeningrijder rekeningrijder) {
+        this.rekeningrijder = rekeningrijder;
+    }
+    
+    
     
     
 }
