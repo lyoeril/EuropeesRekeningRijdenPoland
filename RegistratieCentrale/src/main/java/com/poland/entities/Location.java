@@ -1,5 +1,6 @@
 package com.poland.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
  * @author PC-YOERI
  */
 @Entity
-public class Location {
+public class Location implements Serializable {
 
     @Id
     @Column(name = "id")
