@@ -12,26 +12,81 @@ import java.util.Queue;
  * @author Robin
  */
 public class Ride {
+
     private Long id;
-    /** Time traveled, in seconds, with each update */
+    /**
+     * Time traveled, in seconds, with each update
+     */
     private double defaultInterval = 5L;
     private DirectionsRoute plannedRoute;
     private DirectionsStep currentStep;
-    private Queue<LocationTimed> travelledRoute;
-    
+    private Queue<LocationTimed> traveledRoute;
+
     public Ride(DirectionsRoute plannedRoute) {
         // TODO robkor: ID?
         this.plannedRoute = plannedRoute;
         this.currentStep = this.plannedRoute.legs[0].steps[0];
-        this.travelledRoute = new PriorityQueue();
-        this.travelledRoute.add(new LocationTimed(currentStep.startLocation));
+        this.traveledRoute = new PriorityQueue();
+        this.traveledRoute.add(new LocationTimed(currentStep.startLocation));
     }
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocationTimed progress() {
+        LocationTimed nextLoc = calcNextLoc(defaultInterval);
+        traveledRoute.add(nextLoc);
+        return nextLoc;
+    }
+
+    private double calcPythagoras(double a, double b) {
+        // c
+        return Math.sqrt((Math.pow(a, 2) + Math.pow(b, 2)));
+    }
+
+    private double calcPythagoras(LatLng start, LatLng end) {
+        // a
+        double lat = end.lat - start.lat;
+        // b
+        double lng = end.lng - start.lng;
+        return calcPythagoras(lat, lng);
+    }
+
     /**
-     * Calculates the next step in the plannedRoute. 
-     * 
-     * @return The next step in this route. 
-     * @throws IndexOutOfBoundsException When there are no more steps. 
+     * Calculate the distance traveled of the currentStep in percentages.
+     *
+     * @return The distance traveled in percentages. Example: 0.83
+     */
+    private double calcStepProgressionPercent() {
+        LatLng currentLoc = traveledRoute.peek().getLocation();
+        // The total length of the step between two lat/lng points
+        double totalLen = calcPythagoras(currentStep.startLocation, currentStep.endLocation);
+        // The traveled length of the step between two lat/lng points
+        double traveledLen = calcPythagoras(currentStep.startLocation, currentLoc);
+        // The traveled length divided by the total length for the percentage (%)
+        double progression = traveledLen / totalLen;
+        return progression;
+    }
+
+    private LatLng calcStepProgressionLocation(double percent) {
+        double lat = currentStep.endLocation.lat - currentStep.startLocation.lat;
+        double lng = currentStep.endLocation.lng - currentStep.startLocation.lng;
+        double newLat = lat * percent;
+        double newLng = lng * percent;
+        LatLng newLoc = new LatLng(currentStep.startLocation.lat + newLat, currentStep.startLocation.lng + newLng);
+        return newLoc;
+    }
+
+    /**
+     * Calculates the next step in the plannedRoute.
+     *
+     * @return The next step in this route.
+     * @throws IndexOutOfBoundsException When there are no more steps.
      */
     private DirectionsStep calcNextStep() throws IndexOutOfBoundsException {
         DirectionsLeg currentLeg = plannedRoute.legs[0];
@@ -42,53 +97,19 @@ public class Ride {
         }
         throw new IndexOutOfBoundsException("The current route has been finished.");
     }
-    
-    public LocationTimed progress() {
-        return null;
-    }
-    
-    private double calcPythagoras(LatLng start, LatLng end) {
-        // a
-        double lat = end.lat - start.lat;
-        // b
-        double lng = end.lng - start.lng;
-        // c
-        double len = Math.sqrt((Math.pow(lat, 2) + Math.pow(lng, 2)));
-        return len;
-    }
-    
-    /**
-     * Calculate the distance traveled of the currentStep in percentages. 
-     * 
-     * @return The distance traveled in percentages. Example: 0.83
-     */
-    private double calcStepProgression() {
-        LatLng currentLoc = travelledRoute.peek().getLocation();
-        double plannedLen = calcPythagoras(currentStep.startLocation, currentStep.endLocation);
-        double travelledLen = calcPythagoras(currentStep.startLocation, currentLoc);
-        double progression = travelledLen / plannedLen;
-        return progression;
-    }
-    
-    private LocationTimed calcNextLoc(double timeTravelled) throws IndexOutOfBoundsException {
+
+    private LocationTimed calcNextLoc(double interval) throws IndexOutOfBoundsException {
         Long stepDuration = currentStep.duration.inSeconds;
-        double timeTraveled = calcStepProgression() * stepDuration + timeTravelled;
-        
-        if (stepDuration < timeTraveled) {
-            travelledRoute.add(new LocationTimed(currentStep.endLocation));
-            
+        double timeTraveled = stepDuration * calcStepProgressionPercent() + interval;
+
+        if (stepDuration <= timeTraveled) {
             // Throws IndexOutOfBoundsException
             currentStep = calcNextStep();
-            
-            calcNextLoc(timeTraveled - stepDuration);
-            return travelledRoute.peek();
-        }
-        if (stepDuration == timeTraveled) {
-            return travelledRoute.peek();
+            traveledRoute.add(new LocationTimed(currentStep.startLocation));
+            return calcNextLoc(timeTraveled - stepDuration);
         }
         
-        
-        
-        return null;
+        LatLng newLoc = calcStepProgressionLocation(timeTraveled / stepDuration);
+        return new LocationTimed(newLoc);
     }
 }
