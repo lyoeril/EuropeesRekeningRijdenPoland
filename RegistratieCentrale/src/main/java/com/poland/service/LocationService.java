@@ -27,8 +27,7 @@ public class LocationService {
 
     public LocationService() {
     }
-    
-    
+
     public List<Location> getLocationsByRideId(long id) {
         return locationDAO.findLocationsByRideId(id);
     }
@@ -51,7 +50,6 @@ public class LocationService {
     public boolean deleteLocation(long id) {
         try {
             Location location = locationDAO.find(id);
-        
 
             locationDAO.edit(location);
             locationDAO.remove(locationDAO.find(id));
@@ -60,5 +58,5 @@ public class LocationService {
             return false;
         }
     }
-    
+
 }

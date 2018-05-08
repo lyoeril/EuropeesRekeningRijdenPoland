@@ -11,6 +11,7 @@ import com.poland.entities.Ride;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 /**
  *
@@ -45,7 +46,23 @@ public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO 
 
     @Override
     public void removeRide(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            em.remove(id);
+        } catch (IllegalStateException ise) {
+            handleExceptions(ise);
+        }
     }
 
+    @Override
+    public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
+        Vehicle vehicle = null;
+        try {
+            Query q = em.createQuery("SELECT v FROM Vehicle v WHERE v.authorisationCode = :authorisationCode");
+            q.setParameter("authorisationCode", authorisationCode);
+            vehicle = (Vehicle) q.getSingleResult();
+        } catch (Exception ise) {
+            handleExceptions(ise);
+        }
+        return vehicle;
+    }
 }
