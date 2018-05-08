@@ -44,6 +44,11 @@ public class VehicleService {
         
         vehicleDAO.edit(vehicle);        
         vehicleDAO.addRide(ride);
+        
+    }
+    
+    public Vehicle getVehicleByAuthorisationCode(String authorisationCode){
+        return vehicleDAO.getVehicleByAuthorisationCode(authorisationCode);
     }
     
     public void removeRide(long id){
