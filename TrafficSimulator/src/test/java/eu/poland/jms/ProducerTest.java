@@ -24,6 +24,7 @@ import org.junit.Test;
 public class ProducerTest {
 
     private Producer msgQueueSender;
+    private String activeMQIp = "192.168.25.14";
 
     @Before
     public void setup() {
@@ -35,10 +36,10 @@ public class ProducerTest {
         msgQueueSender.close();
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void TestSendMsg() throws JMSException {
-        msgQueueSender.setup(false, false, "TestQueue");
+        msgQueueSender.setup("TestQueue");
         msgQueueSender.sendMessage("Test");
     }
 
@@ -47,7 +48,8 @@ public class ProducerTest {
         Gson gson = new Gson();
         LocationTimed location = new LocationTimed(new LatLng(1.1, 2.2));
         String msg = gson.toJson(location);
-        msgQueueSender.setup(false, false, "TestQueue1");
-        msgQueueSender.sendMessage(location.toString());
+        
+        msgQueueSender.setup("TestQueue");
+        msgQueueSender.sendMessage(msg);
     }
 }
