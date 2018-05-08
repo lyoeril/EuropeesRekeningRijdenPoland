@@ -10,7 +10,9 @@ import dao.interfaces.IInvoiceDAO;
 import domain.Invoice;
 import domain.Rekeningrijder;
 import domain.Vehicle;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -47,16 +49,16 @@ public class InvoiceService {
         return invoiceDAO.findByRekeningrijder(rekeningrijder);
     }
     
-    public List<Invoice> findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, Date date){
+    public List<Invoice> findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date){
         return invoiceDAO.findByRekeningrijderMonth(rekeningrijder, date);
     }
     
-    public List<Invoice> findInvoiceVehicleMonth(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle){
+    public List<Invoice> findInvoiceVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle){
         return invoiceDAO.findByVehicleMonth(rekeningrijder, date, vehicle);
     }
     
     private Invoice calculateInvoice(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle){
-        return new Invoice(1, 1, new Date(), rekeningrijder);
+        return new Invoice(1, 1, new GregorianCalendar(), rekeningrijder);
     }
 }
 

@@ -9,6 +9,7 @@ import dao.interfaces.IInvoiceDAO;
 import domain.Invoice;
 import domain.Rekeningrijder;
 import domain.Vehicle;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -62,7 +63,7 @@ public class InvoiceJPA implements IInvoiceDAO{
     }
 
     @Override
-    public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, Date date) {
+    public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -72,7 +73,7 @@ public class InvoiceJPA implements IInvoiceDAO{
     }
 
     @Override
-    public List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle) {
+    public List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

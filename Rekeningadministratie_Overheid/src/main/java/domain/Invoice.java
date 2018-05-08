@@ -6,7 +6,9 @@
 package domain;
 
 import enums.InvoiceStatus;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,7 +34,7 @@ public class Invoice {
     private double totalAmount;
     
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Calendar date;
     
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
@@ -40,7 +42,7 @@ public class Invoice {
     @ManyToOne
     private Rekeningrijder rekeningrijder;
 
-    public Invoice(long carTrackerId, double totalAmount, Date date, Rekeningrijder rekeningrijder) {
+    public Invoice(long carTrackerId, double totalAmount, Calendar date, Rekeningrijder rekeningrijder) {
         this.carTrackerId = carTrackerId;
         this.totalAmount = totalAmount;
         this.date = date;
@@ -72,11 +74,11 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 

@@ -6,6 +6,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +15,14 @@ import java.util.List;
  * @author Laurent
  */
 public class Ride {
+
     private long id;
-    private Date startDate;
-    private Date endDate;
-    
+    private Calendar startDate;
+    private Calendar endDate;
+
     private List<Location> locations;
 
-    public Ride(long id, Date startDate, Date endDate) {
+    public Ride(long id, Calendar startDate, Calendar endDate) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -35,19 +37,19 @@ public class Ride {
         this.id = id;
     }
 
-    public Date getStartDate() {
+    public Calendar getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Calendar startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Calendar getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
     }
 
@@ -58,6 +60,5 @@ public class Ride {
     public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
-    
-    
+
 }
