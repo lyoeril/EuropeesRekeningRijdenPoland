@@ -37,8 +37,12 @@ public class Ride {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public LocationTimed getCurrentLocation() {
+        return traveledRoute.peek();
+    }
 
-    public LocationTimed progress() {
+    public LocationTimed progress() throws IndexOutOfBoundsException {
         LocationTimed nextLoc = calcNextLoc(defaultInterval);
         traveledRoute.add(nextLoc);
         return nextLoc;
@@ -111,5 +115,10 @@ public class Ride {
         
         LatLng newLoc = calcStepProgressionLocation(timeTraveled / stepDuration);
         return new LocationTimed(newLoc);
+    }
+    
+    @Override
+    public String toString() {
+        return traveledRoute.toString();
     }
 }

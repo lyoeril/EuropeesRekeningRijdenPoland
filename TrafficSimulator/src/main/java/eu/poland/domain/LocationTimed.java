@@ -56,13 +56,13 @@ public class LocationTimed implements Comparable<LocationTimed> {
      * @param other The LocationTimed to be compared. 
      * @return The value 0 if the time represented by the argument is equal to
      * the time represented by this LocationTimed; a value less than 0 if the
-     * time of this LocationTimed is before the time represented by the 
+     * time of this LocationTimed is after the time represented by the 
      * argument; and a value greater than 0 if the time of this LocationTimed is
-     * after the time represented by the argument. 
+     * before the time represented by the argument. 
      */
     @Override
     public int compareTo(LocationTimed other) {
-        return this.date.compareTo(other.date);
+        return other.date.compareTo(this.date);
     }
     
     /**

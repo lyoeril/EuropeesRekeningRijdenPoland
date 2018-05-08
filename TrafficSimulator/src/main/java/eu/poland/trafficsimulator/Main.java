@@ -6,8 +6,10 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import eu.poland.domain.LocationTimed;
+import eu.poland.domain.Ride;
 import eu.poland.jms.Producer;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,14 +25,9 @@ import javax.jms.JMSException;
 public class Main {
 
     private static Properties props;
-
     private static String activeMQIp = "192.168.25.14";
 
-    public static void main(String[] args) throws JMSException {
-
-        Producer msgQueueSender = new Producer("tcp://" + activeMQIp + ":61616", "admin", "secret");
-        msgQueueSender.setup("TrafficQueue");
-
+    private static void initProps() {
         try {
             props = new Properties();
             InputStream in = ClassLoader.class.getResourceAsStream("/config.properties");
@@ -44,9 +41,23 @@ public class Main {
             System.out.println("Please ensure that the properties file contains an API key.");
             System.exit(1);
         }
+    }
+
+    public static void main(String[] args) throws JMSException {
+        initProps();
+        Producer msgQueueSender = new Producer("tcp://" + activeMQIp + ":61616", "admin", "secret");
+        msgQueueSender.setup("TrafficQueue");
 
         System.out.println("\nSimulation is starting. . .\n");
-
+        
+        System.out.println(getJsonRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)));
+        DirectionsRoute route = getRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)).routes[0];
+        Ride ride = new Ride(route);
+        System.out.println(ride.getCurrentLocation());
+        System.out.println(ride.progress());
+        System.out.println(ride.progress());
+        System.out.println(ride.progress());
+        
         try {
             for (double i = 0; i < 3; i++) {
                 double offset = i / 10;
@@ -54,43 +65,47 @@ public class Main {
 
                 msgQueueSender.sendMessage(output);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JMSException jex) {
+            jex.printStackTrace();
         } finally {
             msgQueueSender.close();
         }
 
         System.out.println("\nSimulation is stopping. . .");
     }
-
-    private static String getJsonRoute(LatLng origin, LatLng destination) {
+    
+    private static DirectionsResult getRoute(LatLng origin, LatLng destination) {
         // API key RDK: ERP2018
-        GeoApiContext context = new GeoApiContext.Builder()
+        GeoApiContext geoContext = new GeoApiContext.Builder()
                 .apiKey(props.getProperty("key"))
                 .build();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            DirectionsResult result = DirectionsApi.newRequest(context)
+            DirectionsResult result = DirectionsApi.newRequest(geoContext)
                     .origin(origin)
                     .destination(destination)
                     .await();
-            String json = gson.toJson(result);
-            return json;
-
+            return result;
         } catch (ApiException ex) {
             Logger.getLogger(Main.class
                     .getName()).log(Level.SEVERE, null, ex);
-            return "";
+            return null;
 
         } catch (InterruptedException ex) {
             Logger.getLogger(Main.class
                     .getName()).log(Level.SEVERE, null, ex);
-            return "";
+            return null;
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class
                     .getName()).log(Level.SEVERE, null, ex);
-            return "";
+            return null;
         }
+    }
+
+    private static String getJsonRoute(LatLng origin, LatLng destination) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        DirectionsResult result = getRoute(origin, destination);
+        String json = gson.toJson(result);
+        return json;
     }
 }
