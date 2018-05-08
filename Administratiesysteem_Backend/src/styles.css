@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+body
+{
+    margin:0;
+    padding:0;
+    background-color: #444;
+    background: url(https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/0kjHIH6/cute-and-puffy-cartoon-clouds-hovering-in-a-beautiful-blue-sky_bnjbcfrm__F0000.png);
+    background-repeat: no-repeat;
+    background-size:cover;
+}
