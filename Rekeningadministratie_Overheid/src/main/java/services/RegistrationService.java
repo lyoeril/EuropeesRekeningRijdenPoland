@@ -7,6 +7,8 @@ package services;
 
 import dao.interfaces.ICartrackerDAO;
 import dao.interfaces.IRekeningrijderDAO;
+import domain.Cartracker;
+import domain.Rekeningrijder;
 
 /**
  *
@@ -22,5 +24,40 @@ public class RegistrationService {
         this.iRekeningrijderDAO = iRekeningrijderDAO;
     }
     
+    //Rekeningrijder Management
     
+    public void addRekeningrijder(Rekeningrijder rekeningrijder){
+        iRekeningrijderDAO.create(rekeningrijder);
+    }
+    
+    public void updateRekeningrijder(Rekeningrijder rekeningrijder){
+        iRekeningrijderDAO.edit(rekeningrijder);
+    }
+    
+    public void deleteRekeningrijder(Rekeningrijder rekeningrijder){
+        iRekeningrijderDAO.delete(rekeningrijder);
+    }
+    
+    public Rekeningrijder findRekeningrijderById(long id){
+        return iRekeningrijderDAO.findById(id);
+    }
+    
+    
+    //Cartracker management
+    
+    public void addCartracker(Cartracker cartracker){
+        iCartrackerDAO.create(cartracker);
+    }
+    
+    public void updateCartracker(Cartracker cartracker){
+        iCartrackerDAO.edit(cartracker);
+    }
+    
+    public void deleteCartracker(Cartracker cartracker){
+        iCartrackerDAO.delete(cartracker);
+    }
+    
+    public Cartracker findCartrackerById(long id){
+        return iCartrackerDAO.findById(id);
+    }
 }
