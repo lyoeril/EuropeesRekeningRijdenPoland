@@ -37,11 +37,17 @@ public class RideService {
         }
     }
 
-    public void addLocation(Location location) {
-        throw new NotImplementedException();
+    public boolean addLocation(long rideId, long locationId) {
+        if (rideId != 0L && locationId > 0L) {
+            return rideDAO.addLocation(rideId, locationId);
+        }
+        return false;
     }
 
-    public void removeLocation(long id) {
-        throw new NotImplementedException();
+    public boolean removeLocation(long rideId, long locationId) {
+        if (rideId != 0L && locationId > 0L) {
+            return rideDAO.removeLocation(rideId, locationId);
+        }
+        return false;
     }
 }

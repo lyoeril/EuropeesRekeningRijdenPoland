@@ -7,7 +7,6 @@ package com.poland.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
@@ -26,7 +25,7 @@ public class Vehicle implements Serializable {
     @Column(name = "authorisationCode")
     private String authorisationCode;
 
-    @OneToMany(mappedBy = "vehicleId", cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "vehicle", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Ride> rides;
 
     public Vehicle() {

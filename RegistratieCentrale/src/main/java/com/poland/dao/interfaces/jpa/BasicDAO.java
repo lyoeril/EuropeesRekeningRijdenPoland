@@ -5,10 +5,6 @@
  */
 package com.poland.dao.interfaces.jpa;
 
-import java.util.List;
-import javax.persistence.EntityExistsException;
-import javax.persistence.RollbackException;
-
 /**
  *
  * @author PC-YOERI
@@ -22,10 +18,10 @@ public interface BasicDAO<T> {
     T find(long id);
 
     T edit(T entity);
-    
+
     int count();
-    
+
     void handleExceptions(Exception ex);
-    
+
     void cleanTable(boolean areYouSure);
 }

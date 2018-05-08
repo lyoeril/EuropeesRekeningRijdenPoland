@@ -5,9 +5,13 @@
  */
 package com.poland.service;
 
+import com.poland.entities.Location;
+import com.poland.entities.Ride;
+import com.poland.entities.Vehicle;
+import java.util.Date;
+import java.util.Random;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-
 
 /**
  *
@@ -26,7 +30,7 @@ public class RegistrationService {
         this.rideService = rideService;
         this.vehicleService = vehicleService;
     }
-    
+
     public RegistrationService() {
     }
 
@@ -53,5 +57,29 @@ public class RegistrationService {
     public void setVehicleService(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
-    
+
+    public boolean registerLocation(Date date, Double latitude, Double longitude, String authorisationCode) {
+        Vehicle vehicle = null;
+        if (authorisationCode != null && authorisationCode != "") {
+            vehicle = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
+        }
+        if (vehicle == null) {
+            vehicle = vehicleService.createVehicle(new Vehicle(authorisationCode));
+        }
+        /*
+        TO DO ride check
+         */
+        String serialNumber = new Random(125125126).toString();
+        Ride ride = new Ride(date, serialNumber, vehicle);
+        vehicleService.addRide(ride);
+
+        ride = rideService.findRideBySerialnumber(serialNumber);
+
+        Location location = new Location(date, latitude, longitude);
+        location = locationService.createLocation(location);
+
+        rideService.addLocation(ride.getId(), location.getId());
+        return true;
+    }
+
 }

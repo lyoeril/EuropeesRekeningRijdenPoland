@@ -1,0 +1,10 @@
+.profile-icon-image {
+  max-width: 100%;
+  width: auto;
+  border-radius: 50%;
+  border: 3px solid white;
+}
+
+textarea {
+  resize: none;
+}
