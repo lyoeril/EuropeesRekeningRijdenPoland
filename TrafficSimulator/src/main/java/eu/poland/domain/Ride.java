@@ -1,5 +1,6 @@
 package eu.poland.domain;
 
+import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.LatLng;
@@ -13,7 +14,7 @@ import java.util.Queue;
 public class Ride {
     private Long id;
     /** Time traveled, in seconds, with each update */
-    private Long interval = 5L;
+    private double defaultInterval = 5L;
     private DirectionsRoute plannedRoute;
     private DirectionsStep currentStep;
     private Queue<LocationTimed> travelledRoute;
@@ -24,6 +25,22 @@ public class Ride {
         this.currentStep = this.plannedRoute.legs[0].steps[0];
         this.travelledRoute = new PriorityQueue();
         this.travelledRoute.add(new LocationTimed(currentStep.startLocation));
+    }
+    
+    /**
+     * Calculates the next step in the plannedRoute. 
+     * 
+     * @return The next step in this route. 
+     * @throws IndexOutOfBoundsException When there are no more steps. 
+     */
+    private DirectionsStep calcNextStep() throws IndexOutOfBoundsException {
+        DirectionsLeg currentLeg = plannedRoute.legs[0];
+        for (int i = 0; i < currentLeg.steps.length; i++) {
+            if (currentLeg.steps[i].startLocation == currentStep.endLocation) {
+                return currentLeg.steps[i];
+            }
+        }
+        throw new IndexOutOfBoundsException("The current route has been finished.");
     }
     
     public LocationTimed progress() {
@@ -53,10 +70,25 @@ public class Ride {
         return progression;
     }
     
-    private LocationTimed calcNext() {
-        if (currentStep.duration.inSeconds < interval) {
+    private LocationTimed calcNextLoc(double timeTravelled) throws IndexOutOfBoundsException {
+        Long stepDuration = currentStep.duration.inSeconds;
+        double timeTraveled = calcStepProgression() * stepDuration + timeTravelled;
+        
+        if (stepDuration < timeTraveled) {
             travelledRoute.add(new LocationTimed(currentStep.endLocation));
+            
+            // Throws IndexOutOfBoundsException
+            currentStep = calcNextStep();
+            
+            calcNextLoc(timeTraveled - stepDuration);
+            return travelledRoute.peek();
         }
+        if (stepDuration == timeTraveled) {
+            return travelledRoute.peek();
+        }
+        
+        
+        
         return null;
     }
 }
