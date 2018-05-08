@@ -5,10 +5,16 @@
  */
 package eu.poland.jms;
 
+
+import com.google.maps.model.LatLng;
+import com.google.gson.Gson;
+
+import eu.poland.domain.LocationTimed;
 import javax.jms.JMSException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -16,54 +22,32 @@ import org.junit.Test;
  * @author Bart
  */
 public class ProducerTest {
-    
+
     private Producer msgQueueSender;
 
-	@Before
-	public void setup() {
-		msgQueueSender = new Producer("tcp://localhost:61616", "admin", "admin");
-	}
+    @Before
+    public void setup() {
+        msgQueueSender = new Producer("tcp://localhost:61616", "admin", "admin");
+    }
 
-	@After
-	public void cleanup() throws JMSException {
-		msgQueueSender.close();
-	}
+    @After
+    public void cleanup() throws JMSException {
+        msgQueueSender.close();
+    }
 
-	@Test
-	public void send_msg_to_no_transaction_Queue() throws JMSException {
-		msgQueueSender.setup(false, false, DataUtil.TEST_GROUP1_QUEUE_1);
-		msgQueueSender.sendMessage("JCG");
-	}
+    @Ignore
+    @Test
+    public void TestSendMsg() throws JMSException {
+        msgQueueSender.setup(false, false, "TestQueue");
+        msgQueueSender.sendMessage("Test");
+    }
 
-	@Test
-	public void send_msg_to_Group2_Queue1() throws JMSException {
-		msgQueueSender.setup(false, false, DataUtil.TEST_GROUP2_QUEUE_1);
-		msgQueueSender.sendMessage("JCG");
-	}
-
-	@Test
-	public void send_msg_to_transaction_Group1_Queue2() throws JMSException {
-		msgQueueSender.setup(true, false, DataUtil.TEST_GROUP1_QUEUE_2);
-		msgQueueSender.sendMessage("DEMO");
-		msgQueueSender.commit(true);
-	}
-
-	@Test
-	public void send_msg_to_no_transaction_Group1_Topic() throws JMSException {
-		msgQueueSender.setup(false, true, DataUtil.TEST_GROUP1_TOPIC);
-		msgQueueSender.sendMessage("MZHENG");
-	}
-
-	@Test
-	public void send_msg_to_Virtual_Topic() throws JMSException {
-		msgQueueSender.setup(false, true, DataUtil.CUSTOMER_VTC_TOPIC);
-		msgQueueSender.sendMessage("MZHENG");
-	}
-
-	@Test
-	public void send_msg_to_Virtual_Topic_WithSelector() throws JMSException {
-		msgQueueSender.setup(false, true, DataUtil.TEST_VTC_TOPIC_SELECTOR);
-		msgQueueSender.sendMessage("DZONE");
-	}
-    
+    @Test
+    public void TestSendObject() throws JMSException {
+        Gson gson = new Gson();
+        LocationTimed location = new LocationTimed(new LatLng(1.1, 2.2));
+        String msg = gson.toJson(location);
+        msgQueueSender.setup(false, false, "TestQueue1");
+        msgQueueSender.sendMessage(location.toString());
+    }
 }
