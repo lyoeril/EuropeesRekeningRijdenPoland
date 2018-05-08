@@ -9,6 +9,7 @@ import dao.interfaces.ICartrackerDAO;
 import dao.interfaces.IRekeningrijderDAO;
 import domain.Cartracker;
 import domain.Rekeningrijder;
+import javax.inject.Inject;
 
 /**
  *
@@ -16,7 +17,10 @@ import domain.Rekeningrijder;
  */
 public class RegistrationService {
     
+    @Inject
     private ICartrackerDAO iCartrackerDAO;
+    
+    @Inject
     private IRekeningrijderDAO iRekeningrijderDAO;
     
     public RegistrationService(IRekeningrijderDAO iRekeningrijderDAO, ICartrackerDAO iCartrackerDAO){
