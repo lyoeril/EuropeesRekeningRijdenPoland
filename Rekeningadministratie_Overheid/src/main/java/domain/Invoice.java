@@ -7,16 +7,28 @@ package domain;
 
 import enums.InvoiceStatus;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author Laurent
  */
+
+@Entity
 public class Invoice {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long invoiceNumber;
     private long carTrackerId;
     private double totalAmount;
+    
+    @Temporal(TemporalType.DATE)
     private Date date;
     
     private InvoiceStatus status;
