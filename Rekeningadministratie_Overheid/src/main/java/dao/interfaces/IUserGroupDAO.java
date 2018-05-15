@@ -3,7 +3,7 @@ package dao.interfaces;
 import domain.UserGroup;
 import java.util.List;
 
-public interface IUserGroup {
+public interface IUserGroupDAO {
 
     public List<UserGroup> findAll();
 
