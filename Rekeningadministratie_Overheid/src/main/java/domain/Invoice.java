@@ -6,25 +6,47 @@
 package domain;
 
 import enums.InvoiceStatus;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author Laurent
  */
+
+@Entity
 public class Invoice {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long invoiceNumber;
     private long carTrackerId;
     private double totalAmount;
-    private Date date;
     
+    @Temporal(TemporalType.DATE)
+    private Calendar date;
+    
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
+    
+    @ManyToOne
+    private Rekeningrijder rekeningrijder;
 
-    public Invoice(long carTrackerId, double totalAmount, Date date) {
+    public Invoice(long carTrackerId, double totalAmount, Calendar date, Rekeningrijder rekeningrijder) {
         this.carTrackerId = carTrackerId;
         this.totalAmount = totalAmount;
         this.date = date;
+        this.rekeningrijder = rekeningrijder;
         status = InvoiceStatus.OPEN;
     }
 
@@ -52,11 +74,11 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
@@ -67,6 +89,16 @@ public class Invoice {
     public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
+
+    public Rekeningrijder getRekeningrijder() {
+        return rekeningrijder;
+    }
+
+    public void setRekeningrijder(Rekeningrijder rekeningrijder) {
+        this.rekeningrijder = rekeningrijder;
+    }
+    
+    
     
     
 }

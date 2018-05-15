@@ -7,15 +7,26 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Laurent
  */
+
+@Entity
 public class Cartracker {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String hardware;
     
+    @OneToMany
     private List<Ride> rides;
 
     public Cartracker(String hardware) {
@@ -38,5 +49,15 @@ public class Cartracker {
     public void setHardware(String hardware) {
         this.hardware = hardware;
     }
+
+    public List<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
+    }
+    
+    
     
 }
