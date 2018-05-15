@@ -1,0 +1,13 @@
+.container {
+    background-color: white;
+    margin-bottom: 10px;
+}
+
+.shadow {
+    border-radius: 0 0 5px 5px;
+}
+
+.header-item {
+    margin-top: auto;
+    margin-bottom: auto;
+}

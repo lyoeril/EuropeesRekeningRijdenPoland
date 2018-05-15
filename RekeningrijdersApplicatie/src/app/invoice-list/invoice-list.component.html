@@ -1,0 +1,22 @@
+<div class="container shadow">
+    <h2>Invoices</h2>
+</div>
+<div class="table-container shadow">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Total Sum</th>
+                <th scope="col">Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let invoice of invoices" class="invoice" (click)="goToInvoice(invoice)">
+                <td>{{invoice.dateToString()}}</td>
+                <td>{{invoice.totalSumToString()}}</td>
+                <td *ngIf="invoice.paid">Yes</td>
+                <td *ngIf="!invoice.paid">No</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

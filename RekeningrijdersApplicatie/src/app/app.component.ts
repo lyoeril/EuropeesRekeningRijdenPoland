@@ -2,6 +2,9 @@
 
 import { Component } from '@angular/core';
 
+import fontawesome from '@fortawesome/fontawesome';
+import { faEnvelope, faUserCircle } from '@fortawesome/fontawesome-free-solid';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,4 +12,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor() {
+    fontawesome.library.add(faEnvelope, faUserCircle);
+  }
 }
