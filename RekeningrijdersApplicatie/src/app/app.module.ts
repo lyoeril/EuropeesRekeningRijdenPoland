@@ -15,6 +15,7 @@ import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { InvoiceListComponent } from './invoice-list/invoice-list.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { CarListComponent } from './car-list/car-list.component';
 
 // Services
 import { HttpService } from './_services/http.service';
@@ -28,7 +29,8 @@ import { HttpService } from './_services/http.service';
     HeaderComponent,
     UserComponent,
     InvoiceListComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    CarListComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,12 @@ export class Movement {
 
     car: Car;
 
-    constructor() {
+    constructor(_id: number, _startDate: Date, _endDate: Date, _startLocation: LatLng, _endLocation: LatLng, _car: Car) {
+        this.id = _id;
+        this.startDate = _startDate;
+        this.endDate = _endDate;
+        this.startLocation = _startLocation;
+        this.endLocation = _endLocation;
+        this.car = _car;
     }
 }

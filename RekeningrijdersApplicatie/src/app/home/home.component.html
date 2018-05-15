@@ -1,10 +1,12 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <app-user></app-user>
+            <app-user [user]="user"></app-user>
+            <br />
+            <app-car-list [cars]="user.cars"></app-car-list>
         </div>
         <div class="col-6">
-            <app-invoice-list></app-invoice-list>
+            <app-invoice-list [invoices]="user.invoices"></app-invoice-list>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@ export class Invoice {
     }
 
     dateToString(): string {
-        return moment(this.date).format('DD-MM-YYYY');
+        return moment(this.date).format('YYYY-MM');
     }
 
     totalSumToString(): string {

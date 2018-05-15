@@ -2,7 +2,8 @@ export class Car {
     id: number;
     licensePlate: string;
 
-    constructor() {
-
+    constructor(_id: number, _licensePlate: string) {
+        this.id = _id;
+        this.licensePlate = _licensePlate;
     }
 }

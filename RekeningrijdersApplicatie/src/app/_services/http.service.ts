@@ -67,6 +67,11 @@ export class HttpService {
         return null;
     }
 
+    // Invoices ==================================================================================== Invoices
+    getInvoice(body: any, options?: Headers): Promise<any> {
+        return null;
+    }
+
     // Other ========================================================================================== Other
     handleError(error) {
         const message = 'Http Error: ' + error.status + ' - ' + error.statusText;
