@@ -12,13 +12,14 @@ import java.util.Calendar;
  * @author Laurent
  */
 public class Location {
+
     private long id;
     private Calendar date;
     private double latitude;
     private double longitude;
-    
-    public Location(){
-        
+
+    public Location() {
+
     }
 
     public Location(long id, Calendar date, double latitude, double longitude) {
@@ -26,7 +27,7 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    
+
     public long getId() {
         return id;
     }
@@ -48,7 +49,13 @@ public class Location {
     }
 
     public void setLatitude(double latitude) {
-        this.latitude = latitude;
+        if (latitude > 90L) {
+            this.latitude = 90L;
+        } else if (latitude < -90L) {
+            this.latitude = -90L;
+        } else {
+            this.latitude = latitude;
+        }
     }
 
     public double getLongitude() {
@@ -56,8 +63,13 @@ public class Location {
     }
 
     public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        if (longitude > 180L) {
+            this.longitude = 180;
+        } else if (longitude < -180L) {
+            this.longitude = -180L;
+        } else {
+            this.longitude = longitude;
+        }
+
     }
-    
-    
 }
