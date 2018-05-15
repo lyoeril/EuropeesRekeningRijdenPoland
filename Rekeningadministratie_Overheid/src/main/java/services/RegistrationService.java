@@ -9,19 +9,25 @@ import dao.interfaces.ICartrackerDAO;
 import dao.interfaces.IRekeningrijderDAO;
 import domain.Cartracker;
 import domain.Rekeningrijder;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  *
  * @author Laurent
  */
+
+@Stateless
 public class RegistrationService {
     
     @Inject
-    private ICartrackerDAO iCartrackerDAO;
+    ICartrackerDAO iCartrackerDAO;
     
     @Inject
-    private IRekeningrijderDAO iRekeningrijderDAO;
+    IRekeningrijderDAO iRekeningrijderDAO;
+
+    public RegistrationService() {
+    }    
     
     public RegistrationService(IRekeningrijderDAO iRekeningrijderDAO, ICartrackerDAO iCartrackerDAO){
         this.iCartrackerDAO = iCartrackerDAO;

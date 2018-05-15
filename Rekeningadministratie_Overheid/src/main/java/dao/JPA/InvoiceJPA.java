@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -20,6 +21,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author Laurent
  */
+
+@Stateless
 public class InvoiceJPA implements IInvoiceDAO{
     private static final Logger LOGGER = Logger.getLogger(InvoiceJPA.class.getName());
     

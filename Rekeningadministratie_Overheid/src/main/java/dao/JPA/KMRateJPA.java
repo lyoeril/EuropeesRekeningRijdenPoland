@@ -9,6 +9,7 @@ import dao.interfaces.IKMRateDAO;
 import domain.KMRate;
 import enums.VehicleType;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,6 +17,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author Laurent
  */
+@Stateless
 public class KMRateJPA implements IKMRateDAO{
     private static final Logger LOGGER = Logger.getLogger(KMRateJPA.class.getName());
     

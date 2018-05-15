@@ -33,7 +33,7 @@ public class Invoice {
     private long carTrackerId;
     private double totalAmount;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
     
     @Enumerated(EnumType.STRING)

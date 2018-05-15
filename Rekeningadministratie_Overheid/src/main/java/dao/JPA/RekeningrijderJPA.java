@@ -8,6 +8,7 @@ package dao.JPA;
 import dao.interfaces.IRekeningrijderDAO;
 import domain.Rekeningrijder;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,6 +16,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author Laurent
  */
+
+@Stateless
 public class RekeningrijderJPA implements IRekeningrijderDAO{
 
     private static final Logger LOGGER = Logger.getLogger(RekeningrijderJPA.class.getName());
