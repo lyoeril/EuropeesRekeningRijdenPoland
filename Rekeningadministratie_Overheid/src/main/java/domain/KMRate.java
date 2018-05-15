@@ -5,10 +5,74 @@
  */
 package domain;
 
+import enums.VehicleType;
+import java.util.Map;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyJoinColumn;
+
 /**
  *
  * @author Laurent
  */
+
+@Entity
 public class KMRate {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String region;
+    
+    @ElementCollection
+    @CollectionTable(name = "KMRATE_VehicleType")
+    @MapKeyJoinColumn(name = "KMRATE_VALUE")
+    @Column(name = "KMRATE")
+    private Map<VehicleType, Double> ratePerVehicleType;
+
+    public KMRate(long id, String region) {
+        this.id = id;
+        this.region = region;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public Map<VehicleType, Double> getRatePerVehicleType() {
+        return ratePerVehicleType;
+    }
+
+    public void setRatePerVehicleType(Map<VehicleType, Double> ratePerVehicleType) {
+        this.ratePerVehicleType = ratePerVehicleType;
+    }
+    
+    public void addRatePerVehicleType(VehicleType vehicleType, double rate){
+        this.ratePerVehicleType.put(vehicleType, rate);
+    }
+    
+    public double getRateFromVehicleType(VehicleType vehicleType){
+        return this.ratePerVehicleType.get(vehicleType);
+    }
+    
+    
     
 }
