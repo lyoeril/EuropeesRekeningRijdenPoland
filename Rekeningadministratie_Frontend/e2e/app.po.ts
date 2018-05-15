@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class JEAKwetterPage {
+export class overheidPage {
   navigateTo() {
     return browser.get('/');
   }

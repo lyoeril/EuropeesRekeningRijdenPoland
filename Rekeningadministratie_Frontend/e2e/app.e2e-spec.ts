@@ -1,10 +1,10 @@
-import { JEAKwetterPage } from './app.po';
+import { overheidPage } from './app.po';
 
-describe('jeakwetter App', () => {
-  let page: JEAKwetterPage;
+describe('overheid App', () => {
+  let page: overheidPage;
 
   beforeEach(() => {
-    page = new JEAKwetterPage();
+    page = new overheidPage();
   });
 
   it('should display message saying app works', () => {
