@@ -18,7 +18,7 @@ public class UserJPA implements IUserDAO{
     
     private static final Logger LOGGER = Logger.getLogger(UserJPA.class.getName());
 
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em ;
 
     public UserJPA(){   
