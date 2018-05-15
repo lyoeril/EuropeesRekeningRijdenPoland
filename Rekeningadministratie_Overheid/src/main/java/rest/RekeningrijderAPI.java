@@ -8,6 +8,7 @@ package rest;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod.*;
 import javax.ws.rs.PUT;
@@ -47,7 +48,7 @@ public class RekeningrijderAPI {
 
     @GET
     @Path("invoices")
-    public Response getInvoices() {
+    public Response getInvoices(@FormParam("id") long id) {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
