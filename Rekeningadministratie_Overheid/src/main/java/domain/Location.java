@@ -23,6 +23,7 @@ public class Location {
     }
 
     public Location(long id, Calendar date, double latitude, double longitude) {
+        this.id = id;
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;

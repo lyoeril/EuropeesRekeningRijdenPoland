@@ -6,6 +6,7 @@
 package domain;
 
 import enums.VehicleType;
+import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -39,6 +40,7 @@ public class KMRate {
     public KMRate(long id, String region) {
         this.id = id;
         this.region = region;
+        ratePerVehicleType = new HashMap<>();
     }
 
     public long getId() {

@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod.*;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
@@ -32,6 +33,11 @@ public class RekeningrijderAPI {
     @Inject
     private RegistrationService registrationService;
     
+    @GET
+    public Response getRekeningrijder(){
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    
     @PUT
     @Path("update")
     @Consumes(APPLICATION_JSON)
@@ -47,13 +53,13 @@ public class RekeningrijderAPI {
 
     @GET
     @Path("invoices/{year}/{month}")
-    public Response getInvoicebyDate() {
+    public Response getInvoicebyDate(@PathParam("year") String year, @PathParam("month") String month) {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @PUT
     @Path("invoices/{year}/{month}/pay")
-    public Response payInvoice() {
+    public Response payInvoice(@PathParam("year") String year, @PathParam("month") String month) {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
@@ -65,7 +71,7 @@ public class RekeningrijderAPI {
     
     @GET
     @Path("cars/{carId}")
-    public Response getCar(){
+    public Response getCar(@PathParam("carId") long id){
         return Response.status(Response.Status.NOT_FOUND).build();
     }
     
