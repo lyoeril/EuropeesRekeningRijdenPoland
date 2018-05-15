@@ -14,12 +14,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  *
  * @author Laurent
  */
+
+@Stateless
 public class InvoiceService {
     
    @Inject
