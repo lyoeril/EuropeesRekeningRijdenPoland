@@ -13,7 +13,7 @@ import java.util.Queue;
  */
 public class Ride {
 
-    private Long id;
+    private String id;
     /**
      * Time traveled, in seconds, with each update
      */
@@ -22,19 +22,19 @@ public class Ride {
     private DirectionsStep currentStep;
     private Queue<LocationTimed> traveledRoute;
 
-    public Ride(DirectionsRoute plannedRoute) {
-        // TODO robkor: ID?
+    public Ride(String trackerId, DirectionsRoute plannedRoute) {
+        this.id = trackerId;
         this.plannedRoute = plannedRoute;
         this.currentStep = this.plannedRoute.legs[0].steps[0];
         this.traveledRoute = new PriorityQueue();
         this.traveledRoute.add(new LocationTimed(currentStep.startLocation));
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     

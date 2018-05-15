@@ -1,5 +1,6 @@
 package eu.poland.trafficsimulator;
 
+import threading.SimulationController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.DirectionsApi;
@@ -26,6 +27,8 @@ public class Main {
 
     private static Properties props;
     private static String activeMQIp = "192.168.25.14";
+    
+    private static SimulationController simulator;
 
     private static void initProps() {
         try {
@@ -44,23 +47,27 @@ public class Main {
     }
 
     public static void main(String[] args) throws JMSException {
+        System.out.println("Loading properties file. . .");
         initProps();
+        
+        System.out.println("Connecting to ActiveMQ server. . .");
         Producer msgQueueSender = new Producer("tcp://" + activeMQIp + ":61616", "admin", "secret");
         msgQueueSender.setup("TrafficQueue");
 
-        System.out.println("\nSimulation is starting. . .\n");
+        System.out.println("\nSimulator is starting. . .\n");
+        simulator = new SimulationController();
 
-        System.out.println(getJsonRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)));
+        /*System.out.println(getJsonRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)));
         DirectionsRoute route = getRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)).routes[0];
         Ride ride = new Ride(route);
         System.out.println(ride.getCurrentLocation());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 1000; i++) {
                     try {
                         System.out.println(ride.progress());
-                        Thread.sleep(1000);
+                        Thread.sleep(200);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -79,9 +86,9 @@ public class Main {
             jex.printStackTrace();
         } finally {
             msgQueueSender.close();
-        }
+        }*/
 
-        System.out.println("\nSimulation is stopping. . .");
+        System.out.println("\nSimulator is stopping. . .");
     }
 
     private static DirectionsResult getRoute(LatLng origin, LatLng destination) {
