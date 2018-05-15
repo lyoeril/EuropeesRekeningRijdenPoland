@@ -95,7 +95,7 @@ public class Ride {
     private DirectionsStep calcNextStep() throws IndexOutOfBoundsException {
         DirectionsLeg currentLeg = plannedRoute.legs[0];
         for (int i = 0; i < currentLeg.steps.length; i++) {
-            if (currentLeg.steps[i].startLocation == currentStep.endLocation) {
+            if (currentLeg.steps[i].startLocation.equals(currentStep.endLocation)) {
                 return currentLeg.steps[i];
             }
         }

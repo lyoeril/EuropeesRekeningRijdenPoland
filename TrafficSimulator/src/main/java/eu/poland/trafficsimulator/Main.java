@@ -49,15 +49,25 @@ public class Main {
         msgQueueSender.setup("TrafficQueue");
 
         System.out.println("\nSimulation is starting. . .\n");
-        
+
         System.out.println(getJsonRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)));
         DirectionsRoute route = getRoute(new LatLng(52.0828121, 17.0008908), new LatLng(51.8774911, 17.0028028)).routes[0];
         Ride ride = new Ride(route);
         System.out.println(ride.getCurrentLocation());
-        System.out.println(ride.progress());
-        System.out.println(ride.progress());
-        System.out.println(ride.progress());
-        
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 100; i++) {
+                    try {
+                        System.out.println(ride.progress());
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
+
         try {
             for (double i = 0; i < 3; i++) {
                 double offset = i / 10;
@@ -73,7 +83,7 @@ public class Main {
 
         System.out.println("\nSimulation is stopping. . .");
     }
-    
+
     private static DirectionsResult getRoute(LatLng origin, LatLng destination) {
         // API key RDK: ERP2018
         GeoApiContext geoContext = new GeoApiContext.Builder()
