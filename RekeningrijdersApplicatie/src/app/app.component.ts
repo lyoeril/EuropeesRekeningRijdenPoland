@@ -1,3 +1,5 @@
+/// <reference path="../../node_modules/moment/moment.d.ts"" />
+
 import { Component } from '@angular/core';
 
 @Component({
