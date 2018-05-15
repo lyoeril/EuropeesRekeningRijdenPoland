@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "jeakwetter": {
+    "overheid": {
       "root": "",
       "projectType": "application",
       "architect": {
@@ -56,18 +56,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "jeakwetter:build"
+            "browserTarget": "overheid:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "jeakwetter:build:production"
+              "browserTarget": "overheid:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "jeakwetter:build"
+            "browserTarget": "overheid:build"
           }
         },
         "test": {
@@ -110,7 +110,7 @@
         }
       }
     },
-    "jeakwetter-e2e": {
+    "overheid-e2e": {
       "root": "",
       "projectType": "application",
       "cli": {},
@@ -120,7 +120,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "jeakwetter:serve"
+            "devServerTarget": "overheid:serve"
           }
         },
         "lint": {
