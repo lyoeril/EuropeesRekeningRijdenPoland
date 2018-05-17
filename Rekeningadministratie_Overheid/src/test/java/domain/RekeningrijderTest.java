@@ -27,9 +27,9 @@ public class RekeningrijderTest {
     
     @Before
     public void setUp() {
-        r1 = new Rekeningrijder("name1", "address1", true);
+        r1 = new Rekeningrijder("username1", "password1", "address1", "email1");
         r1.setId(1L);
-        r2 = new Rekeningrijder("name2", "address2", false);
+        r2 = new Rekeningrijder("username2", "password2", "address2", "email2");
         r2.setId(2L);
     }
     
@@ -65,11 +65,11 @@ public class RekeningrijderTest {
      * Test of getName method, of class Rekeningrijder.
      */
     @Test
-    public void testGetName() {
+    public void testGetUsername() {
         System.out.println("getName");
         Rekeningrijder instance = r1;
-        String expResult = "name1";
-        String result = instance.getName();
+        String expResult = "username1";
+        String result = instance.getUsername();
         assertEquals(expResult, result);
     }
 
@@ -77,12 +77,12 @@ public class RekeningrijderTest {
      * Test of setName method, of class Rekeningrijder.
      */
     @Test
-    public void testSetName() {
+    public void testSetusername() {
         System.out.println("setName");
         String name = "name99";
         Rekeningrijder instance = r1;
-        instance.setName(name);
-        assertEquals(name, instance.getName());
+        instance.setUsername(name);
+        assertEquals(name, instance.getUsername());
     }
 
     /**
@@ -109,34 +109,7 @@ public class RekeningrijderTest {
         assertEquals(address, instance.getAddress());
         
     }
-
-    /**
-     * Test of isUseRRApp method, of class Rekeningrijder.
-     */
-    @Test
-    public void testIsUseRRApp() {
-        System.out.println("isUseRRApp");
-        Rekeningrijder instance = r1;
-        boolean result = instance.isUseRRApp();
-        assertTrue(result);
-        
-        instance = r2;
-        result = instance.isUseRRApp();
-        assertFalse(result);
-    }
-
-    /**
-     * Test of setUseRRApp method, of class Rekeningrijder.
-     */
-    @Test
-    public void testSetUseRRApp() {
-        System.out.println("setUseRRApp");
-        boolean useRRApp = false;
-        Rekeningrijder instance = r1;
-        instance.setUseRRApp(useRRApp);
-        assertFalse(instance.isUseRRApp());
-    }
-
+    
     /**
      * Test of getInvoices method, of class Rekeningrijder.
      */

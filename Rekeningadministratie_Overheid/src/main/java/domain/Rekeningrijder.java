@@ -8,61 +8,39 @@ package domain;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.json.bind.annotation.JsonbTransient;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
  *
  * @author Laurent
  */
-
 @Entity
-public class Rekeningrijder implements Serializable{
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String name;
+public class Rekeningrijder extends User implements Serializable {
+
     private String address;
-    private boolean useRRApp;
     
     @OneToMany
-    private List<Invoice> invoices;
+    private List<Invoice> invoices = new ArrayList<>();
     
-    @OneToMany
-    private List<Vehicle> ownedVehicles;
-    
-    //JPA
-    public Rekeningrijder(){
-        
+    @OneToMany      
+    private List<Vehicle> ownedVehicles = new ArrayList<>();
+
+    public Rekeningrijder() {
     }
-    
-    public Rekeningrijder(String name, String address, boolean useRRApp) {
-        this.name = name;
+
+    public Rekeningrijder(String username, String password, String address, String email) {
+        super(username, password, email);
         this.address = address;
-        this.useRRApp = useRRApp;
-        this.invoices = new ArrayList<>();
-        this.ownedVehicles = new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {
@@ -71,14 +49,6 @@ public class Rekeningrijder implements Serializable{
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isUseRRApp() {
-        return useRRApp;
-    }
-
-    public void setUseRRApp(boolean useRRApp) {
-        this.useRRApp = useRRApp;
     }
 
     public List<Invoice> getInvoices() {
@@ -98,4 +68,5 @@ public class Rekeningrijder implements Serializable{
     }
     
     
+
 }
