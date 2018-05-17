@@ -14,7 +14,8 @@
                 data-toggle="modal" data-target="#registerModal">{{ "register" | translate }}</button>
             <button *ngIf="session.getItem('userId') !== null" class="btn btn-outline-primary" style="float:right" (click)="logout()">{{ "logout" | translate }}</button>
         </div>
-        <div class="col-1 header-item">
+        <div class="col-2 header-item">
+            <a class="language" [class.selected]="usingLang === 'pl'" (click)="changeLang('pl')">PL</a>
             <a class="language" [class.selected]="usingLang === 'en'" (click)="changeLang('en')">EN</a>
             <a class="language" [class.selected]="usingLang === 'nl'" (click)="changeLang('nl')">NL</a>
         </div>

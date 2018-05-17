@@ -26,13 +26,13 @@ export class HeaderComponent implements OnInit {
     };
 
     constructor(public translate: TranslateService, private http: HttpService) {
-        translate.addLangs(['en', 'nl']);
-        translate.setDefaultLang('en');
+        translate.addLangs(['pl', 'en', 'nl']);
+        translate.setDefaultLang('pl');
 
         if (localStorage.getItem('lang') !== null) {
             this.changeLang(localStorage.getItem('lang'));
         } else {
-            this.changeLang('en');
+            this.changeLang('pl');
         }
     }
 
