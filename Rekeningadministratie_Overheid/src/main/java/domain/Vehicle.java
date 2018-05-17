@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Vehicle {
+public class Vehicle implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,11 @@ public class Vehicle {
     private VehicleType vehicleType;
     
     private String licensePlate;
+    
+    //JPA
+    public Vehicle(){
+        
+    }
 
     public Vehicle(VehicleType vehicleType, String licensePlate) {
         this.ownersHistory = new ArrayList<>();

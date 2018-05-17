@@ -6,6 +6,7 @@
 package domain;
 
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
  */
 
 @Entity
-public class Rekeningrijder {
+public class Rekeningrijder implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,11 @@ public class Rekeningrijder {
     
     @OneToMany
     private List<Vehicle> ownedVehicles;
+    
+    //JPA
+    public Rekeningrijder(){
+        
+    }
     
     public Rekeningrijder(String name, String address, boolean useRRApp) {
         this.name = name;

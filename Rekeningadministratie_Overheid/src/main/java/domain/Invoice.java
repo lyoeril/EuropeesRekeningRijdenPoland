@@ -6,6 +6,7 @@
 package domain;
 
 import enums.InvoiceStatus;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -25,7 +26,7 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
-public class Invoice {
+public class Invoice implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +42,11 @@ public class Invoice {
     
     @ManyToOne
     private Rekeningrijder rekeningrijder;
+    
+    //JPA
+    public Invoice(){
+        
+    }
 
     public Invoice(long carTrackerId, double totalAmount, Calendar date, Rekeningrijder rekeningrijder) {
         this.carTrackerId = carTrackerId;

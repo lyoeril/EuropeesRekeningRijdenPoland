@@ -5,6 +5,7 @@
  */
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -19,15 +20,19 @@ import javax.persistence.OneToMany;
  */
 
 @Entity
-public class Cartracker {
+public class Cartracker implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String hardware;
     
-    @OneToMany
     private List<Ride> rides;
+    
+    //JPA
+    public Cartracker(){
+        
+    }
 
     public Cartracker(String hardware) {
         this.hardware = hardware;

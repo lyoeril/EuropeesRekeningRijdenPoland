@@ -22,7 +22,7 @@ public class RekeningrijderJPA implements IRekeningrijderDAO{
 
     private static final Logger LOGGER = Logger.getLogger(RekeningrijderJPA.class.getName());
 
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em;
 
     public RekeningrijderJPA() {

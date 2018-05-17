@@ -6,6 +6,7 @@
 package domain;
 
 import enums.VehicleType;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.CollectionTable;
@@ -24,7 +25,7 @@ import javax.persistence.MapKeyJoinColumn;
  */
 
 @Entity
-public class KMRate {
+public class KMRate implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +37,11 @@ public class KMRate {
     @MapKeyJoinColumn(name = "KMRATE_VALUE")
     @Column(name = "KMRATE")
     private Map<VehicleType, Double> ratePerVehicleType;
+    
+    //JPA
+    public KMRate(){
+        
+    }
 
     public KMRate(long id, String region) {
         this.id = id;

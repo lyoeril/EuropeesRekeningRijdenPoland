@@ -21,7 +21,7 @@ import javax.persistence.PersistenceContext;
 public class KMRateJPA implements IKMRateDAO{
     private static final Logger LOGGER = Logger.getLogger(KMRateJPA.class.getName());
     
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em ;
 
     public KMRateJPA(){   

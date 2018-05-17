@@ -26,7 +26,7 @@ import javax.persistence.PersistenceContext;
 public class InvoiceJPA implements IInvoiceDAO{
     private static final Logger LOGGER = Logger.getLogger(InvoiceJPA.class.getName());
     
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em ;
 
     public InvoiceJPA(){   
