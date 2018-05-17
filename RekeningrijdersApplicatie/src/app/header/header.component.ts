@@ -29,13 +29,17 @@ export class HeaderComponent implements OnInit {
         translate.addLangs(['en', 'nl']);
         translate.setDefaultLang('en');
 
-        this.usingLang = 'en';
-        translate.use('en');
+        if (localStorage.getItem('lang') !== null) {
+            this.changeLang(localStorage.getItem('lang'));
+        } else {
+            this.changeLang('en');
+        }
     }
 
     changeLang(lang: string) {
         this.usingLang = lang;
         this.translate.use(lang);
+        localStorage.setItem('lang', lang);
     }
 
     ngOnInit() { }
