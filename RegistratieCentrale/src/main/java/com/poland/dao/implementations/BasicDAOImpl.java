@@ -112,12 +112,8 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
         try {
             String entityName = em.getMetamodel().entity(type).getName();
             em.createQuery("delete from " + entityName).executeUpdate();
-        } catch (IllegalStateException ise) {
+        } catch (Exception ise) {
             handleExceptions(ise);
-        } catch (RollbackException rbe) {
-            handleExceptions(rbe);
-        } catch (QueryTimeoutException qte) {
-            handleExceptions(qte);
         }
     }
 

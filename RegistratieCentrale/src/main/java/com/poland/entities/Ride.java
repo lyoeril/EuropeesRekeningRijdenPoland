@@ -16,6 +16,7 @@ import javax.persistence.*;
  * @author PC-YOERI
  */
 @Entity
+@Table(name = "t_ride")
 public class Ride implements Serializable {
 
     @Id
@@ -38,7 +39,7 @@ public class Ride implements Serializable {
     @JoinColumn(name = "vehicleId", nullable = false)
     private Vehicle vehicle;
 
-    @ElementCollection
+    @OneToMany(mappedBy = "ride", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Location> locations;
 
     public Ride() {

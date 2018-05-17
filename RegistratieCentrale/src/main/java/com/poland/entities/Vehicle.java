@@ -22,10 +22,10 @@ public class Vehicle implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "authorisationCode")
+    @Column(name = "authorisationCode", unique = true)
     private String authorisationCode;
 
-    @OneToMany(mappedBy = "vehicle", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ride> rides;
 
     public Vehicle() {

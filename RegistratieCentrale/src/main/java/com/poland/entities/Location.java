@@ -10,6 +10,7 @@ import javax.persistence.*;
  * @author PC-YOERI
  */
 @Entity
+@Table(name = "t_location")
 public class Location implements Serializable {
 
     @Id
@@ -27,13 +28,18 @@ public class Location implements Serializable {
     @Column(name = "longitude")
     private double longitude;
 
+    @ManyToOne
+    @JoinColumn(name = "rideId", nullable = false)
+    private Ride ride;
+
     public Location() {
     }
 
-    public Location(Date date, double latitude, double longitude) {
+    public Location(Date date, double latitude, double longitude, Ride ride) {
         setDate(date);
         setLatitude(latitude);
         setLongitude(longitude);
+        setRide(ride);
     }
 
     public long getId() {
@@ -79,4 +85,14 @@ public class Location implements Serializable {
             this.longitude = longitude;
         }
     }
+
+    public Ride getRide() {
+        return ride;
+    }
+
+    public void setRide(Ride ride) {
+        this.ride = ride;
+    }
+    
+    
 }

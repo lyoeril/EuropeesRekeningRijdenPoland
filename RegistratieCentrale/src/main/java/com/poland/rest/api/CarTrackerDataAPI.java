@@ -33,9 +33,9 @@ public class CarTrackerDataAPI {
     @Path("/post/update")
     @Produces({MediaType.APPLICATION_JSON})
     public Response registerLocation(@FormParam("id") long id, @FormParam("latitude") Double latitude, @FormParam("longitude") Double longitude) {
-        
-        Location location = new Location(new Date(), latitude, longitude);
-        location = registrationService.getLocationService().createLocation(location);
-        return Response.status(Response.Status.CREATED).entity(location).build();
+//        
+//        Location location = new Location(new Date(), latitude, longitude);
+//        location = registrationService.getLocationService().createLocation(location);
+        return Response.status(Response.Status.CREATED).build();
     }
 }

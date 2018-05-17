@@ -9,6 +9,7 @@ import com.poland.entities.Location;
 import com.poland.dao.interfaces.jpa.LocationDAO;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.Query;
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.Query;
  * @author PC-YOERI
  */
 @Stateless
+@Default
 public class LocationDAOImpl extends BasicDAOImpl<Location> implements LocationDAO {
 
     @Override

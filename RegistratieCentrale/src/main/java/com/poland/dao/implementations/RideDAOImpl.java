@@ -9,6 +9,7 @@ import com.poland.entities.Ride;
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Location;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.Query;
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.Query;
  * @author PC-YOERI
  */
 @Stateless
+@Default
 public class RideDAOImpl extends BasicDAOImpl<Ride> implements RideDAO {
 
     @Override

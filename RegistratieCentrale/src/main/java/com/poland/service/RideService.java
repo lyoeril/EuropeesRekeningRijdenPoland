@@ -6,11 +6,9 @@
 package com.poland.service;
 
 import com.poland.dao.interfaces.jpa.RideDAO;
-import com.poland.entities.Location;
 import com.poland.entities.Ride;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -49,5 +47,35 @@ public class RideService {
             return rideDAO.removeLocation(rideId, locationId);
         }
         return false;
+    }
+    
+    public Ride createRide(Ride ride) {
+        try {
+            if (rideDAO.find(ride.getId()) == null) {
+                return rideDAO.create(ride);
+            }
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+        return null;
+    }
+
+    public Ride editRide(Ride ride) {
+        return rideDAO.edit(ride);
+    }
+
+    public boolean deleteRide(long id) {
+        try {
+            Ride ride = rideDAO.find(id);
+
+            ride.getLocations().forEach((t) -> {
+                ride.removeLocation(t);
+            });
+            rideDAO.edit(ride);
+            rideDAO.remove(rideDAO.find(id));
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 }

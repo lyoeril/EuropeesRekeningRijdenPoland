@@ -29,42 +29,49 @@ public class VehicleService {
 
     public VehicleService() {
     }
-    
-    public Vehicle createVehicle(Vehicle vehicle){
-        return vehicleDAO.create(vehicle);
+
+    public Vehicle createVehicle(Vehicle vehicle) {
+        try {
+            if (vehicleDAO.getVehicleByAuthorisationCode(vehicle.getAuthorisationCode()) == null) {
+                return vehicleDAO.create(vehicle);
+            }
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+        return null;
     }
-    
-    public void removeVehicle(Vehicle vehicle){
+
+    public void removeVehicle(Vehicle vehicle) {
         vehicleDAO.remove(vehicle);
     }
-    
-    public void addRide(Ride ride){
+
+    public void addRide(Ride ride) {
         Vehicle vehicle = vehicleDAO.find(ride.getVehicle().getId());
         vehicle.getRides().add(ride);
-        
-        vehicleDAO.edit(vehicle);        
+
+        vehicleDAO.edit(vehicle);
         vehicleDAO.addRide(ride);
-        
+
     }
-    
-    public Vehicle getVehicleByAuthorisationCode(String authorisationCode){
+
+    public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
         return vehicleDAO.getVehicleByAuthorisationCode(authorisationCode);
     }
-    
-    public void removeRide(long id){
+
+    public void removeRide(long id) {
         vehicleDAO.removeRide(id);
     }
-    
-    public List<Ride> getAllRidesByVehicle(long id){
-        return vehicleDAO.getAllRidesByVehicleId(id);        
+
+    public List<Ride> getAllRidesByVehicle(long id) {
+        return vehicleDAO.getAllRidesByVehicleId(id);
     }
-    
-    public List<Ride> getRidesByDate(Date startDate, Date endDate, long id){
+
+    public List<Ride> getRidesByDate(Date startDate, Date endDate, long id) {
         return vehicleDAO.getRidesByDate(startDate, endDate, id);
     }
-    
-    public List<Ride> getAllFinishedRidesByVehicle(long id){
+
+    public List<Ride> getAllFinishedRidesByVehicle(long id) {
         return vehicleDAO.getAllFinishedRidesByVehicleId(id);
-    }  
+    }
 
 }

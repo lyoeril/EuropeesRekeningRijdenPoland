@@ -11,6 +11,7 @@ import com.poland.entities.Ride;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.Query;
 
 /**
@@ -18,6 +19,7 @@ import javax.persistence.Query;
  * @author PC-YOERI
  */
 @Stateless
+@Default
 public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO {
 
     @Override

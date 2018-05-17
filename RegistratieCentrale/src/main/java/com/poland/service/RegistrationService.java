@@ -71,11 +71,12 @@ public class RegistrationService {
          */
         String serialNumber = new Random(125125126).toString();
         Ride ride = new Ride(date, serialNumber, vehicle);
+        
         vehicleService.addRide(ride);
 
         ride = rideService.findRideBySerialnumber(serialNumber);
 
-        Location location = new Location(date, latitude, longitude);
+        Location location = new Location(date, latitude, longitude, ride);
         location = locationService.createLocation(location);
 
         rideService.addLocation(ride.getId(), location.getId());
