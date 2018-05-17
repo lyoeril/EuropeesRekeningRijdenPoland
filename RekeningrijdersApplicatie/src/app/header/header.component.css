@@ -11,3 +11,11 @@
     margin-top: auto;
     margin-bottom: auto;
 }
+
+.language {
+    cursor: pointer;
+}
+
+.selected {
+    font-weight: bold;
+}

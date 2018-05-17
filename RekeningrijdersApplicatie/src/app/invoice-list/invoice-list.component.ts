@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Invoice} from '../_model/Invoice';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invoice-list',
@@ -12,7 +13,7 @@ export class InvoiceListComponent implements OnInit {
 
     @Input() invoices: Invoice[];
 
-    constructor(private router: Router) {
+    constructor(public translate: TranslateService, private router: Router) {
     }
 
     ngOnInit() { }

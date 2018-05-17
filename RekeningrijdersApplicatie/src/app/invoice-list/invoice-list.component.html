@@ -1,21 +1,21 @@
 <div class="container shadow">
-    <h2>My Invoices</h2>
+    <h2>{{ "myinvoices" | translate }}</h2>
 </div>
 <div class="table-container shadow">
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Total Sum</th>
-                <th scope="col">Paid</th>
+                <th scope="col">{{ "date" | translate }}</th>
+                <th scope="col">{{ "totalsum" | translate }}</th>
+                <th scope="col">{{ "paid" | translate }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let invoice of invoices" class="invoice" (click)="goToInvoice(invoice)">
                 <td>{{invoice.dateToString()}}</td>
                 <td>{{invoice.totalSumToString()}}</td>
-                <td *ngIf="invoice.paid">Yes</td>
-                <td *ngIf="!invoice.paid">No</td>
+                <td *ngIf="invoice.paid">{{ "yes" | translate }}</td>
+                <td *ngIf="!invoice.paid">{{ "no" | translate }}</td>
             </tr>
         </tbody>
     </table>

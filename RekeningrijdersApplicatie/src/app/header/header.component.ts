@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../_services/http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-header',
@@ -11,6 +12,7 @@ import { HttpService } from '../_services/http.service';
 export class HeaderComponent implements OnInit {
 
     session = sessionStorage;
+    usingLang;
 
     usercreds = {
         username: '',
@@ -23,7 +25,17 @@ export class HeaderComponent implements OnInit {
         password: '',
     };
 
-    constructor(private http: HttpService) {
+    constructor(public translate: TranslateService, private http: HttpService) {
+        translate.addLangs(['en', 'nl']);
+        translate.setDefaultLang('en');
+
+        this.usingLang = 'en';
+        translate.use('en');
+    }
+
+    changeLang(lang: string) {
+        this.usingLang = lang;
+        this.translate.use(lang);
     }
 
     ngOnInit() { }

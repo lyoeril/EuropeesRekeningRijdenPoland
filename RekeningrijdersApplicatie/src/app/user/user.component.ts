@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../_model/User';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user',
@@ -10,7 +11,7 @@ import { User } from '../_model/User';
 export class UserComponent implements OnInit {
     @Input() user: User;
 
-    constructor() {
+    constructor(public translate: TranslateService) {
     }
 
     ngOnInit() { }

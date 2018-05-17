@@ -7,6 +7,7 @@ import { Vehicle } from '../_model/Vehicle';
 import { VehicleType } from '../_model/VehicleType';
 import * as moment from 'moment';
 import { HttpService } from '../_services/http.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invoice',
@@ -19,7 +20,9 @@ export class InvoiceComponent implements OnInit {
     invoice: Invoice = null;
 
 
-    constructor(private http: HttpService,
+    constructor(
+        public translate: TranslateService,
+        private http: HttpService,
         private route: ActivatedRoute) {
         this.route.params
             .subscribe((params: Params) => {

@@ -1,17 +1,17 @@
 <div class="container shadow">
-    <h2>User</h2>
+    <h2>{{ "mydata" | translate }}</h2>
 </div>
 <div class="container shadow">
     <div class="row">
-        <span class="fas fa-user-circle"></span>
+        <span class="fas fa-user-circle" title="{{ 'username' | translate }}"></span>
         {{user.username}}
     </div>
     <div class="row">
-        <span class="fas fa-envelope"></span>
+        <span class="fas fa-envelope" title="{{ 'email' | translate }}"></span>
         {{user.email}}
     </div>
     <div class="row">
-        <span class="fas fa-home"></span>
+        <span class="fas fa-home" title="{{ 'address' | translate }}"></span>
         {{user.address}}
     </div>
 </div>
