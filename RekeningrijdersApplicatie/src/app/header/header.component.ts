@@ -10,6 +10,8 @@ import { HttpService } from '../_services/http.service';
 
 export class HeaderComponent implements OnInit {
 
+    session = sessionStorage;
+
     usercreds = {
         username: '',
         password: '',
@@ -30,7 +32,6 @@ export class HeaderComponent implements OnInit {
         if (usercreds.username !== '' && usercreds.password !== '') {
             this.http.login(usercreds).then(data => {
                 if (data !== null) {
-                    // this.session.setUserId(data.id);
                     document.getElementById('closeLoginModal').click();
                 }
             });
@@ -49,7 +50,7 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        // this.session.setUserId(null);
+        this.http.logout();
     }
 
     goToProfile() {

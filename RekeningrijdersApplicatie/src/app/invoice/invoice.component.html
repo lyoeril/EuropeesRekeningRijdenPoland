@@ -1,7 +1,7 @@
-<div class="container shadow">
+<div *ngIf="invoice !== null" class="container shadow">
     <h2>Invoice: {{invoice.dateToString()}}</h2>
 </div>
-<div class="container shadow">
+<div *ngIf="invoice !== null" class="container shadow">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -9,7 +9,7 @@
                 <th scope="col">Date End</th>
                 <th scope="col">Location Start</th>
                 <th scope="col">Location End</th>
-                <th scope="col">Car</th>
+                <th scope="col">Vehicle</th>
             </tr>
         </thead>
         <tbody>
@@ -18,7 +18,7 @@
                 <td>{{dateToString(movement.endDate)}}</td>
                 <td>{{movement.startLocation.latitude}}, {{movement.startLocation.longitude}}</td>
                 <td>{{movement.endLocation.latitude}}, {{movement.endLocation.longitude}}</td>
-                <td>{{movement.car.licensePlate}}</td>
+                <td>{{movement.vehicle.licensePlate}}</td>
             </tr>
         </tbody>
     </table>

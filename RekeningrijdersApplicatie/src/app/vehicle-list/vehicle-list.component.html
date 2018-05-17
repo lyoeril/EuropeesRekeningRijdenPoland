@@ -1,0 +1,21 @@
+<div class="container shadow">
+    <h2>My Vehicles</h2>
+</div>
+<div class="table-container shadow">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">License Plate</th>
+                <th scope="col">Type</th>
+                <th scope="col">Manage</th> 
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let vehicle of vehicles">
+                <td>{{vehicle.licensePlate}}</td>
+                <td>{{vehicle.vehicleType.toString()}}</td>
+                <td><button class="btn btn-primary">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

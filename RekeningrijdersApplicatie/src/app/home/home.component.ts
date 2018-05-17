@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../_model/User';
-import { Car } from '../_model/Car';
+import { Vehicle } from '../_model/Vehicle';
 import { Invoice } from '../_model/Invoice';
+import { HttpService } from '../_services/http.service';
 
 @Component({
     selector: 'app-home',
@@ -9,26 +10,39 @@ import { Invoice } from '../_model/Invoice';
 })
 
 export class HomeComponent implements OnInit {
-    user: User;
+    user: User = null;
+    session = sessionStorage;
 
-    constructor() {
-        this.user = new User(1, 'xXQuickScope360Xx', 'jan-peter@mail.com');
-
-        const invoices = [];
-        invoices.push(new Invoice(1, 120, true, new Date(2018, 4)));
-        invoices.push(new Invoice(2, 150.50, true, new Date(2018, 3)));
-        invoices.push(new Invoice(3, 200, true, new Date(2018, 2)));
-        invoices.push(new Invoice(4, 220.30, true, new Date(2018, 1)));
-        invoices.push(new Invoice(5, 122.63, false, new Date(2018, 0)));
-        this.user.invoices = invoices;
-
-        const cars = [];
-        cars.push(new Car(1, '12-AB-34'));
-        cars.push(new Car(2, '34-CD-56'));
-        cars.push(new Car(3, '56-EF-78'));
-        this.user.cars = cars;
+    constructor(private http: HttpService) {
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.getUser(+sessionStorage.getItem('userId'));
+    }
+
+    getUser(userId: number) {
+        this.http.getUser(userId)
+            .then(user => {
+                if (user) {
+                    this.user = user;
+                    this.fillUserInvoices(userId);
+                    this.fillUserVehicles(userId);
+                }
+            });
+    }
+
+    fillUserInvoices(userId: number) {
+        this.http.getUserInvoices(userId)
+            .then(invoices => {
+                this.user.invoices = invoices;
+            });
+    }
+
+    fillUserVehicles(userId: number) {
+        this.http.getUserVehicles(userId)
+            .then(vehicles => {
+                this.user.vehicles = vehicles;
+            });
+    }
 
 }

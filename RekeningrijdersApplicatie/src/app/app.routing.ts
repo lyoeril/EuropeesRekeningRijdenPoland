@@ -11,7 +11,7 @@ const routes: Routes = [
         component: HomeComponent
     },
     {
-        path: 'invoice/:year/:month',
+        path: 'invoice/:invoiceId',
         component: InvoiceComponent
     },
     {

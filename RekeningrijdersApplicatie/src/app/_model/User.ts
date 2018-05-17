@@ -1,21 +1,23 @@
 import { Invoice } from './Invoice';
-import { Car } from './Car';
+import { Vehicle } from './Vehicle';
 
 
 export class User {
     id: number;
     username: string;
     email: string;
+    address: string;
 
     invoices: Invoice[];
-    cars: Car[];
+    vehicles: Vehicle[];
 
-    constructor(_id: number, _username: string, _email: string) {
+    constructor(_id: number, _username: string, _email: string, _address: string) {
         this.id = _id;
         this.username = _username;
         this.email = _email;
+        this.address = _address;
 
         this.invoices = [];
-        this.cars = [];
+        this.vehicles = [];
     }
 }

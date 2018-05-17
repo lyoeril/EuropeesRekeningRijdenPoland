@@ -1,5 +1,5 @@
 import { LatLng } from './LatLng';
-import { Car } from './Car';
+import { Vehicle } from './Vehicle';
 
 export class Movement {
     id: number;
@@ -8,14 +8,14 @@ export class Movement {
     startLocation: LatLng;
     endLocation: LatLng;
 
-    car: Car;
+    vehicle: Vehicle;
 
-    constructor(_id: number, _startDate: Date, _endDate: Date, _startLocation: LatLng, _endLocation: LatLng, _car: Car) {
+    constructor(_id: number, _startDate: Date, _endDate: Date, _startLocation: LatLng, _endLocation: LatLng, _vehicle: Vehicle) {
         this.id = _id;
         this.startDate = _startDate;
         this.endDate = _endDate;
         this.startLocation = _startLocation;
         this.endLocation = _endLocation;
-        this.car = _car;
+        this.vehicle = _vehicle;
     }
 }

@@ -1,9 +1,9 @@
-<div class="container">
+<div *ngIf="session.getItem('userId') !== null && user !== null" class="container">
     <div class="row">
         <div class="col-6">
             <app-user [user]="user"></app-user>
             <br />
-            <app-car-list [cars]="user.cars"></app-car-list>
+            <app-vehicle-list [vehicles]="user.vehicles"></app-vehicle-list>
         </div>
         <div class="col-6">
             <app-invoice-list [invoices]="user.invoices"></app-invoice-list>
