@@ -38,6 +38,8 @@ public class User implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
@@ -70,6 +72,7 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    @JsonbTransient
     public HashSet<UserGroup> getGroups() {
         return groups;
     }

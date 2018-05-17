@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import services.InvoiceService;
 import services.RegistrationService;
 import domain.Rekeningrijder;
-import javax.ws.rs.Consumes;
+import domain.UserGroup;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -42,8 +42,12 @@ public class RegisterAPI {
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(
             @FormParam("username") String username,
+            @FormParam("password") String password,
+            @FormParam("email") String email,
             @FormParam("address") String address) {
-        Rekeningrijder r = new Rekeningrijder("email", "username", "password", "test");
+        Rekeningrijder r = new Rekeningrijder(username, password, address, email);
+        UserGroup group = registrationService.findByName("REKENINGRIJDER");
+        System.out.println("group: " + group.getGroupName());
         registrationService.addRekeningrijder(r);
         return Response.ok(r).build();
     } 

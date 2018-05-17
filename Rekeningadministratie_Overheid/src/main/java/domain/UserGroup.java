@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 
 
 @Entity
-@NamedQuery(name = "usergroup.findAll", query = "SELECT ug FROM UserGroup ug")
+@NamedQuery(name = "UserGroup.findAll", query = "SELECT ug FROM UserGroup ug")
 public class UserGroup implements Serializable {
 
     @Id
