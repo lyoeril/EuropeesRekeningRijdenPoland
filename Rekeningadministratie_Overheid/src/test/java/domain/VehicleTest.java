@@ -27,7 +27,7 @@ public class VehicleTest {
     
     @Before
     public void setUp() {
-        v1 = new Vehicle("aNumber1", "sNumber1", VehicleType.PASSENGER_CAR);
+        v1 = new Vehicle(VehicleType.PASSENGER_CAR, "licensePlate");
         v1.setId(1L);
     }
     
@@ -63,11 +63,11 @@ public class VehicleTest {
      * Test of getAutorisationNumber method, of class Vehicle.
      */
     @Test
-    public void testGetAutorisationNumber() {
-        System.out.println("getAutorisationNumber");
+    public void testGetLicensePlate() {
+        System.out.println("getLicensePlate");
         Vehicle instance = v1;
-        String expResult = "aNumber1";
-        String result = instance.getAutorisationNumber();
+        String expResult = "licensePlate";
+        String result = instance.getLicensePlate();
         assertEquals(expResult, result);
     }
 
@@ -76,35 +76,11 @@ public class VehicleTest {
      */
     @Test
     public void testSetAutorisationNumber() {
-        System.out.println("setAutorisationNumber");
+        System.out.println("setLicensePlate");
         String autorisationNumber = "aNumber99";
         Vehicle instance = v1;
-        instance.setAutorisationNumber(autorisationNumber);
-        assertEquals(autorisationNumber, instance.getAutorisationNumber());
-    }
-
-    /**
-     * Test of getSerialNumber method, of class Vehicle.
-     */
-    @Test
-    public void testGetSerialNumber() {
-        System.out.println("getSerialNumber");
-        Vehicle instance = v1;
-        String expResult = "sNumber1";
-        String result = instance.getSerialNumber();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of setSerialNumber method, of class Vehicle.
-     */
-    @Test
-    public void testSetSerialNumber() {
-        System.out.println("setSerialNumber");
-        String serialNumber = "sNumber99";
-        Vehicle instance = v1;
-        instance.setSerialNumber(serialNumber);
-        assertEquals(serialNumber, instance.getSerialNumber());
+        instance.setLicensePlate(autorisationNumber);
+        assertEquals(autorisationNumber, instance.getLicensePlate());
     }
 
     /**

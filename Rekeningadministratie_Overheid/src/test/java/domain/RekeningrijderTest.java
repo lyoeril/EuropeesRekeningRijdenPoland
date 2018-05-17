@@ -172,18 +172,5 @@ public class RekeningrijderTest {
         List<Vehicle> result = instance.getOwnedVehicles();
         assertEquals(expResult, result);
     }
-
-    /**
-     * Test of setOwnedVehicles method, of class Rekeningrijder.
-     */
-    @Test
-    public void testSetOwnedVehicles() {
-        System.out.println("setOwnedVehicles");
-        List<Vehicle> ownedVehicles = new ArrayList<Vehicle>();
-        ownedVehicles.add(new Vehicle("autorisation", "serial", VehicleType.PASSENGER_CAR));
-        Rekeningrijder instance = r1;
-        instance.setOwnedVehicles(ownedVehicles);
-        assertEquals(ownedVehicles, instance.getOwnedVehicles());
-    }
     
 }

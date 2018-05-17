@@ -19,8 +19,6 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String autorisationNumber;
-    private String serialNumber;
 
     @OneToMany
     private List<Rekeningrijder> ownersHistory;
@@ -30,12 +28,13 @@ public class Vehicle {
 
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
+    
+    private String licensePlate;
 
-    public Vehicle(String autorisationNumber, String serialNumber, VehicleType vehicleType) {
-        this.autorisationNumber = autorisationNumber;
-        this.serialNumber = serialNumber;
+    public Vehicle(VehicleType vehicleType, String licensePlate) {
         this.ownersHistory = new ArrayList<>();
         this.vehicleType = vehicleType;
+        this.licensePlate = licensePlate;
     }
 
     public long getId() {
@@ -44,22 +43,6 @@ public class Vehicle {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getAutorisationNumber() {
-        return autorisationNumber;
-    }
-
-    public void setAutorisationNumber(String autorisationNumber) {
-        this.autorisationNumber = autorisationNumber;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
     }
 
     public List<Rekeningrijder> getOwnersHistory() {
@@ -77,5 +60,23 @@ public class Vehicle {
     public void setCartracker(Cartracker cartracker) {
         this.cartracker = cartracker;
     }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+    
+    
 
 }
