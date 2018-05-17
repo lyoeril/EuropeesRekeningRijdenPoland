@@ -12,6 +12,7 @@ import { faEnvelope, faUserCircle, faHome } from '@fortawesome/fontawesome-free-
 })
 export class AppComponent {
   title = 'app';
+  session = sessionStorage;
 
   constructor() {
     fontawesome.library.add(faEnvelope, faUserCircle, faHome);

@@ -1,7 +1,7 @@
 <div class="container shadow">
     <h2>{{ "invoice" | translate }}</h2>
 </div>
-<div *ngIf="invoice !== null" class="container shadow">
+<div *ngIf="!loading && invoice !== null" class="container shadow">
     <table class="table">
         <tbody>
             <tr>
@@ -20,7 +20,7 @@
             <tr *ngIf="!invoice.paid">
                 <th>{{ "pay" | translate }}</th>
                 <td>
-                    <button class="btn btn-primary" style="float: right">{{ "pay" | translate }}</button>
+                    <div id="paypal-button"></div>
                 </td>
             </tr>
         </tbody>
