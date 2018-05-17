@@ -32,13 +32,13 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             return;
         }
         String token = authorizationHeader.substring("Bearer".length()).trim();
-
         try {
             Algorithm algorithm = Algorithm.HMAC512("supersecret");
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("secret")
+                    .withIssuer("mario")
                     .build();
             DecodedJWT jwt = verifier.verify(token);
+            
             final String username = jwt.getSubject();
             final SecurityContext securityContext = crc.getSecurityContext();
             crc.setSecurityContext(new SecurityContext() {

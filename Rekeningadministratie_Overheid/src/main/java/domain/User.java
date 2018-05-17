@@ -72,7 +72,6 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    @JsonbTransient
     public HashSet<UserGroup> getGroups() {
         return groups;
     }
