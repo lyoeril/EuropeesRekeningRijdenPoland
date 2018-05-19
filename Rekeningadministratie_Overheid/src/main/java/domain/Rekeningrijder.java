@@ -5,12 +5,14 @@
  */
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.enterprise.inject.Model;
 import javax.json.bind.annotation.JsonbTransient;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
@@ -18,6 +20,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -59,6 +63,7 @@ public class Rekeningrijder extends User implements Serializable {
         this.invoices = invoices;
     }
 
+    @JsonIgnore
     public List<Vehicle> getOwnedVehicles() {
         return ownedVehicles;
     }

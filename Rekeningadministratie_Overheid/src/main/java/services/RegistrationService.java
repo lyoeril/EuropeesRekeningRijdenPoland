@@ -45,7 +45,12 @@ public class RegistrationService {
     //Rekeningrijder Management
     
     public void addRekeningrijder(Rekeningrijder rekeningrijder){
-        iRekeningrijderDAO.create(rekeningrijder);
+        try{
+            iRekeningrijderDAO.create(rekeningrijder);
+        }catch(Exception e){
+            System.out.println("e = EEEEENEN EXCPEITONEIASDN" + e);
+        }
+        
     }
     
     public void updateRekeningrijder(Rekeningrijder rekeningrijder){

@@ -17,6 +17,7 @@ import services.RegistrationService;
 import domain.Rekeningrijder;
 import domain.User;
 import domain.UserGroup;
+import dto.DTO_Rekeningrijder;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -54,12 +55,19 @@ public class RegisterAPI {
             @FormParam("password") String password,
             @FormParam("email") String email,
             @FormParam("address") String address) {
+        boolean findUsername = (userService.findByUsername(username).get(0) != null);
+        System.out.println("findUsername = " + findUsername);
+        if(findUsername){
+            return Response.status(Status.CONFLICT).build();
+        }
         Rekeningrijder r = new Rekeningrijder(username, password, address, email);
         UserGroup group = registrationService.findByName("REKENINGRIJDER");
-        System.out.println("group: " + group.getGroupName());
+
         r.addGroup(group);
         registrationService.addRekeningrijder(r);
-        return Response.ok(r).build();
+        DTO_Rekeningrijder d = new DTO_Rekeningrijder(r);
+        return Response.ok(d).build();
+
     }
 
     @POST
@@ -79,5 +87,4 @@ public class RegisterAPI {
         }
         return Response.status(Status.FORBIDDEN).build();
     }
-
 }
