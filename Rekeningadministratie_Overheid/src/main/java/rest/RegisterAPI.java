@@ -53,7 +53,7 @@ public class RegisterAPI {
             @FormParam("password") String password,
             @FormParam("email") String email,
             @FormParam("address") String address) {
-        boolean findUsername = (userService.findByUsername(username).get(0) != null);
+        boolean findUsername = (userService.findByUsername(username).size() != 0);
         System.out.println("findUsername = " + findUsername);
         if(findUsername){
             return Response.status(Status.CONFLICT).build();
