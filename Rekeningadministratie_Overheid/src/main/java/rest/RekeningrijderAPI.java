@@ -57,7 +57,7 @@ public class RekeningrijderAPI {
     @Inject
     private RegistrationService registrationService;
 
-    @Inject
+    @Inject 
     private UserService userService;
 
     //TODO
@@ -149,18 +149,18 @@ public class RekeningrijderAPI {
     @Path("invoices/{year}/{month}")
     public Response getInvoicebyDate(
             @Context HttpHeaders headers,
-            @PathParam("year") int year, 
+            @PathParam("year") int year,
             @PathParam("month") int month) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
         List<Invoice> invoices = rekeningrijder.getInvoices();
         if (invoices != null) {
-            for(Invoice i : invoices){
+            for (Invoice i : invoices) {
                 Calendar c = i.getDate();
                 System.out.println("c.MONTh: " + c.get(Calendar.MONTH));
                 System.out.println("DATE: " + c.get(Calendar.YEAR) + " " + c.get(Calendar.MONTH) + " " + c.get(Calendar.DATE));
-                if(c.get(Calendar.YEAR) == year && (c.get(Calendar.MONTH) + 1) == month){
+                if (c.get(Calendar.YEAR) == year && (c.get(Calendar.MONTH) + 1) == month) {
                     return Response.accepted(i).build();
                 }
             }
@@ -168,8 +168,9 @@ public class RekeningrijderAPI {
         return Response.status(Status.NOT_FOUND).build();
     }
 
+    //TODO
     @PUT
-    @Path("invoices/{year}/{month}/pay")
+    @Path("invoices/{year}/{month}/")
     public Response payInvoice(@PathParam("year") String year, @PathParam("month") String month) {
         return Response.status(Status.NOT_FOUND).build();
     }
@@ -231,6 +232,7 @@ public class RekeningrijderAPI {
         return Response.accepted().build();
     }
 
+    //TODO
     @PUT
     @Path("cars/{carId}")
     public Response updateCar() {
