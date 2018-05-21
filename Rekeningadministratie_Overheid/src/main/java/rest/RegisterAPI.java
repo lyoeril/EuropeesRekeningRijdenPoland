@@ -19,8 +19,6 @@ import domain.User;
 import domain.UserGroup;
 import dto.DTO_Rekeningrijder;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import services.UserService;
@@ -44,7 +42,7 @@ public class RegisterAPI {
 
     @GET
     public Response getRekeningrijder() {
-        return Response.accepted("Welcome to REGISTER API").build();
+        return Response.accepted("Welcome to REGISTER API new REGISTER new !!").build();
     }
 
     @POST
