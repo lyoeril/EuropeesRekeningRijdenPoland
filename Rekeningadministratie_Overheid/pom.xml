@@ -4,7 +4,7 @@
 
     <groupId>fontys</groupId>
     <artifactId>Rekeningadministratie_Overheid</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Rekeningadministratie_Overheid</name>
