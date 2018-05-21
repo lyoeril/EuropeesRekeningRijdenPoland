@@ -10,7 +10,6 @@ import domain.Invoice;
 import domain.Rekeningrijder;
 import domain.Vehicle;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -21,21 +20,21 @@ import javax.persistence.PersistenceContext;
  *
  * @author Laurent
  */
-
 @Stateless
-public class InvoiceJPA implements IInvoiceDAO{
-    private static final Logger LOGGER = Logger.getLogger(InvoiceJPA.class.getName());
-    
-    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
-    private EntityManager em ;
+public class InvoiceJPA implements IInvoiceDAO {
 
-    public InvoiceJPA(){   
+    private static final Logger LOGGER = Logger.getLogger(InvoiceJPA.class.getName());
+
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
+    private EntityManager em;
+
+    public InvoiceJPA() {
     }
-    
-    public InvoiceJPA(EntityManager em){
+
+    public InvoiceJPA(EntityManager em) {
         this.em = em;
     }
-    
+
     public void setEm(EntityManager em) {
         this.em = em;
     }
@@ -79,6 +78,5 @@ public class InvoiceJPA implements IInvoiceDAO{
     public List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
 }

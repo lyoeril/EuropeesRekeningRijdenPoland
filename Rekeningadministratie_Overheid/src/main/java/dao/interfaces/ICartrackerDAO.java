@@ -6,7 +6,6 @@
 package dao.interfaces;
 
 import domain.Cartracker;
-import java.util.List;
 
 /**
  *

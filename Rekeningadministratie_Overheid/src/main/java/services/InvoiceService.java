@@ -5,7 +5,6 @@
  */
 package services;
 
-import dao.JPA.KMRateJPA;
 import dao.interfaces.IInvoiceDAO;
 import domain.Invoice;
 import domain.Rekeningrijder;

@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
 import static javax.ws.rs.core.MediaType.*;
 import javax.ws.rs.core.Response;
-import domain.User;
 import services.LoginService;
 
 @Path("login")
