@@ -8,6 +8,7 @@ package com.poland.rest.api;
 import com.poland.service.RegistrationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,13 +56,36 @@ public class CarTrackerMQ implements MessageListener {
 
                 JSONObject obj = new JSONObject(textMessage.getText());
 
-                Date date = sdf.parse(obj.getString("date"));
+                JSONObject locationObj = obj.getJSONObject("location");
+                JSONObject dateObj = obj.getJSONObject("date");
 
-                Double latitude = obj.getDouble("latitude");
+                Double latitude = locationObj.getDouble("lat");
+                Double longitude = locationObj.getDouble("lng");
+                
+                long year = dateObj.getLong("year");
+                long month = dateObj.getLong("month");
+                long dayOfMonth = dateObj.getLong("dayOfMonth");
+                long hourOfDay = dateObj.getLong("hourOfDay");
+                long minute = dateObj.getLong("minute");
+                long second = dateObj.getLong("second");
+                
+                StringBuilder sb = new StringBuilder();
+                
+                sb.append(year);
+                sb.append("-");
+                sb.append(month);
+                sb.append("-");
+                sb.append(dayOfMonth);
+                sb.append(" ");
+                sb.append(hourOfDay);
+                sb.append(":");
+                sb.append(minute);
+                sb.append(":");
+                sb.append(second);
+                
+                Date date = sdf.parse(sb.toString());
 
-                Double longitude = obj.getDouble("longitude");
-
-                String authorisationCode = obj.getString("authorisationCode");
+                String authorisationCode = obj.getString("trackerId");
                 registrationService.registerLocation(date, latitude, longitude, authorisationCode);
             }
         } catch (JMSException | ParseException ex) {

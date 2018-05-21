@@ -98,9 +98,9 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
             // If the statement execution exceeds the query timeout value
             System.out.println("The query took too long to be executed. ");
         } else if (ex instanceof IllegalArgumentException) {
-            System.out.println("Entity type is not valid");
+            System.out.println("Illegal Argument Exception");
         } else if (ex instanceof NoResultException) {
-            System.out.println("Entity type is not valid");
+            System.out.println("No Results found");
         }
     }
 

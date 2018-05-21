@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_location")
-public class Location implements Serializable {
+public class Location implements Serializable, Comparable<Location> {
 
     @Id
     @Column(name = "id")
@@ -92,6 +92,11 @@ public class Location implements Serializable {
 
     public void setRide(Ride ride) {
         this.ride = ride;
+    }
+
+    @Override
+    public int compareTo(Location o) {
+        return getDate().compareTo(o.getDate());
     }
     
     
