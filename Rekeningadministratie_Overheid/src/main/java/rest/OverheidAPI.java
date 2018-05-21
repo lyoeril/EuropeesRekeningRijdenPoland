@@ -10,9 +10,11 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import domain.Cartracker;
+import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.User;
 import dto.DTO_User;
+import enums.VehicleType;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
@@ -109,9 +111,27 @@ public class OverheidAPI {
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
-//    @GET
-//    @Path("KMRates/{region}")
-//    public Response getKMRateByRegion(){
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("KMRates/{region}")
+    public Response getKMRateByRegion(
+            @PathParam("region") String region){
+        if(!region.isEmpty()){
+            KMRate kMRate = invoiceService.findKMRateByRegion(region);
+            if(kMRate != null){
+                return Response.accepted(kMRate).build();
+            }
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+//    
+//    @POST
+//    @Produces(APPLICATION_JSON)
+//    @Path("KMRates/{region}/{vehicleType}")
+//    public Response newKMRateForVehicleType(
+//            @PathParam("region") String region,
+//            @PathParam("vehicleType") VehicleType vehicleType,
+//            @FormParam("rate") double rate){
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
@@ -124,6 +144,7 @@ public class OverheidAPI {
 //    @GET
 //    @Path("invoices")
 //    public Response getCalculatedInvoices(){
+//        invoiceService.find
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    

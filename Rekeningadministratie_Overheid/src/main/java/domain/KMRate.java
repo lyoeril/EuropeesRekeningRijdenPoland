@@ -9,6 +9,7 @@ import enums.VehicleType;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.enterprise.inject.Model;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -17,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -24,6 +27,14 @@ import javax.persistence.MapKeyJoinColumn;
  */
 
 @Entity
+@Model
+@NamedQueries({
+    @NamedQuery(name = "KMRate.findAll",
+            query = "SELECT k FROM KMRate k")
+    ,
+    @NamedQuery(name = "KMRate.findByRegion",
+            query = "SELECT k FROM KMRate k WHERE k.region LIKE :region")
+})
 public class KMRate implements Serializable{
     
     @Id

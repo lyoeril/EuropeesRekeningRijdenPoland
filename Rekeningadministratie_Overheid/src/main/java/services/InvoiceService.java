@@ -6,9 +6,12 @@
 package services;
 
 import dao.interfaces.IInvoiceDAO;
+import dao.interfaces.IKMRateDAO;
 import domain.Invoice;
+import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.Vehicle;
+import enums.VehicleType;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,6 +29,9 @@ public class InvoiceService {
     
    @Inject
    IInvoiceDAO invoiceDAO;
+   
+   @Inject
+   IKMRateDAO kmRateDAO;
     
     public InvoiceService(){
         
@@ -61,6 +67,30 @@ public class InvoiceService {
     
     private Invoice calculateInvoice(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle){
         return new Invoice(1, 1, new GregorianCalendar(), rekeningrijder);
+    }
+    
+    public void addKMRate(KMRate kmRate){
+        kmRateDAO.create(kmRate);
+    }
+    
+    public void updateKMRate(KMRate kmRate){
+        kmRateDAO.edit(kmRate);
+    }
+    
+    public void deleteKMRate(KMRate kmRate){
+        kmRateDAO.delete(kmRate);
+    }
+    
+    public KMRate findKMRateById(long id){
+        return kmRateDAO.findById(id);
+    }
+    
+    public KMRate findKMRateByRegion(String region){
+        return kmRateDAO.findByRegion(region);
+    }
+    
+    public KMRate findKMRateByRegionType(String region, VehicleType vehicleType){
+        return kmRateDAO.findByRegionVehicleType(region, vehicleType);
     }
 }
 

@@ -57,7 +57,7 @@ public class KMRateJPA implements IKMRateDAO{
 
     @Override
     public KMRate findByRegion(String region) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (KMRate)em.createNamedQuery("KMRate.findByRegion").setParameter("region", region).getSingleResult();
     }
 
     @Override
