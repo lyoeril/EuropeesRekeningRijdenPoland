@@ -53,7 +53,6 @@ public class LoginResource {
             System.out.println("token " + token);
             return Response.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .header("Access-Control-Allow-Headers", "Authorization")
                     .build();
 
         }
