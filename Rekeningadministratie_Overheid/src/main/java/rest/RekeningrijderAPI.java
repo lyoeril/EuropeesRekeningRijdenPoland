@@ -13,6 +13,7 @@ import domain.Invoice;
 import domain.Rekeningrijder;
 import domain.User;
 import domain.Vehicle;
+import dto.DTO_Invoice;
 import dto.DTO_Rekeningrijder;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
@@ -131,7 +132,12 @@ public class RekeningrijderAPI {
 
         List<Invoice> invoices = rekeningrijder.getInvoices();
         if (invoices != null) {
-            return Response.accepted(invoices).build();
+            List<DTO_Invoice> dto_invoices = new ArrayList<>();
+            for(Invoice i : invoices){
+                dto_invoices.add(new DTO_Invoice(i));
+            }            
+            
+            return Response.accepted(dto_invoices).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
