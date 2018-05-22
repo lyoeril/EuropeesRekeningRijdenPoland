@@ -14,8 +14,10 @@ import domain.Rekeningrijder;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Rekeningrijder;
+import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -201,7 +203,13 @@ public class RekeningrijderAPI {
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
 
         if (r != null) {
-            return Response.ok(r.getOwnedVehicles()).build();
+            List<Vehicle> vehicles = r.getOwnedVehicles();
+            List<DTO_Vehicle> vehicleNames = new ArrayList<>();
+            for(Vehicle v: vehicles){
+                DTO_Vehicle vehicle = new DTO_Vehicle(v);
+                vehicleNames.add(vehicle);
+            }
+            return Response.ok(vehicleNames).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
