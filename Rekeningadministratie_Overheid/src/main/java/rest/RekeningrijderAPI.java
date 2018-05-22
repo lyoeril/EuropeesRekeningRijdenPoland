@@ -174,7 +174,7 @@ public class RekeningrijderAPI {
                 System.out.println("c.MONTh: " + c.get(Calendar.MONTH));
                 System.out.println("DATE: " + c.get(Calendar.YEAR) + " " + c.get(Calendar.MONTH) + " " + c.get(Calendar.DATE));
                 if (c.get(Calendar.YEAR) == year && (c.get(Calendar.MONTH) + 1) == month) {
-                    return Response.accepted(i).build();
+                    return Response.accepted(new DTO_Invoice(i)).build();
                 }
             }
         }
