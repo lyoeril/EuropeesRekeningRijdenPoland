@@ -24,7 +24,7 @@ public class LocationDAOImpl extends BasicDAOImpl<Location> implements LocationD
     public List<Location> findLocationsByRideId(long id) {
         List<Location> locations = null;
         try {
-            Query q = em.createQuery("select l from Location l where l.id = (select r.locations from Ride r where r.id = :id");
+            Query q = em.createQuery("select l from Location l where l.ride = (select r from Ride r where r.id = :id)");
             q.setParameter("id", id);
             locations = (List<Location>) q.getResultList();
         } catch (Exception ise) {

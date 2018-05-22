@@ -84,7 +84,7 @@ public class RegistrationService {
 
         Ride ride = null;
         if (rides.isEmpty()) {
-            String serialNumber = String.valueOf(System.currentTimeMillis());
+            String serialNumber = String.valueOf(new Random().nextLong());
             ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
             ride = rideService.findRideBySerialnumber(serialNumber);
             vehicleService.addRide(ride);
@@ -99,11 +99,11 @@ public class RegistrationService {
             double diffInMillis = (double) Math.abs(date.getTime() - lastlocation.getDate().getTime());
             double diff = diffInMillis / 3600000;
 
-            if (diff > 1) {
+            if (diff >= 1) {
                 ride.setEndDate(lastlocation.getDate());
                 rideService.editRide(ride);
 
-                String serialNumber = String.valueOf(System.currentTimeMillis());
+                String serialNumber = String.valueOf(new Random().nextLong());
                 ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
                 vehicleService.addRide(ride);
                 ride = rideService.findRideBySerialnumber(serialNumber);
