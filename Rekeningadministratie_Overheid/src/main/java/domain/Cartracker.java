@@ -39,7 +39,7 @@ public class Cartracker implements Serializable{
 
     public Cartracker(String hardware) {
         this.hardware = hardware;
-        this.rides = new ArrayList<>();
+        this.rides = new ArrayList<>(); 
     }
 
     public long getId() {
