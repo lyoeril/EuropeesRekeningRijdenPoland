@@ -1,4 +1,4 @@
-package eu.poland.threading;
+package eu.poland.service;
 
 import com.google.maps.model.DirectionsRoute;
 import eu.poland.dal.*;

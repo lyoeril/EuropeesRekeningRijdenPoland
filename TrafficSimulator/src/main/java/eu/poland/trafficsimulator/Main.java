@@ -12,19 +12,19 @@ import javax.jms.JMSException;
 public class Main {
 
     private static String activeMQIp = "192.168.25.14";
-    
+
     private static SimulationController simulator;
 
     public static void main(String[] args) throws JMSException {
         System.out.println("Loading properties file. . .");
-        
+
         System.out.println("Connecting to ActiveMQ server. . .");
         Producer msgQueueSender = new Producer("tcp://" + activeMQIp + ":61616", "admin", "secret");
         msgQueueSender.setup("TrafficQueue");
 
         System.out.println("\nSimulator is starting. . .\n");
         simulator = new SimulationController(msgQueueSender);
-        
+
         showMainMenu();
         Scanner sc = new Scanner(System.in);
         String input = "";
@@ -45,6 +45,7 @@ public class Main {
                     System.out.printf("Currently live simulation threads: %s\n", count);
                     break;
                 case "stop":
+                    System.out.println("\nSimulator is stopping. . .");
                     stopServer = true;
                     simulator.stop(0);
                     break;
@@ -87,10 +88,8 @@ public class Main {
         } finally {
             msgQueueSender.close();
         }*/
-
-        System.out.println("\nSimulator is stopping. . .");
     }
-    
+
     private static void showMainMenu() {
         System.out.println(""
                 + "----------------------------------------------------------------------------------------------------\n"

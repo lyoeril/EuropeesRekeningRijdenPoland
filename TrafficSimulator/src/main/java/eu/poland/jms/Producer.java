@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.poland.jms;
-
-import java.util.Random;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -17,8 +10,6 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
-
-import com.google.gson.Gson;
 
 /**
  *

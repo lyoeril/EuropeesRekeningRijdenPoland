@@ -1,8 +1,10 @@
 package eu.poland.threading;
 
+import eu.poland.service.RouteService;
 import com.google.maps.model.DirectionsRoute;
 import eu.poland.domain.Ride;
 import eu.poland.jms.Producer;
+import eu.poland.service.PolygonService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,6 +25,7 @@ public class SimulationController {
 
     private Producer msgQueueProducer;
     private ExecutorService pool;
+    private PolygonService polygonService;
     private RouteService routeService;
     private Map<String, Thread> simulations;
     
