@@ -14,6 +14,7 @@ import domain.Rekeningrijder;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Rekeningrijder;
+import enums.InvoiceStatus;
 import enums.VehicleType;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -53,11 +54,13 @@ public class RekeningrijderAPI {
     @Inject
     private RegistrationService registrationService;
 
-    @Inject 
+    @Inject
     private UserService userService;
 
     //TODO
     //Still need to fix User/Kwetteraar difference; Essential to just need 1 databasecall
+    //TODO
+    //FIX DATABASECALL for findByUsername();
     @GET
     @Produces(APPLICATION_JSON)
     public Response getRekeningrijder(@Context HttpHeaders headers) {
@@ -87,6 +90,12 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
+        boolean findUsername = (userService.findByUsername(username).size() != 0);
+        System.out.println("findUsername = " + findUsername);
+        if (findUsername) {
+            return Response.status(Status.CONFLICT).build();
+        }
+
         if (rekeningrijder != null) {
             rekeningrijder.setUsername(username);
             rekeningrijder.setEmail(email);
@@ -108,7 +117,7 @@ public class RekeningrijderAPI {
         rekeningrijder.getInvoices().add(i);
         registrationService.updateRekeningrijder(rekeningrijder);
         invoiceService.addInvoice(i);
-        return Response.status(Status.NOT_FOUND).build();
+        return Response.accepted().build();
     }
 
     @GET
@@ -135,9 +144,9 @@ public class RekeningrijderAPI {
                 return Response.ok(i).build();
             }
         } catch (Exception e) {
-            return Response.status(Status.NOT_FOUND).build();
+            return Response.status(Status.BAD_REQUEST).build();
         }
-        return Response.status(Status.NOT_FOUND).build();
+        return Response.status(Status.BAD_REQUEST).build();
     }
 
     @GET
@@ -167,8 +176,20 @@ public class RekeningrijderAPI {
     //TODO
     @PUT
     @Path("invoices/{year}/{month}/")
-    public Response payInvoice(@PathParam("year") String year, @PathParam("month") String month) {
-        return Response.status(Status.NOT_FOUND).build();
+    public Response payInvoice(
+            @Context HttpHeaders headers,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        Calendar date = new GregorianCalendar(year, month, 1);
+        Invoice invoice = invoiceService.findInvoiceByRekeningrijderMonth(r, date);
+        if (invoice != null) {
+            invoice.setStatus(InvoiceStatus.PAID);
+            invoiceService.updateInvoice(invoice);
+            return Response.accepted().build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
     }
 
     @GET
@@ -228,13 +249,16 @@ public class RekeningrijderAPI {
         return Response.accepted().build();
     }
 
-    //TODO
-    @PUT
-    @Path("cars/{carId}")
-    public Response updateCar() {
-        return Response.status(Status.NOT_FOUND).build();
-    }
-
+//    //TODO
+//    @PUT
+//    @Path("cars/{carId}")
+//    public Response updateCar(
+//            @Context HttpHeaders headers,
+//            @PathParam("carId") long id,
+//            @FormParam()
+//            ) {
+//        return Response.status(Status.NOT_FOUND).build();
+//    }
     @DELETE
     @Produces(APPLICATION_JSON)
     @Path("cars/{carId}")

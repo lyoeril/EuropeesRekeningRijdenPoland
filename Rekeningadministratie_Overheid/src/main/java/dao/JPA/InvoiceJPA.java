@@ -65,7 +65,7 @@ public class InvoiceJPA implements IInvoiceDAO {
     }
 
     @Override
-    public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date) {
+    public Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import enums.InvoiceStatus;
 import java.io.Serializable;
 import java.util.Calendar;
+import javax.enterprise.inject.Model;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,6 +28,17 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
+@Model
+//@NamedQueries({
+//    @NamedQuery(name = "Invoice.findAll",
+//            query = "SELECT i FROM Invoice i")
+//    ,
+//    @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
+//            query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id AND i.date")
+//    ,
+//    @NamedQuery(name = "User.findByUsername",
+//            query = "SELECT u FROM User u WHERE u.username LIKE :username")
+//})
 public class Invoice implements Serializable{
     
     @Id

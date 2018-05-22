@@ -57,7 +57,7 @@ public class InvoiceService {
         return invoiceDAO.findByRekeningrijder(rekeningrijder);
     }
     
-    public List<Invoice> findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date){
+    public Invoice findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date){
         return invoiceDAO.findByRekeningrijderMonth(rekeningrijder, date);
     }
     
