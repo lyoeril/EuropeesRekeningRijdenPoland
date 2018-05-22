@@ -58,5 +58,18 @@ public class LocationService {
             return false;
         }
     }
+    
+    public Location getLocatieById(long id) {
+        try {
+            if (id != 0L && id > 0L) {
+                return locationDAO.find(id);
+            } else{
+                return null;
+            }
+        } catch (NullPointerException x) {
+            return null;
+        }
+
+    }
 
 }

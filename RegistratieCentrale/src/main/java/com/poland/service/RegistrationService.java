@@ -69,15 +69,16 @@ public class RegistrationService {
         if (authorisationCode != null && authorisationCode != "") {
             vehicle = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
         }
+        System.out.println(vehicle);
         if (vehicle == null) {
             vehicle = vehicleService.createVehicle(new Vehicle(authorisationCode));
         }
 
         List<Ride> rides = new ArrayList<>();
 
-        vehicle.getRides().forEach((t) -> {
-            if (t.getEndDate() == null) {
-                rides.add(t);
+        vehicle.getRides().forEach(r -> {
+            if (r.getEndDate() == null) {
+                rides.add(r);
             }
         });
 
@@ -95,8 +96,8 @@ public class RegistrationService {
 
             Location lastlocation = locations.get(ride.getLocations().size() - 1);
 
-            double diffInMillies = (double) Math.abs(date.getTime() - lastlocation.getDate().getTime());
-            double diff = diffInMillies / 3600000;
+            double diffInMillis = (double) Math.abs(date.getTime() - lastlocation.getDate().getTime());
+            double diff = diffInMillis / 3600000;
 
             if (diff > 1) {
                 ride.setEndDate(lastlocation.getDate());
@@ -112,7 +113,12 @@ public class RegistrationService {
         Location location = new Location(date, latitude, longitude, ride);
         location = locationService.createLocation(location);
         
-        rideService.addLocation(ride.getId(), location.getId());
+        List<Location> rideLocations = locationService.getLocationsByRideId(ride.getId());
+        Collections.sort(rideLocations);
+        
+        Location newlocation = rideLocations.get(ride.getLocations().size() - 1);
+        
+        rideService.addLocation(ride.getId(), newlocation.getId());
         return true;
     }
 
