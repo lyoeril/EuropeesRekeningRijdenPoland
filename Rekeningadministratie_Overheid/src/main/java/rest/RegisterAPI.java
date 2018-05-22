@@ -42,7 +42,7 @@ public class RegisterAPI {
 
     @GET
     public Response getRekeningrijder() {
-        return Response.accepted("Welcome to REGISTER API new REGISTER new !!").build();
+        return Response.accepted("Welcome to de nieuwe versie !!").build();
     }
 
     @POST
