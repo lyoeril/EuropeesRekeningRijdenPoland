@@ -83,25 +83,26 @@ public class RegistrationService {
 
         Ride ride = null;
         if (rides.isEmpty()) {
-            String serialNumber = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+            String serialNumber = String.valueOf(System.currentTimeMillis());
             ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
             ride = rideService.findRideBySerialnumber(serialNumber);
+            vehicleService.addRide(ride);
         } else {
             ride = rides.get(0);
 
-            List<Location> locations = new ArrayList<>();
+            List<Location> locations = ride.getLocations();
             Collections.sort(locations);
 
-            Location lastlocation = ride.getLocations().get(ride.getLocations().size() - 1);
+            Location lastlocation = locations.get(ride.getLocations().size() - 1);
 
-            long diffInMillies = Math.abs(date.getTime() - lastlocation.getDate().getTime());
-            long diff = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.HOURS);
+            double diffInMillies = (double) Math.abs(date.getTime() - lastlocation.getDate().getTime());
+            double diff = diffInMillies / 3600000;
 
-            if (diff > 2) {
+            if (diff > 1) {
                 ride.setEndDate(lastlocation.getDate());
                 rideService.editRide(ride);
-                
-                String serialNumber = new Random().toString();
+
+                String serialNumber = String.valueOf(System.currentTimeMillis());
                 ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
                 vehicleService.addRide(ride);
                 ride = rideService.findRideBySerialnumber(serialNumber);
@@ -110,7 +111,7 @@ public class RegistrationService {
 
         Location location = new Location(date, latitude, longitude, ride);
         location = locationService.createLocation(location);
-
+        
         rideService.addLocation(ride.getId(), location.getId());
         return true;
     }

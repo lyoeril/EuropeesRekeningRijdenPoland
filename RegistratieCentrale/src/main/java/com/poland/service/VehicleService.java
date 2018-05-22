@@ -50,8 +50,6 @@ public class VehicleService {
         vehicle.getRides().add(ride);
 
         vehicleDAO.edit(vehicle);
-        vehicleDAO.addRide(ride);
-
     }
 
     public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
