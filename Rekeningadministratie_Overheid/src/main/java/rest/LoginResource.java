@@ -54,7 +54,6 @@ public class LoginResource {
             return Response.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .header("Access-Control-Expose-Headers", "Authorization")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
 
         }
