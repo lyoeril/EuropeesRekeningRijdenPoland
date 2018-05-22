@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.maps.model.DirectionsRoute;
 import eu.poland.domain.LocationSerializable;
 import eu.poland.domain.Ride;
+import eu.poland.domain.RideFinishedException;
 import eu.poland.jms.Producer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,7 @@ public class SimRunnable implements Runnable {
             } catch (InterruptedException ie) {
                 //Logger.getLogger(SimRunnable.class.getName()).log(Level.SEVERE, null, ie);
                 break;
-            } catch (IndexOutOfBoundsException ioobe) {
+            } catch (RideFinishedException ioobe) {
                 //System.out.printf("Simulation with ID %s has finished.\n", ride.getId());
                 break;
             } catch (JMSException jmse) {

@@ -42,7 +42,7 @@ public class Ride {
         return traveledRoute.peek();
     }
 
-    public LocationTimed progress() throws IndexOutOfBoundsException {
+    public LocationTimed progress() throws RideFinishedException {
         LocationTimed nextLoc = calcNextLoc(defaultInterval);
         traveledRoute.add(nextLoc);
         return nextLoc;
@@ -92,17 +92,17 @@ public class Ride {
      * @return The next step in this route.
      * @throws IndexOutOfBoundsException When there are no more steps.
      */
-    private DirectionsStep calcNextStep() throws IndexOutOfBoundsException {
+    private DirectionsStep calcNextStep() throws RideFinishedException {
         DirectionsLeg currentLeg = plannedRoute.legs[0];
         for (int i = 0; i < currentLeg.steps.length; i++) {
             if (currentLeg.steps[i].startLocation.equals(currentStep.endLocation)) {
                 return currentLeg.steps[i];
             }
         }
-        throw new IndexOutOfBoundsException("The current route has been finished.");
+        throw new RideFinishedException("The current route has been finished.");
     }
 
-    private LocationTimed calcNextLoc(double interval) throws IndexOutOfBoundsException {
+    private LocationTimed calcNextLoc(double interval) throws RideFinishedException {
         Long stepDuration = currentStep.duration.inSeconds;
         double timeTraveled = stepDuration * calcStepProgressionPercent() + interval;
 

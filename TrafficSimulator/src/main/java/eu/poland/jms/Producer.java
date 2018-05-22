@@ -55,7 +55,7 @@ public class Producer {
         setConnectionFactory(activeMqBrokerUri, username, password);
         setConnection();
         setSession(false);
-        setDdestination(false, destinationName);
+        setDestination(false, destinationName);
         setMsgProducer();
     }
 
@@ -88,10 +88,9 @@ public class Producer {
         textMessage.setStringProperty(ACTION_ID_HEADER, String.valueOf(id));
         msgProducer.send(destination, textMessage);
         this.id++;
-
     }
 
-    private void setDdestination(final boolean isDestinationTopic, final String destinationName) throws JMSException {
+    private void setDestination(final boolean isDestinationTopic, final String destinationName) throws JMSException {
         if (isDestinationTopic) {
             destination = session.createTopic(destinationName);
         } else {
@@ -101,7 +100,6 @@ public class Producer {
 
     private void setMsgProducer() throws JMSException {
         msgProducer = session.createProducer(destination);
-
     }
 
     private void setSession(final boolean transacted) throws JMSException {

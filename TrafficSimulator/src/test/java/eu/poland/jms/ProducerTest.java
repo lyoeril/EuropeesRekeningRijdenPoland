@@ -36,13 +36,14 @@ public class ProducerTest {
         msgQueueSender.close();
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void TestSendMsg() throws JMSException {
         msgQueueSender.setup("TestQueue");
         msgQueueSender.sendMessage("Test");
     }
 
+    @Ignore
     @Test
     public void TestSendObject() throws JMSException {
         Gson gson = new Gson();
