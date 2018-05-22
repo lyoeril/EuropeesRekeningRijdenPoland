@@ -13,3 +13,4 @@ buildNumber.properties
 Simulator/target/
 RegistratieCentrale/target/
 /RegistratieCentrale/nbproject/
+TrafficSimulator/src/main/resources/config\.properties

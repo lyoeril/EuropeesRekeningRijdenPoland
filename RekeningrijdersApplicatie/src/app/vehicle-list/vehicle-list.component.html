@@ -7,14 +7,14 @@
             <tr>
                 <th scope="col">{{ "licenseplate" | translate }}</th>
                 <th scope="col">{{ "type" | translate }}</th>
-                <th scope="col">{{ "manage" | translate }}</th> 
+                <!-- <th scope="col">{{ "manage" | translate }}</th>  -->
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let vehicle of vehicles">
                 <td>{{vehicle.licensePlate}}</td>
                 <td>{{ vehicle.vehicleType.toString() | translate }}</td>
-                <td><button class="btn btn-primary">{{ "remove" | translate }}</button></td>
+                <!-- <td><button class="btn btn-danger">{{ "remove" | translate }}</button></td> -->
             </tr>
         </tbody>
     </table>

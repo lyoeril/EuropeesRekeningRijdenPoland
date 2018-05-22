@@ -7,12 +7,12 @@
         </div>
         <div class="col header-item">
             <button id="closeLoginModal" [hidden]="true" data-toggle="modal" data-target="#loginModal"></button>
-            <button *ngIf="session.getItem('userId') === null" class="btn btn-outline-primary" style="float:right" data-toggle="modal"
+            <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right" data-toggle="modal"
                 data-target="#loginModal">{{ "login" | translate }}</button>
             <button id="closeRegisterModal" [hidden]="true" data-toggle="modal" data-target="#registerModal"></button>
-            <button *ngIf="session.getItem('userId') === null" class="btn btn-outline-primary" style="float:right; margin-right: 5px;"
+            <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right; margin-right: 5px;"
                 data-toggle="modal" data-target="#registerModal">{{ "register" | translate }}</button>
-            <button *ngIf="session.getItem('userId') !== null" class="btn btn-outline-primary" style="float:right" (click)="logout()">{{ "logout" | translate }}</button>
+            <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-danger" style="float:right" (click)="logout()">{{ "logout" | translate }}</button>
         </div>
         <div class="col-2 header-item">
             <a class="language" [class.selected]="usingLang === 'pl'" (click)="changeLang('pl')">PL</a>
@@ -39,7 +39,7 @@
                     placeholder="{{ 'password' | translate }}" required autofocus>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="login(usercreds)">{{ "login" | translate }}</button>
+                <button type="button" class="btn btn-danger" (click)="login(usercreds)">{{ "login" | translate }}</button>
             </div>
         </div>
     </div>
@@ -58,6 +58,9 @@
                 <input name="email" id="regemail" type="email" class="form-control" [(ngModel)]="registercreds.email" (keyup.enter)="register(registercreds)"
                     placeholder="{{ 'email' | translate }}" required autofocus>
                 <br/>
+                <input name="address" id="regaddress" type="text" class="form-control" [(ngModel)]="registercreds.address" (keyup.enter)="register(registercreds)"
+                    placeholder="{{ 'address' | translate }}" required autofocus>
+                <br/>
                 <input name="username" id="regusername" type="text" class="form-control" [(ngModel)]="registercreds.username" (keyup.enter)="register(registercreds)"
                     placeholder="{{ 'username' | translate }}" required autofocus>
                 <br/>
@@ -65,7 +68,7 @@
                     placeholder="{{ 'password' | translate }}" required autofocus>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="register(registercreds)">{{ "register" | translate }}</button>
+                <button type="button" class="btn btn-danger" (click)="register(registercreds)">{{ "register" | translate }}</button>
             </div>
         </div>
     </div>

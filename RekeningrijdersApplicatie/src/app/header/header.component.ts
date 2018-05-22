@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
 
     registercreds = {
         email: '',
+        address: '',
         username: '',
         password: '',
     };
@@ -55,8 +56,8 @@ export class HeaderComponent implements OnInit {
     }
 
     register(registercreds) {
-        if (registercreds.email !== '' && registercreds.username !== '' && registercreds.password !== '') {
-            this.http.register().then(data => {
+        if (registercreds.email !== '' && registercreds.address !== '' && registercreds.username !== '' && registercreds.password !== '') {
+            this.http.register(registercreds).then(data => {
                 if (data !== null) {
                     // this.session.setUserId(data.id);
                     document.getElementById('closeRegisterModal').click();

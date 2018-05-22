@@ -17,8 +17,9 @@ declare let paypal: any;
     styleUrls: ['invoice.component.css']
 })
 
-export class InvoiceComponent implements OnInit {
-    invoiceId: number;
+export class InvoiceComponent implements OnInit, AfterViewChecked {
+    year: number;
+    month: number;
     invoice: Invoice = null;
 
     didPaypalScriptLoad = false;
@@ -42,8 +43,7 @@ export class InvoiceComponent implements OnInit {
         },
         onAuthorize: (data, actions) => {
             return actions.payment.execute().then((payment) => {
-                // show success page
-                this.invoice.paid = true;
+                this.payInvoice(this.year, this.month);
             });
         }
     };
@@ -54,13 +54,12 @@ export class InvoiceComponent implements OnInit {
         private route: ActivatedRoute) {
         this.route.params
             .subscribe((params: Params) => {
-                this.invoiceId = +params['invoiceId'];
+                this.year = +params['year'];
+                this.month = +params['month'];
             });
     }
 
-    ngOnInit() {
-        this.getInvoice(this.invoiceId);
-
+    ngAfterViewChecked(): void {
         if (!this.didPaypalScriptLoad) {
             this.loadPaypalScript().then(() => {
                 paypal.Button.render(this.paypalConfig, '#paypal-button');
@@ -68,10 +67,22 @@ export class InvoiceComponent implements OnInit {
         }
     }
 
-    getInvoice(invoiceId) {
-        this.http.getInvoice(invoiceId)
+    ngOnInit() {
+        this.getInvoice(this.year, this.month);
+    }
+
+    getInvoice(year: number, month: number) {
+        this.http.getInvoice(year, month)
             .then(invoice => {
                 this.invoice = invoice;
+            });
+    }
+
+    payInvoice(year: number, month: number) {
+        this.http.payInvoice(year, month)
+            .then(invoice => {
+                this.invoice = invoice;
+                this.invoice.paid = true;
             });
     }
 

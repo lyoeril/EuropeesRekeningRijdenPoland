@@ -1,4 +1,4 @@
-<div *ngIf="session.getItem('userId') !== null && user !== null" class="container">
+<div *ngIf="session.getItem('token') !== null && user !== null" class="container">
     <div class="row">
         <div class="col-6">
             <app-user [user]="user"></app-user>

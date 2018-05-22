@@ -1,8 +1,16 @@
 body {
-    background-color: lightgray;
+    background-color: #dc3545;
     /* background-image: url("../images/warschau.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed; */
+}
+
+a {
+    color: #dc3545;
+}
+
+a :hover {
+    color: #dc3545;
 }
 
 .shadow {

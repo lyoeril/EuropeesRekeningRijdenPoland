@@ -17,29 +17,29 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getUser(+sessionStorage.getItem('userId'));
+        this.getUser();
     }
 
-    getUser(userId: number) {
-        this.http.getUser(userId)
+    getUser() {
+        this.http.getUser()
             .then(user => {
                 if (user) {
                     this.user = user;
-                    this.fillUserInvoices(userId);
-                    this.fillUserVehicles(userId);
+                    this.fillUserInvoices();
+                    this.fillUserVehicles();
                 }
             });
     }
 
-    fillUserInvoices(userId: number) {
-        this.http.getUserInvoices(userId)
+    fillUserInvoices() {
+        this.http.getUserInvoices()
             .then(invoices => {
                 this.user.invoices = invoices;
             });
     }
 
-    fillUserVehicles(userId: number) {
-        this.http.getUserVehicles(userId)
+    fillUserVehicles() {
+        this.http.getUserVehicles()
             .then(vehicles => {
                 this.user.vehicles = vehicles;
             });
