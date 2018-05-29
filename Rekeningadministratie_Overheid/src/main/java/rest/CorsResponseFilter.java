@@ -21,6 +21,6 @@ public class CorsResponseFilter implements ContainerResponseFilter{
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://192.168.25.14:8080");
+        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
     }
 }
