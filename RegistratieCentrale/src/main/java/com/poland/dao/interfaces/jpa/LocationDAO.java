@@ -6,6 +6,7 @@
 package com.poland.dao.interfaces.jpa;
 
 import com.poland.entities.Location;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface LocationDAO extends BasicDAO<Location>{
     List<Location> findLocationsByRideId(long id);
+    
+    boolean insertLocationStoreProcedure(Date date, Double latitude, Double longitude, String authorisationCode);
 }

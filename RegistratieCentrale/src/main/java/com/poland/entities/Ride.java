@@ -24,9 +24,6 @@ public class Ride implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "serialNumber", unique = true, nullable = false)
-    private String serialNumber;
-
     @Column(name = "startDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
@@ -46,10 +43,9 @@ public class Ride implements Serializable {
         locations = new ArrayList<>();
     }
 
-    public Ride(Date startDate, String serialNumber, Vehicle vehicle) {
+    public Ride(Date startDate, Vehicle vehicle) {
         locations = new ArrayList<>();
         setStartDate(startDate);
-        setSerialNumber(serialNumber);
         setVehicle(vehicle);
 
     }
@@ -88,14 +84,6 @@ public class Ride implements Serializable {
 
     public List<Location> getLocations() {
         return locations;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
     }
 
     public void setLocations(List<Location> locations) {

@@ -7,7 +7,7 @@
         <class>com.poland.entities.Ride</class>
         <class>com.poland.entities.Vehicle</class>
         <properties>
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
         </properties>
     </persistence-unit>
 </persistence>

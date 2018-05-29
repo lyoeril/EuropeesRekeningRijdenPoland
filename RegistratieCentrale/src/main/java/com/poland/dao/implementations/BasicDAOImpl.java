@@ -33,12 +33,14 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
     @Override
     public T create(T entity) {
+        T newEntity = null;
         try {
             em.persist(entity);
+            newEntity = em.merge(entity);
         } catch (Exception ise) {
             handleExceptions(ise);
         }
-        return entity;
+        return newEntity;
     }
 
     @Override

@@ -65,61 +65,7 @@ public class RegistrationService {
     }
 
     public boolean registerLocation(Date date, Double latitude, Double longitude, String authorisationCode) {
-        Vehicle vehicle = null;
-        if (authorisationCode != null && authorisationCode != "") {
-            vehicle = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
-        }
-        System.out.println(vehicle);
-        if (vehicle == null) {
-            vehicle = vehicleService.createVehicle(new Vehicle(authorisationCode));
-        }
-
-        List<Ride> rides = new ArrayList<>();
-
-        vehicle.getRides().forEach(r -> {
-            if (r.getEndDate() == null) {
-                rides.add(r);
-            }
-        });
-
-        Ride ride = null;
-        if (rides.isEmpty()) {
-            String serialNumber = String.valueOf(new Random().nextLong());
-            ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
-            ride = rideService.findRideBySerialnumber(serialNumber);
-            vehicleService.addRide(ride);
-        } else {
-            ride = rides.get(0);
-
-            List<Location> locations = ride.getLocations();
-            Collections.sort(locations);
-
-            Location lastlocation = locations.get(ride.getLocations().size() - 1);
-
-            double diffInMillis = (double) Math.abs(date.getTime() - lastlocation.getDate().getTime());
-            double diff = diffInMillis / 3600000;
-
-            if (diff >= 1) {
-                ride.setEndDate(lastlocation.getDate());
-                rideService.editRide(ride);
-
-                String serialNumber = String.valueOf(new Random().nextLong());
-                ride = rideService.createRide(new Ride(date, serialNumber, vehicle));
-                vehicleService.addRide(ride);
-                ride = rideService.findRideBySerialnumber(serialNumber);
-            }
-        }
-
-        Location location = new Location(date, latitude, longitude, ride);
-        location = locationService.createLocation(location);
-        
-        List<Location> rideLocations = locationService.getLocationsByRideId(ride.getId());
-        Collections.sort(rideLocations);
-        
-        Location newlocation = rideLocations.get(ride.getLocations().size() - 1);
-        
-        rideService.addLocation(ride.getId(), newlocation.getId());
-        return true;
+        return locationService.insertLocationStoreProcedure(date, latitude, longitude, authorisationCode);
     }
 
 }

@@ -11,6 +11,21 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_location")
+@NamedStoredProcedureQuery(
+        name = "insertLocationSP",
+        procedureName = "insertLocationSP",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "datetime")
+            ,
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Double.class, name = "latitude")
+            ,
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Double.class, name = "longitude")
+            ,
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "authorisationCode")
+            ,
+            @StoredProcedureParameter(mode = ParameterMode.OUT, type = Long.class, name = "succeeded")
+        }
+)
 public class Location implements Serializable, Comparable<Location> {
 
     @Id

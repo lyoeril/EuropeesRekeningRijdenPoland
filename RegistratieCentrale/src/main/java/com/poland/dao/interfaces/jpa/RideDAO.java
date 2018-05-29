@@ -6,6 +6,7 @@
 package com.poland.dao.interfaces.jpa;
 
 import com.poland.entities.Ride;
+import java.util.Date;
 
 /**
  *
@@ -13,8 +14,7 @@ import com.poland.entities.Ride;
  */
 public interface RideDAO extends BasicDAO<Ride> {
 
-    Ride findRideBySerialNumber(String serialNumber);
-
+    Ride findUncompletedRideByAutorisationCode(String authorisationCode);
     boolean addLocation(long rideid, long locationid);
 
     boolean removeLocation(long rideid, long locationid);

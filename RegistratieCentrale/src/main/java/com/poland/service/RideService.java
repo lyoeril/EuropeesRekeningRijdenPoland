@@ -7,6 +7,7 @@ package com.poland.service;
 
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Ride;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -27,9 +28,9 @@ public class RideService {
     public RideService() {
     }
 
-    public Ride findRideBySerialnumber(String serialNumber) {
-        if (serialNumber != null || serialNumber.equals("")) {
-            return rideDAO.findRideBySerialNumber(serialNumber);
+    public Ride findOrCreateUncompletedRideByAutorisationCode(String authorisationCode) {
+        if (authorisationCode != null || authorisationCode.equals("")) {
+            return rideDAO.findUncompletedRideByAutorisationCode(authorisationCode);
         } else {
             return null;
         }
