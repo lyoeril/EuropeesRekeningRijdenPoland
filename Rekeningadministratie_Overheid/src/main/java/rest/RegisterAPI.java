@@ -18,6 +18,7 @@ import domain.Rekeningrijder;
 import domain.User;
 import domain.UserGroup;
 import dto.DTO_Rekeningrijder;
+import dto.DTO_User;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
@@ -81,8 +82,10 @@ public class RegisterAPI {
         System.out.println("group: " + group.getGroupName());
         u.addGroup(group);
         boolean finished = userService.register(u);
+        System.out.println("Finished? " + finished);
         if (finished) {
-            return Response.ok(u).build();
+            System.out.println("is finished");
+            return Response.ok(new DTO_User(u)).build();
         }
         return Response.status(Status.FORBIDDEN).build();
     }

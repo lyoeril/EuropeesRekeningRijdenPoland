@@ -31,12 +31,16 @@ import javax.persistence.TemporalType;
 @Model
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll",
-            query = "SELECT i FROM Invoice i")
-    ,
+            query = "SELECT i FROM Invoice i")    ,
     @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
             query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id "
-                    + "AND i.year = :year AND i.month = :month")
-})
+                    + "AND i.year = :year AND i.month = :month"),
+    @NamedQuery(name = "Invoice.findByCartrackerYearMonth",
+            query = "SELECT i FROM Invoice i WHERE i.carTrackerId = :cartrackerid "
+                    + "AND i.year = :year AND i.month = :month"),   
+    @NamedQuery(name = "Invoice.findByStatus",
+            query = "SELECT i FROM Invoice i WHERE i.status = :status")
+}) 
 public class Invoice implements Serializable{
     
     @Id

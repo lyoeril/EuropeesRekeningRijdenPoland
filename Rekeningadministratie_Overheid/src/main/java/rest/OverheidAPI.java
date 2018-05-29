@@ -10,11 +10,14 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import domain.Cartracker;
+import domain.Invoice;
 import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.User;
 import dto.DTO_User;
+import enums.InvoiceStatus;
 import enums.VehicleType;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
@@ -39,6 +42,7 @@ import services.UserService;
 @Path("overheid")
 @JWTTokenNeeded
 @Stateless
+@Produces(APPLICATION_JSON)
 public class OverheidAPI {
 
     @Inject
@@ -76,7 +80,7 @@ public class OverheidAPI {
 
     @POST
     @Produces(APPLICATION_JSON)
-    @Path("cartracker/new")
+    @Path("cartrackers/new")
     public Response addCartracker(
             @Context HttpHeaders headers,
             @FormParam("hardware") String hardware) {
@@ -86,7 +90,7 @@ public class OverheidAPI {
             return Response.accepted(cartracker).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
-        
+
     }
 
     @GET
@@ -98,27 +102,36 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_IMPLEMENTED).build();
     }
-//    
-//    @POST
-//    @Path("cartrackers/{id}")
-//    public Response setCartracker(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
-//    
-//    @GET
-//    @Path("KMRates")
-//    public Response getKMRates(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
-//    
+
+    @POST
+    @Produces(APPLICATION_JSON)
+    @Path("cartrackers/{id}/update")
+    public Response setCartracker(
+            @PathParam("id") long id,
+            @FormParam("hardware") String hardware) {
+        Cartracker c = registrationService.findCartrackerById(id);
+        if (c != null) {
+            c.setHardware(hardware);
+            registrationService.updateCartracker(c);
+            return Response.accepted(c).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Path("KMRates")
+    public Response getKMRates() {
+        return Response.status(Status.NOT_IMPLEMENTED).build();
+    }
+
     @GET
     @Produces(APPLICATION_JSON)
     @Path("KMRates/{region}")
     public Response getKMRateByRegion(
-            @PathParam("region") String region){
-        if(!region.isEmpty()){
+            @PathParam("region") String region) {
+        if (!region.isEmpty()) {
             KMRate kMRate = invoiceService.findKMRateByRegion(region);
-            if(kMRate != null){
+            if (kMRate != null) {
                 return Response.accepted(kMRate).build();
             }
         }
@@ -141,12 +154,16 @@ public class OverheidAPI {
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
-//    @GET
-//    @Path("invoices")
-//    public Response getCalculatedInvoices(){
-//        invoiceService.find
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
+
+    @GET
+    @Path("invoices")
+    public Response getCalculatedInvoices() {
+        List<Invoice> invoices = invoiceService.findAllInvoices();
+        if (invoices != null) {
+            return Response.accepted(invoices).build();
+        }
+        return Response.status(Status.NOT_IMPLEMENTED).build();
+    }
 //    
 //    @POST
 //    @Path("invoices/vehicle/{year}/{month}")
@@ -154,23 +171,42 @@ public class OverheidAPI {
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
-//    @GET
-//    @Path("invoices/cartracker/{id}/{year}/{month}")
-//    public Response getInvoicesByCartracker(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
-//    
-//    @GET
-//    @Path("invoices/rekeningrijder/{id}")
-//    public Response getInvoicesByRekeningrijder(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
-//    
-//    @GET
-//    @Path("invoices/invoicestatus/{status}")
-//    public Response getInvoicesByStatus(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
+
+    @GET
+    @Path("invoices/cartracker/{cartrackerId}/{year}/{month}")
+    public Response getInvoicesByCartrackerYearMonth(
+            @PathParam("cartrackerId") long id,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        Invoice i = invoiceService.findInvoiceByCartrackerYearMonth(id, year, month);
+        if (i != null) {
+            return Response.accepted(i).build();
+        }
+        return Response.status(Status.FORBIDDEN).build();
+    }
+
+    @GET
+    @Path("invoices/rekeningrijder/{id}")
+    public Response getInvoicesByRekeningrijder(
+            @PathParam("id") long id) {
+        Rekeningrijder r = registrationService.findRekeningrijderById(id);
+        List<Invoice> invoices = r.getInvoices();
+        if (invoices != null) {
+            return Response.accepted(invoices).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Path("invoices/invoicestatus/{status}")
+    public Response getInvoicesByStatus(
+            @PathParam("status") InvoiceStatus status) {
+        List<Invoice> invoices = invoiceService.findInvoicesByStatus(status);
+        if(invoices != null){
+            return Response.accepted(invoices).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
 
     private String getUsernameFromToken(String token) {
         try {
