@@ -108,7 +108,7 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        Invoice i = new Invoice(1, 20.00, 1, 2017, rekeningrijder);
+        Invoice i = new Invoice(1, 20.00, 2017, 1, rekeningrijder);
         rekeningrijder.getInvoices().add(i);
         registrationService.updateRekeningrijder(rekeningrijder);
         invoiceService.addInvoice(i);
@@ -159,13 +159,9 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        List<Invoice> invoices = rekeningrijder.getInvoices();
-        if (invoices != null) {
-            for (Invoice i : invoices) {
-                if(i.getYear() == year && i.getMonth() == month){
-                    return Response.accepted(new DTO_Invoice(i)).build();
-                }
-            }
+        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
+        if(toReturn != null){
+            return Response.accepted(new DTO_Invoice(toReturn)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }

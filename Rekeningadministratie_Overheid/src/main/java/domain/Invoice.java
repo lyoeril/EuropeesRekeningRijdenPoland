@@ -29,16 +29,14 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Model
-//@NamedQueries({
-//    @NamedQuery(name = "Invoice.findAll",
-//            query = "SELECT i FROM Invoice i")
-//    ,
-//    @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
-//            query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id AND i.date")
-//    ,
-//    @NamedQuery(name = "User.findByUsername",
-//            query = "SELECT u FROM User u WHERE u.username LIKE :username")
-//})
+@NamedQueries({
+    @NamedQuery(name = "Invoice.findAll",
+            query = "SELECT i FROM Invoice i")
+    ,
+    @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
+            query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id "
+                    + "AND i.year = :year AND i.month = :month")
+})
 public class Invoice implements Serializable{
     
     @Id

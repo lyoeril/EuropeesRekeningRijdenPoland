@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -65,8 +67,16 @@ public class InvoiceJPA implements IInvoiceDAO {
     }
 
     @Override
-    public Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
+        try {
+            Query q = em.createNamedQuery("Invoice.findByRekeningrijderMonth");
+            q.setParameter("id", rekeningrijder.getId());
+            q.setParameter("year", year);
+            q.setParameter("month", month);
+            return (Invoice) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
