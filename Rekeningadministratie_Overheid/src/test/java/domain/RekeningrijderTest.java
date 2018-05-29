@@ -27,9 +27,9 @@ public class RekeningrijderTest {
     
     @Before
     public void setUp() {
-        r1 = new Rekeningrijder("username1", "password1", "address1", "email1");
+        r1 = new Rekeningrijder("username1", "password1", "address1", "city", "email1");
         r1.setId(1L);
-        r2 = new Rekeningrijder("username2", "password2", "address2", "email2");
+        r2 = new Rekeningrijder("username2", "password2", "address2", "city", "email2");
         r2.setId(2L);
     }
     

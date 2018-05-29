@@ -52,13 +52,14 @@ public class RegisterAPI {
             @FormParam("username") String username,
             @FormParam("password") String password,
             @FormParam("email") String email,
-            @FormParam("address") String address) {
+            @FormParam("address") String address,
+            @FormParam("city") String city) {
         boolean findUsername = (userService.findByUsername(username).size() != 0);
         System.out.println("findUsername = " + findUsername);
         if(findUsername){
             return Response.status(Status.CONFLICT).build();
         }
-        Rekeningrijder r = new Rekeningrijder(username, password, address, email);
+        Rekeningrijder r = new Rekeningrijder(username, password, address, city, email);
         UserGroup group = registrationService.findByName("REKENINGRIJDER");
 
         r.addGroup(group);

@@ -36,8 +36,8 @@ public class InvoiceTest {
     
     @Before
     public void setUp() {
-        r1 = new Rekeningrijder("r1", "address1", "","");
-        r2 = new Rekeningrijder("r2", "address2", "", "");
+        r1 = new Rekeningrijder("r1", "address1", "","", "");
+        r2 = new Rekeningrijder("r2", "address2", "", "", "");
         
         c1 = new Cartracker("hardware1");
         c1.setId(1L);

@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 public class Rekeningrijder extends User implements Serializable {
 
     private String address;
+    private String city;
     
     @OneToMany
     private List<Invoice> invoices = new ArrayList<>();
@@ -30,7 +31,7 @@ public class Rekeningrijder extends User implements Serializable {
     public Rekeningrijder() {
     }
 
-    public Rekeningrijder(String username, String password, String address, String email) {
+    public Rekeningrijder(String username, String password, String address, String city, String email) {
         super(username, password, email);
         this.address = address;
     }
@@ -59,6 +60,15 @@ public class Rekeningrijder extends User implements Serializable {
     public void setOwnedVehicles(List<Vehicle> ownedVehicles) {
         this.ownedVehicles = ownedVehicles;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
     
     
 
