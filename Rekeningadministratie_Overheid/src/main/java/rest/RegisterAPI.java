@@ -77,7 +77,7 @@ public class RegisterAPI {
             @FormParam("password") String password,
             @FormParam("email") String email) {
         User u = new User(username, password, email);
-        UserGroup group = registrationService.findByName("REKENINGRIJDER");
+        UserGroup group = registrationService.findByName("OVERHEID");
         System.out.println("group: " + group.getGroupName());
         u.addGroup(group);
         boolean finished = userService.register(u);

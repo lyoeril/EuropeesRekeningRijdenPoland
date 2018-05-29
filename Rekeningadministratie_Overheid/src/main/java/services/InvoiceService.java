@@ -66,7 +66,7 @@ public class InvoiceService {
     }
     
     private Invoice calculateInvoice(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle){
-        return new Invoice(1, 1, new GregorianCalendar(), rekeningrijder);
+        return new Invoice(1, 1, 2017, 1, rekeningrijder);
     }
     
     public void addKMRate(KMRate kmRate){

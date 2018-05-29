@@ -24,8 +24,8 @@ public class DTO_Invoice {
         this.id = invoice.getInvoiceNumber();
         this.totalAmount = invoice.getTotalAmount();
         this.status = invoice.getStatus();
-        this.year = invoice.getDate().get(Calendar.YEAR);
-        this.month = invoice.getDate().get(Calendar.MONTH);
+        this.year = invoice.getYear();
+        this.month = invoice.getMonth();
     }
 
     public long getId() {

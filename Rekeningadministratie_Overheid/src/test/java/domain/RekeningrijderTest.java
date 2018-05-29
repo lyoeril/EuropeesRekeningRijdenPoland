@@ -129,7 +129,7 @@ public class RekeningrijderTest {
     public void testSetInvoices() {
         System.out.println("setInvoices");
         List<Invoice> invoices = new ArrayList<Invoice>();
-        invoices.add(new Invoice(1L, 0.2, new GregorianCalendar(), r1));
+        invoices.add(new Invoice(1L, 0.2, 2017, 1, r1));
         Rekeningrijder instance = r1;
         instance.setInvoices(invoices);
     }
