@@ -3,6 +3,7 @@ package eu.poland.trafficsimulator;
 import eu.poland.threading.SimulationController;
 import eu.poland.jms.Producer;
 import java.util.Scanner;
+import java.util.Set;
 import javax.jms.JMSException;
 
 /**
@@ -16,8 +17,6 @@ public class Main {
     private static SimulationController simulator;
 
     public static void main(String[] args) throws JMSException {
-        System.out.println("Loading properties file. . .");
-
         System.out.println("Connecting to ActiveMQ server. . .");
         Producer msgQueueSender = new Producer("tcp://" + activeMQIp + ":61616", "admin", "secret");
         msgQueueSender.setup("TrafficQueue");
@@ -43,6 +42,10 @@ public class Main {
                 case "count":
                     int count = simulator.getSimCount();
                     System.out.printf("Currently live simulation threads: %s\n", count);
+                    break;
+                case "list":
+                    Set<String> trackerIds = simulator.getSimTrackerIds();
+                    System.out.printf("Currently live trackers:\n%s\n", trackerIds);
                     break;
                 case "stop":
                     System.out.println("\nSimulator is stopping. . .");
@@ -96,6 +99,7 @@ public class Main {
                 + "info\t\tShow current status of the Simulator\n"
                 + "spawn\t\tSpawn a new simulation thread\n"
                 + "count\t\tShow the amount of currently active simulations\n"
+                + "list\t\tShow the trackerIds of the currently active simulations\n"
                 + "stop\t\tStop the simulator\n"
                 + "----------------------------------------------------------------------------------------------------\n");
     }

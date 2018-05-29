@@ -24,6 +24,8 @@ public class RouteDaoMem implements IRouteDao {
     private Map<Long, DirectionsRoute> routes;
 
     private void initProps() {
+        System.out.println("Loading properties file. . .");
+
         try {
             props = new Properties();
             InputStream in = ClassLoader.class.getResourceAsStream("/config.properties");
