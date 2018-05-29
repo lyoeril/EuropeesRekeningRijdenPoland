@@ -166,23 +166,23 @@ public class RekeningrijderAPI {
         return Response.status(Status.NOT_FOUND).build();
     }
 
-//    //TODO
-//    @PUT
-//    @Path("invoices/{year}/{month}/")
-//    public Response payInvoice(
-//            @Context HttpHeaders headers,
-//            @PathParam("year") int year,
-//            @PathParam("month") int month) {
-//        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-//        Rekeningrijder r = this.getRekeningrijderFromToken(token);
-//        Calendar date = new GregorianCalendar(year, month, 1);
-//        if (toReturn != null) {
-//            toReturn.setStatus(InvoiceStatus.PAID);
-//            invoiceService.updateInvoice(toReturn);
-//            return Response.accepted().build();
-//        }
-//        return Response.status(Status.BAD_REQUEST).build();
-//    }
+    //TODO
+    @PUT
+    @Path("invoices/{year}/{month}/")
+    public Response payInvoice(
+            @Context HttpHeaders headers,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(r, year, month);
+        if (toReturn != null) {
+            toReturn.setStatus(InvoiceStatus.PAID);
+            invoiceService.updateInvoice(toReturn);
+            return Response.accepted().build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
 
     @GET
     @Produces(APPLICATION_JSON)
