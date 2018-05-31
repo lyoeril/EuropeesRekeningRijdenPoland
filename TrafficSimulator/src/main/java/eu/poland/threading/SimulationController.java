@@ -5,6 +5,7 @@ import com.google.maps.model.DirectionsRoute;
 import eu.poland.domain.Ride;
 import eu.poland.jms.Producer;
 import eu.poland.service.PolygonService;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.JMSException;
@@ -61,13 +61,22 @@ public class SimulationController {
     }
 
     public SimulationController(Producer producer) {
+        /*System.out.println(new GeoJsonWriter().write(new GeometryFactory().createPolygon(
+                new Coordinate[]{
+                    new Coordinate(1,1), 
+                    new Coordinate(1,2), 
+                    new Coordinate(2,2), 
+                    new Coordinate(2,1), 
+                    new Coordinate(1,1)
+                }
+        )));*/
         this.json = new GeoJsonReader();
         this.msgQueueProducer = producer;
         this.pool = Executors.newCachedThreadPool();
         this.polyPoland = new PolygonService(loadGeoJsonFile("/poland.json"));
-        System.out.println(polyPoland.getRandomPoint());
-        System.out.println(polyPoland.getRandomPoint());
-        System.out.println(polyPoland.getRandomPoint());
+        for (int i = 0; i < 16; i++) {
+            System.out.println(polyPoland.getRandomPoint());
+        }
         this.routeService = new RouteService();
         this.simulations = new HashMap();
     }
@@ -99,11 +108,16 @@ public class SimulationController {
         System.out.printf("Loading %s. . .\n", path);
         try {
             InputStreamReader in = new InputStreamReader(ClassLoader.class.getResourceAsStream(path));
-            return json.read(in);
+            Geometry ret = json.read(in);
+            in.close();
+            return ret;
         } catch (ParseException ex) {
             //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
             System.out.printf("Please verify the integrity of %s.\n", path);
             System.exit(1);
+            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
