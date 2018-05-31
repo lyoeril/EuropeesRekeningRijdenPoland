@@ -37,6 +37,7 @@ public class PolygonService {
                 break;
             }
         }
-        return new LatLng(p.getX(), p.getY());
+        // For some reason the JSON file's data is inverted
+        return new LatLng(p.getY(), p.getX());
     }
 }
