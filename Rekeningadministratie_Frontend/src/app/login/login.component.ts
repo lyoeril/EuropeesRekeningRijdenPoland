@@ -1,45 +1,34 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {AuthService} from '../auth.service';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../_service/http.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  encapsulation: ViewEncapsulation.None,
-  providers: [
-    AuthService
-  ]
+    selector: 'app-login',
+    templateUrl: 'login.component.html',
+    styleUrls: ['login.component.css']
 })
+
 export class LoginComponent implements OnInit {
 
-  error = '';
+    usercreds = {
+        username: '',
+        password: '',
+    };
 
-    loginForm = new FormGroup({
-    username: new FormControl(),
-    password: new FormControl()
-  });
+    constructor(
+        private http: HttpService,
+        private router: Router
+    ) { }
 
-  constructor(private authService: AuthService, private router: Router) {
-  }
+    ngOnInit() { }
 
-  ngOnInit() {
-  }
-
-  login(): void {
-    this
-      .authService
-      .login(this.loginForm.get('username').value, this.loginForm.get('password').value)
-      .subscribe(result => {
-        localStorage.setItem('token', result.headers.get('Authorization'));
-        this.router.navigate(['/']);
-      }, err => {
-        if (err.status === 401) {
-          this.error = 'Username or password incorrect';
-        } else {
-          this.error = 'An unknown error occured';
-        }
-      });
-  }
+    login() {
+        this.http.login(this.usercreds)
+            .then(response => {
+                if (response === true) {
+                    this.router.navigate(['']);
+                }
+                console.log(response);
+            });
+    }
 }

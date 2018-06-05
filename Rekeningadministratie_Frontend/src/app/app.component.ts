@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component } from '@angular/core';
+
+import fontawesome from '@fortawesome/fontawesome';
+import { faHome, faFileAlt, faCar } from '@fortawesome/fontawesome-free-solid';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +9,9 @@ import {Router} from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  isNavbarCollapsed = true;
+  title = 'app';
 
-  constructor(private router: Router) {
-  }
-
-
-  isLoggedIn(): boolean {
-    return !(localStorage.getItem('token') === null);
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+  constructor() {
+    fontawesome.library.add(faHome, faFileAlt, faCar);
   }
 }

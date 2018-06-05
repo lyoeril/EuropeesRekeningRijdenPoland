@@ -1,7 +1,7 @@
 {
-  "name": "overheid",
-  "version": "1.0.0",
-  "license": "UNLICENSED",
+  "name": "rekeningadministratie-frontend",
+  "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,17 +21,14 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
-    "@auth0/angular-jwt": "^1.1.0",
-    "@ng-bootstrap/ng-bootstrap": "^1.1.1",
-    "angular2-jwt": "^0.2.3",
-    "bootstrap": "^4.0.0",
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "core-js": "^2.4.1",
-    "ngx-infinite-scroll": "^0.8.3",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {
-    "@angular/cli": "^6.0.0-rc.4",
+    "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "~2.8.3",
@@ -48,7 +45,6 @@
     "protractor": "~5.1.2",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
-    "typescript": "~2.5.3",
-    "@angular-devkit/build-angular": "~0.5.0"
+    "typescript": "~2.5.3"
   }
 }
