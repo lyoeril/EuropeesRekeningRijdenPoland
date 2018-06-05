@@ -65,8 +65,11 @@ public class OverheidAPI {
     public Response getEmployee(@Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
+        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
         if (u != null) {
-            return Response.accepted(new DTO_User(u)).build();
+            if(!isRekeningrijder){
+                return Response.accepted(new DTO_User(u)).build();
+            }            
         }
         return Response.noContent().build();
     }
@@ -75,7 +78,11 @@ public class OverheidAPI {
     @Produces(APPLICATION_JSON)
     @Path("cartrackers")
     public Response getCartrackers() {
-        return Response.status(Status.NOT_IMPLEMENTED).build();
+        List<Cartracker> cartrackers = registrationService.findAllCartrackers();
+        if(cartrackers != null){
+            return Response.accepted(cartrackers).build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     @POST
@@ -100,7 +107,7 @@ public class OverheidAPI {
         if (c != null) {
             Response.accepted(c).build();
         }
-        return Response.status(Status.NOT_IMPLEMENTED).build();
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     @POST
@@ -171,6 +178,17 @@ public class OverheidAPI {
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
+    
+    @GET
+    @Path("invoices/{id}")
+    public Response getInvoiceById(
+            @PathParam("id") long id){
+        Invoice i = invoiceService.findInvoiceById(id);
+        if(i != null){
+            return Response.accepted().build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
 
     @GET
     @Path("invoices/cartracker/{cartrackerId}/{year}/{month}")

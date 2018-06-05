@@ -6,6 +6,7 @@
 package dao.interfaces;
 
 import domain.Cartracker;
+import java.util.List;
 
 /**
  *
@@ -17,4 +18,6 @@ public interface ICartrackerDAO {
     void edit(Cartracker cartracker);
     void delete(Cartracker cartracker);
     Cartracker findById(long id);
+
+    List<Cartracker> findAll();
 }

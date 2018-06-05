@@ -34,7 +34,8 @@ public class Rekeningrijder extends User implements Serializable {
     public Rekeningrijder(String username, String password, String address, String city, String email) {
         super(username, password, email);
         this.address = address;
-    }
+    }  
+    
 
     public String getAddress() {
         return address;

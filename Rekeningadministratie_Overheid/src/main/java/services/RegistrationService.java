@@ -84,6 +84,10 @@ public class RegistrationService {
         return iCartrackerDAO.findById(id);
     }
     
+    public List<Cartracker> findAllCartrackers(){
+        return iCartrackerDAO.findAll();
+    }
+    
     //UserGroup
     public List<UserGroup> findAllUserGroups(){
         return iUserGroupDAO.findAll();

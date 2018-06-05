@@ -88,13 +88,15 @@ public class RekeningrijderAPI {
     public Response updateRekeningrijder(
             @Context HttpHeaders headers,
             @FormParam("email") String email,
-            @FormParam("address") String address) {
+            @FormParam("address") String address,
+            @FormParam("password") String password){
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
         if (rekeningrijder != null) {
             rekeningrijder.setEmail(email);
             rekeningrijder.setAddress(address);
+            rekeningrijder.setPassword(password);
             registrationService.updateRekeningrijder(rekeningrijder);
             return Response.accepted(new DTO_Rekeningrijder(rekeningrijder)).build();
         }

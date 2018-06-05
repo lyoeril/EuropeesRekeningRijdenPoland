@@ -2,6 +2,7 @@ package dao.JPA;
 
 import dao.interfaces.ICartrackerDAO;
 import domain.Cartracker;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,5 +50,10 @@ public class CartrackerJPA implements ICartrackerDAO{
     @Override
     public Cartracker findById(long id) {
         return em.find(Cartracker.class, id);
+    }
+
+    @Override
+    public List<Cartracker> findAll() {
+        return em.createNamedQuery("Cartracker.findAll").getResultList();
     }
 }
