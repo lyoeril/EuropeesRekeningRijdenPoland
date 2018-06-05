@@ -23,6 +23,11 @@ import javax.persistence.Transient;
  */
 
 @Entity
+@Model
+@NamedQueries({
+    @NamedQuery(name = "Cartracker.findAll",
+            query = "SELECT c FROM Cartracker c")
+})
 public class Cartracker implements Serializable{
     
     @Id

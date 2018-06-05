@@ -55,7 +55,6 @@ public class LoginResource {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .header("Access-Control-Expose-Headers", "Authorization")
                     .build();
-
         }
         return Response.status(Response.Status.UNAUTHORIZED).build();
     }

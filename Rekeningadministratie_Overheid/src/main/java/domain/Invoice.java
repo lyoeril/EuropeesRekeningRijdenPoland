@@ -29,16 +29,18 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Model
-//@NamedQueries({
-//    @NamedQuery(name = "Invoice.findAll",
-//            query = "SELECT i FROM Invoice i")
-//    ,
-//    @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
-//            query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id AND i.date")
-//    ,
-//    @NamedQuery(name = "User.findByUsername",
-//            query = "SELECT u FROM User u WHERE u.username LIKE :username")
-//})
+@NamedQueries({
+    @NamedQuery(name = "Invoice.findAll",
+            query = "SELECT i FROM Invoice i")    ,
+    @NamedQuery(name = "Invoice.findByRekeningrijderMonth",
+            query = "SELECT i FROM Invoice i WHERE i.rekeningrijder.id = :id "
+                    + "AND i.year = :year AND i.month = :month"),
+    @NamedQuery(name = "Invoice.findByCartrackerYearMonth",
+            query = "SELECT i FROM Invoice i WHERE i.carTrackerId = :cartrackerid "
+                    + "AND i.year = :year AND i.month = :month"),   
+    @NamedQuery(name = "Invoice.findByStatus",
+            query = "SELECT i FROM Invoice i WHERE i.status = :status")
+}) 
 public class Invoice implements Serializable{
     
     @Id
@@ -47,8 +49,8 @@ public class Invoice implements Serializable{
     private long carTrackerId;
     private double totalAmount;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar date;
+    private int year;
+    private int month;
     
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
@@ -61,10 +63,11 @@ public class Invoice implements Serializable{
         
     }
 
-    public Invoice(long carTrackerId, double totalAmount, Calendar date, Rekeningrijder rekeningrijder) {
+    public Invoice(long carTrackerId, double totalAmount, int year, int month, Rekeningrijder rekeningrijder) {
         this.carTrackerId = carTrackerId;
         this.totalAmount = totalAmount;
-        this.date = date;
+        this.year = year;
+        this.month = month;
         this.rekeningrijder = rekeningrijder;
         status = InvoiceStatus.OPEN;
     }
@@ -93,13 +96,21 @@ public class Invoice implements Serializable{
         this.totalAmount = totalAmount;
     }
 
-    public Calendar getDate() {
-        return date;
+    public int getYear() {
+        return year;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setYear(int year) {
+        this.year = year;
     }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }    
 
     public InvoiceStatus getStatus() {
         return status;

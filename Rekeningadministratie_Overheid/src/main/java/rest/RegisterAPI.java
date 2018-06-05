@@ -18,6 +18,7 @@ import domain.Rekeningrijder;
 import domain.User;
 import domain.UserGroup;
 import dto.DTO_Rekeningrijder;
+import dto.DTO_User;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
@@ -52,13 +53,14 @@ public class RegisterAPI {
             @FormParam("username") String username,
             @FormParam("password") String password,
             @FormParam("email") String email,
-            @FormParam("address") String address) {
+            @FormParam("address") String address,
+            @FormParam("city") String city) {
         boolean findUsername = (userService.findByUsername(username).size() != 0);
         System.out.println("findUsername = " + findUsername);
         if(findUsername){
             return Response.status(Status.CONFLICT).build();
         }
-        Rekeningrijder r = new Rekeningrijder(username, password, address, email);
+        Rekeningrijder r = new Rekeningrijder(username, password, address, city, email);
         UserGroup group = registrationService.findByName("REKENINGRIJDER");
 
         r.addGroup(group);
@@ -76,12 +78,14 @@ public class RegisterAPI {
             @FormParam("password") String password,
             @FormParam("email") String email) {
         User u = new User(username, password, email);
-        UserGroup group = registrationService.findByName("REKENINGRIJDER");
+        UserGroup group = registrationService.findByName("OVERHEID");
         System.out.println("group: " + group.getGroupName());
         u.addGroup(group);
         boolean finished = userService.register(u);
+        System.out.println("Finished? " + finished);
         if (finished) {
-            return Response.ok(u).build();
+            System.out.println("is finished");
+            return Response.ok(new DTO_User(u)).build();
         }
         return Response.status(Status.FORBIDDEN).build();
     }

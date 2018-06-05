@@ -87,22 +87,16 @@ public class RekeningrijderAPI {
     @Produces(APPLICATION_JSON)
     public Response updateRekeningrijder(
             @Context HttpHeaders headers,
-            @FormParam("username") String username,
             @FormParam("email") String email,
-            @FormParam("address") String address) {
+            @FormParam("address") String address,
+            @FormParam("password") String password){
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        boolean findUsername = (userService.findByUsername(username).size() != 0);
-        System.out.println("findUsername = " + findUsername);
-        if (findUsername) {
-            return Response.status(Status.CONFLICT).build();
-        }
-
         if (rekeningrijder != null) {
-            rekeningrijder.setUsername(username);
             rekeningrijder.setEmail(email);
             rekeningrijder.setAddress(address);
+            rekeningrijder.setPassword(password);
             registrationService.updateRekeningrijder(rekeningrijder);
             return Response.accepted(new DTO_Rekeningrijder(rekeningrijder)).build();
         }
@@ -116,7 +110,7 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        Invoice i = new Invoice(1, 20.00, new GregorianCalendar(TimeZone.getTimeZone("434")), rekeningrijder);
+        Invoice i = new Invoice(1, 20.00, 2017, 1, rekeningrijder);
         rekeningrijder.getInvoices().add(i);
         registrationService.updateRekeningrijder(rekeningrijder);
         invoiceService.addInvoice(i);
@@ -167,16 +161,9 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        List<Invoice> invoices = rekeningrijder.getInvoices();
-        if (invoices != null) {
-            for (Invoice i : invoices) {
-                Calendar c = i.getDate();
-                System.out.println("c.MONTh: " + c.get(Calendar.MONTH));
-                System.out.println("DATE: " + c.get(Calendar.YEAR) + " " + c.get(Calendar.MONTH) + " " + c.get(Calendar.DATE));
-                if (c.get(Calendar.YEAR) == year && (c.get(Calendar.MONTH) + 1) == month) {
-                    return Response.accepted(new DTO_Invoice(i)).build();
-                }
-            }
+        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
+        if(toReturn != null){
+            return Response.accepted(new DTO_Invoice(toReturn)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
@@ -190,11 +177,10 @@ public class RekeningrijderAPI {
             @PathParam("month") int month) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        Calendar date = new GregorianCalendar(year, month, 1);
-        Invoice invoice = invoiceService.findInvoiceByRekeningrijderMonth(r, date);
-        if (invoice != null) {
-            invoice.setStatus(InvoiceStatus.PAID);
-            invoiceService.updateInvoice(invoice);
+        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(r, year, month);
+        if (toReturn != null) {
+            toReturn.setStatus(InvoiceStatus.PAID);
+            invoiceService.updateInvoice(toReturn);
             return Response.accepted().build();
         }
         return Response.status(Status.BAD_REQUEST).build();
@@ -262,17 +248,30 @@ public class RekeningrijderAPI {
         registrationService.updateRekeningrijder(r);
         return Response.accepted().build();
     }
+    
+    @PUT
+    @Produces(APPLICATION_JSON)
+    @Path("cars/{carId}/update")
+    public Response updateCar(
+            @Context HttpHeaders headers,
+            @FormParam("vehicletype") VehicleType vehicleType,
+            @FormParam("licensePlate") String licensePlate) {
 
-//    //TODO
-//    @PUT
-//    @Path("cars/{carId}")
-//    public Response updateCar(
-//            @Context HttpHeaders headers,
-//            @PathParam("carId") long id,
-//            @FormParam()
-//            ) {
-//        return Response.status(Status.NOT_FOUND).build();
-//    }
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        List<Vehicle> vehicles = r.getOwnedVehicles();
+        Vehicle old = new Vehicle(vehicleType, licensePlate);
+        for(Vehicle v: vehicles){
+            if(v.getLicensePlate() == licensePlate){
+                r.getOwnedVehicles().remove(v);
+                old.setVehicleType(vehicleType);
+                r.getOwnedVehicles().add(v);
+                registrationService.updateRekeningrijder(r);
+            }
+        }        
+        return Response.accepted().build();
+    }
+
     @DELETE
     @Produces(APPLICATION_JSON)
     @Path("cars/{carId}")

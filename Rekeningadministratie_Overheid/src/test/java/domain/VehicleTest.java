@@ -102,7 +102,7 @@ public class VehicleTest {
     public void testSetOwnersHistory() {
         System.out.println("setOwnersHistory");
         List<Rekeningrijder> ownersHistory = new ArrayList<>();
-        Rekeningrijder r1 = new Rekeningrijder("name1", "address1", "asdf", "asdf");
+        Rekeningrijder r1 = new Rekeningrijder("name1", "address1", "asdf", "city", "asdf");
         ownersHistory.add(r1);
         Vehicle instance = v1;
         instance.setOwnersHistory(ownersHistory);

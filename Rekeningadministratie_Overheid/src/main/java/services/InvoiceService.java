@@ -11,6 +11,7 @@ import domain.Invoice;
 import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.Vehicle;
+import enums.InvoiceStatus;
 import enums.VehicleType;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,16 +58,28 @@ public class InvoiceService {
         return invoiceDAO.findByRekeningrijder(rekeningrijder);
     }
     
-    public Invoice findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, Calendar date){
-        return invoiceDAO.findByRekeningrijderMonth(rekeningrijder, date);
+    public Invoice findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month){
+        return invoiceDAO.findByRekeningrijderMonth(rekeningrijder, year, month);
     }
     
     public List<Invoice> findInvoiceVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle){
         return invoiceDAO.findByVehicleMonth(rekeningrijder, date, vehicle);
     }
     
-    private Invoice calculateInvoice(Rekeningrijder rekeningrijder, Date date, Vehicle vehicle){
-        return new Invoice(1, 1, new GregorianCalendar(), rekeningrijder);
+    public Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month){
+        return invoiceDAO.findInvoiceByCartrackerYearMonth(cartrackerId, year, month);
+    }
+    
+    public List<Invoice> findAllInvoices(){
+        return invoiceDAO.findAllInvoices();
+    }
+    
+    public List<Invoice> findInvoicesByStatus(InvoiceStatus status){
+        return invoiceDAO.findInvoicesByStatus(status);
+    }
+    
+    public Invoice calculateInvoice(Rekeningrijder rekeningrijder, int year, int month, Vehicle vehicle){
+        return new Invoice(1, 1, 2017, 1, rekeningrijder);
     }
     
     public void addKMRate(KMRate kmRate){
@@ -92,5 +105,6 @@ public class InvoiceService {
     public KMRate findKMRateByRegionType(String region, VehicleType vehicleType){
         return kmRateDAO.findByRegionVehicleType(region, vehicleType);
     }
+    
 }
 

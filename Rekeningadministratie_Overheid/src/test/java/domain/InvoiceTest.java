@@ -36,8 +36,8 @@ public class InvoiceTest {
     
     @Before
     public void setUp() {
-        r1 = new Rekeningrijder("r1", "address1", "","");
-        r2 = new Rekeningrijder("r2", "address2", "", "");
+        r1 = new Rekeningrijder("r1", "address1", "","", "");
+        r2 = new Rekeningrijder("r2", "address2", "", "", "");
         
         c1 = new Cartracker("hardware1");
         c1.setId(1L);
@@ -48,9 +48,9 @@ public class InvoiceTest {
         c4 = new Cartracker("hardware4");
         c4.setId(4L);
         
-        i1 = new Invoice(1L, 11.11, new GregorianCalendar(2010, 01, 01), r1);
+        i1 = new Invoice(1L, 11.11, 2017, 1, r1);
         i1.setInvoiceNumber(1L);
-        i2 = new Invoice(2L, 22.22, new GregorianCalendar(2010, 01, 02), r2);
+        i2 = new Invoice(2L, 22.22, 2017, 1, r2);
         i2.setInvoiceNumber(2L);
     }
     
@@ -120,42 +120,6 @@ public class InvoiceTest {
         double expResult = 11.11;
         double result = instance.getTotalAmount();
         assertEquals(expResult, result, 0.0);
-    }
-
-    /**
-     * Test of setTotalAmount method, of class Invoice.
-     */
-    @Test
-    public void testSetTotalAmount() {
-        System.out.println("setTotalAmount");
-        double totalAmount = 999.999;
-        Invoice instance = i1;
-        instance.setTotalAmount(totalAmount);
-        assertEquals(totalAmount, instance.getTotalAmount(), 0.0);
-    }
-
-    /**
-     * Test of getDate method, of class Invoice.
-     */
-    @Test
-    public void testGetDate() {
-        System.out.println("getDate");
-        Invoice instance = i1;
-        Calendar expResult = new GregorianCalendar(2010, 01, 01);
-        Calendar result = instance.getDate();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of setDate method, of class Invoice.
-     */
-    @Test
-    public void testSetDate() {
-        System.out.println("setDate");
-        Calendar date = new GregorianCalendar(2018, 03, 03);
-        Invoice instance = i1;
-        instance.setDate(date);
-        assertEquals(date, instance.getDate());
     }
 
     /**
