@@ -24,7 +24,11 @@ export class HeaderComponent implements OnInit {
         address: '',
         username: '',
         password: '',
+        repPassword: ''
     };
+
+    loginAlerts = [];
+    registerAlerts = [];
 
     constructor(public translate: TranslateService, private http: HttpService) {
         translate.addLangs(['pl', 'en', 'nl']);
@@ -47,22 +51,36 @@ export class HeaderComponent implements OnInit {
 
     login(usercreds) {
         if (usercreds.username !== '' && usercreds.password !== '') {
-            this.http.login(usercreds).then(data => {
-                if (data !== null) {
+            this.loginAlerts = [];
+            this.http.login(usercreds).then(response => {
+                if (response === true) {
                     document.getElementById('closeLoginModal').click();
+                } else {
+                    if (response !== 'error') {
+                        this.usercreds.password = '';
+                    }
+                    this.loginAlerts.push(response);
                 }
             });
         }
     }
 
     register(registercreds) {
-        if (registercreds.email !== '' && registercreds.address !== '' && registercreds.username !== '' && registercreds.password !== '') {
-            this.http.register(registercreds).then(data => {
-                if (data !== null) {
-                    // this.session.setUserId(data.id);
-                    document.getElementById('closeRegisterModal').click();
+        if (registercreds.email !== '' && registercreds.address !== '' &&
+            registercreds.username !== '' && registercreds.password !== '' && registercreds.newPassword !== '') {
+            this.registerAlerts = [];
+            this.http.register(registercreds).then(response => {
+                if (response === true) {
+                    document.getElementById('closeLoginModal').click();
+                } else {
+                    if (response !== 'error') {
+                        this.usercreds.password = '';
+                    }
+                    this.registerAlerts.push(response);
                 }
             });
+        } else {
+
         }
     }
 

@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Invoice } from '../_model/Invoice';
 import { Movement } from '../_model/Movement';
+import { Status } from '../_model/Status';
 import { LatLng } from '../_model/LatLng';
 import { Vehicle } from '../_model/Vehicle';
 import { VehicleType } from '../_model/VehicleType';
@@ -17,7 +18,7 @@ declare let paypal: any;
     styleUrls: ['invoice.component.css']
 })
 
-export class InvoiceComponent implements OnInit, AfterViewChecked {
+export class InvoiceComponent implements OnInit {
     year: number;
     month: number;
     invoice: Invoice = null;
@@ -59,14 +60,6 @@ export class InvoiceComponent implements OnInit, AfterViewChecked {
             });
     }
 
-    ngAfterViewChecked(): void {
-        if (!this.didPaypalScriptLoad) {
-            this.loadPaypalScript().then(() => {
-                paypal.Button.render(this.paypalConfig, '#paypal-button');
-            });
-        }
-    }
-
     ngOnInit() {
         this.getInvoice(this.year, this.month);
     }
@@ -75,14 +68,24 @@ export class InvoiceComponent implements OnInit, AfterViewChecked {
         this.http.getInvoice(year, month)
             .then(invoice => {
                 this.invoice = invoice;
+
+                console.log(this.invoice);
+                console.log(this.invoice.status.toLowerCase());
+                console.log(Status.OPEN);
+                if (!this.didPaypalScriptLoad && this.invoice.status.toLowerCase() === Status.OPEN) {
+                    this.loadPaypalScript().then(() => {
+                        paypal.Button.render(this.paypalConfig, '#paypal-button');
+                    });
+                }
             });
     }
 
     payInvoice(year: number, month: number) {
         this.http.payInvoice(year, month)
-            .then(invoice => {
-                this.invoice = invoice;
-                this.invoice.paid = true;
+            .then(response => {
+                if (response === true) {
+                    this.invoice.status = Status.PAID;
+                }
             });
     }
 

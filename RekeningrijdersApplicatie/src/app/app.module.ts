@@ -23,6 +23,7 @@ import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 // Services
 import { HttpService } from './_services/http.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EqualValidator } from './_directives/equal-validator.directive';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -37,7 +38,8 @@ export function createTranslateLoader(http: HttpClient) {
     UserComponent,
     InvoiceListComponent,
     InvoiceComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    EqualValidator
   ],
   imports: [
     BrowserModule,

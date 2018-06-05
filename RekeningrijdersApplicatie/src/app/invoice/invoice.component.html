@@ -1,7 +1,7 @@
 <div class="container shadow">
     <h2>{{ "invoice" | translate }}</h2>
 </div>
-<div *ngIf="!loading && invoice !== null" class="container shadow">
+<div *ngIf="invoice !== null && (invoice.status.toLowerCase() !== 'open' || !loading)" class="container shadow">
     <table class="table">
         <tbody>
             <tr>
@@ -13,11 +13,10 @@
                 <td>{{invoice.totalSumToString()}}</td>
             </tr>
             <tr>
-                <th scope="row">{{ "paid" | translate }}</th>
-                <td *ngIf="invoice.paid">{{ "yes" | translate }}</td>
-                <td *ngIf="!invoice.paid">{{ "no" | translate }}</td>
+                <th scope="row">{{ "status" | translate }}</th>
+                <td>{{ invoice.status.toLowerCase() | translate }}</td>
             </tr>
-            <tr *ngIf="!invoice.paid">
+            <tr *ngIf="invoice.status.toLowerCase() !== 'paid'">
                 <th>{{ "pay" | translate }}</th>
                 <td>
                     <div id="paypal-button"></div>

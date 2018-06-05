@@ -15,20 +15,7 @@ export class HttpService {
     static administrationUrl = 'http://192.168.25.14:8080/Rekeningadministratie_Overheid/api';
     constructor(private http: Http) { }
 
-    getGetHeaders(): Headers {
-        if (sessionStorage.getItem('token') !== null) {
-            return new Headers({
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': sessionStorage.getItem('token')
-            });
-        } else {
-            return new Headers({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            });
-        }
-    }
-
-    getPostHeaders(): Headers {
+    getHeaders(): Headers {
         if (sessionStorage.getItem('token') !== null) {
             return new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -42,7 +29,7 @@ export class HttpService {
     }
 
     get(url: string, options?: Headers): Observable<Response> {
-        const headers: Headers = this.getGetHeaders();
+        const headers: Headers = this.getHeaders();
 
         if (options != null) {
             for (const key of options.keys()) {
@@ -54,7 +41,7 @@ export class HttpService {
     }
 
     post(url: string, body: any, options?: Headers): Observable<Response> {
-        const headers: Headers = this.getPostHeaders();
+        const headers: Headers = this.getHeaders();
 
         if (options != null) {
             for (const key of options.keys()) {
@@ -67,7 +54,7 @@ export class HttpService {
     }
 
     delete(url: string, body: any, options?: Headers): Observable<Response> {
-        const headers: Headers = this.getPostHeaders();
+        const headers: Headers = this.getHeaders();
 
         if (options != null) {
             for (const key of options.keys()) {
@@ -75,11 +62,12 @@ export class HttpService {
             }
         }
 
+        body = this.convertToUrlEncoded(body);
         return this.http.delete(`${HttpService.administrationUrl}${url}`, { headers: headers });
     }
 
     put(url: string, body: any, options?: Headers): Observable<Response> {
-        const headers: Headers = this.getPostHeaders();
+        const headers: Headers = this.getHeaders();
 
         if (options != null) {
             for (const key of options.keys()) {
@@ -87,18 +75,23 @@ export class HttpService {
             }
         }
 
+        body = this.convertToUrlEncoded(body);
         return this.http.put(`${HttpService.administrationUrl}${url}`, body, { headers: headers });
     }
 
 
     // Users ========================================================================================== Users
-    login(usercreds: any, options?: Headers): Promise<boolean> {
+    login(usercreds: any, options?: Headers): Promise<boolean | string> {
         return new Promise(resolve => {
             this.post('/login', usercreds, options)
                 .subscribe(data => {
-                    sessionStorage.setItem('token', data.headers.get('authorization'));
+                    sessionStorage.setItem('token', data.headers.get('Authorization'));
+                    sessionStorage.setItem('password', usercreds.password);
                     resolve(true);
                 }, error => {
+                    if (error.status === 401) {
+                        resolve('usernamepasswordnomatch');
+                    }
                     this.handleError(error); resolve(null);
                 });
         });
@@ -111,13 +104,16 @@ export class HttpService {
         });
     }
 
-    register(user: any, options?: Headers): Promise<any> {
+    register(user: any, options?: Headers): Promise<boolean | string> {
         return new Promise(resolve => {
             this.post('/register/rekeningrijder', user, options)
                 .subscribe(data => {
                     resolve(true);
                 }, error => {
-                    this.handleError(error); resolve(null);
+                    if (error.status === 409) {
+                        resolve('accountexists');
+                    }
+                    this.handleError(error); resolve('error');
                 });
         });
     }
@@ -133,21 +129,26 @@ export class HttpService {
         });
     }
 
-    updateUser(options?: Headers): Promise<any> {
-        return null;
+    updateUser(userData: any, options?: Headers): Promise<any> {
+        return new Promise(resolve => {
+            this.put('/rekeningrijder/update', userData)
+                .subscribe(data => {
+                    resolve(true);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
     }
 
     // Invoices ==================================================================================== Invoices
     getInvoice(year: number, month: number, options?: Headers): Promise<Invoice> {
+        month -= 1;
         return new Promise(resolve => {
             this.get('/rekeningrijder/invoices/' + year + '/' + month)
                 .subscribe(data => {
                     console.log(data);
-                    let paid = false;
-                    if (data.json().status === 'PAID') {
-                        paid = true;
-                    }
-                    resolve(new Invoice(data.json().id, data.json().totalAmount, paid, new Date(data.json().year, data.json().month)));
+                    resolve(new Invoice(data.json().id, data.json().totalAmount, data.json().status,
+                        new Date(data.json().year, data.json().month)));
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
@@ -192,11 +193,7 @@ export class HttpService {
                 .subscribe(data => {
                     const invoices = [];
                     data.json().forEach(i => {
-                        let paid = false;
-                        if (i.status === 'PAID') {
-                            paid = true;
-                        }
-                        invoices.push(new Invoice(i.id, i.totalAmount, paid, new Date(i.year, i.month)));
+                        invoices.push(new Invoice(i.id, i.totalAmount, i.status, new Date(i.year, i.month)));
                     });
                     resolve(invoices);
                 }, error => {
@@ -207,6 +204,7 @@ export class HttpService {
 
     payInvoice(year: number, month: number, options?: Headers): Promise<any> {
         const body = {};
+        month -= 1;
         return new Promise(resolve => {
             this.put('/rekeningrijder/invoices/' + year + '/' + month, body)
                 .subscribe(data => {
@@ -227,6 +225,19 @@ export class HttpService {
                         vehicles.push(new Vehicle(v.id, v.licensePlate, v.vehicleType));
                     });
                     resolve(vehicles);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+    removeVehicle(vehicleId: number, options?: Headers): Promise<boolean> {
+        const body = {};
+        return new Promise(resolve => {
+            this.delete('/rekeningrijder/cars/' + vehicleId, body)
+                .subscribe(data => {
+                    console.log(data);
+                    resolve(true);
                 }, error => {
                     this.handleError(error); resolve(null);
                 });

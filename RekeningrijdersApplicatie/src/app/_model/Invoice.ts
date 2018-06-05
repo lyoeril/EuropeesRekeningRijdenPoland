@@ -1,18 +1,19 @@
 import { Movement } from './Movement';
+import { Status } from './Status';
 import * as moment from 'moment';
 
 export class Invoice {
     id: number;
     totalSum: number;
-    paid: boolean;
+    status: Status;
     date: Date;
 
     movements: Movement[];
 
-    constructor(_id: number, _totalSum: number, _paid: boolean, _date: Date) {
+    constructor(_id: number, _totalSum: number, _status: Status, _date: Date) {
         this.id = _id;
         this.totalSum = _totalSum;
-        this.paid = _paid;
+        this.status = _status;
         this.date = _date;
     }
 

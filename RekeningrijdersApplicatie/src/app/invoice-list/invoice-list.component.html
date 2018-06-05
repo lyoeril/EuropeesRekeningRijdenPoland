@@ -7,15 +7,14 @@
             <tr>
                 <th scope="col">{{ "date" | translate }}</th>
                 <th scope="col">{{ "totalsum" | translate }}</th>
-                <th scope="col">{{ "paid" | translate }}</th>
+                <th scope="col">{{ "status" | translate }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let invoice of invoices" class="invoice" (click)="goToInvoice(invoice)">
                 <td>{{invoice.dateToString()}}</td>
                 <td>{{invoice.totalSumToString()}}</td>
-                <td *ngIf="invoice.paid">{{ "yes" | translate }}</td>
-                <td *ngIf="!invoice.paid">{{ "no" | translate }}</td>
+                <td>{{ invoice.status.toLowerCase() | translate }}</td>
             </tr>
         </tbody>
     </table>
