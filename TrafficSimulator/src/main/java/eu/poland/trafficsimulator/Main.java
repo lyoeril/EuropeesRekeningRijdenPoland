@@ -101,6 +101,7 @@ public class Main {
                 + "count\t\tShow the amount of currently active simulations\n"
                 + "list\t\tShow the trackerIds of the currently active simulations\n"
                 + "stop\t\tStop the simulator\n"
+                + "help\t\tShow this list\n"
                 + "----------------------------------------------------------------------------------------------------\n");
     }
 }

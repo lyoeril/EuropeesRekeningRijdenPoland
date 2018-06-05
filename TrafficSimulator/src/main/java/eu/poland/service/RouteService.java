@@ -16,7 +16,6 @@ public class RouteService {
     }
     
     public DirectionsRoute getRandomRoute() {
-        // TODO robkor: make this random
-        return routeDao.getRoute(0L);
+        return routeDao.getRandomRoute();
     }
 }

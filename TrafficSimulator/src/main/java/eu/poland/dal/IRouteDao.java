@@ -8,4 +8,5 @@ import com.google.maps.model.DirectionsRoute;
  */
 public interface IRouteDao {
     public DirectionsRoute getRoute(Long id);
+    public DirectionsRoute getRandomRoute();
 }
