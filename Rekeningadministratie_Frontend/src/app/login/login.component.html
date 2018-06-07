@@ -1,11 +1,15 @@
-<div class="alert alert-danger" role="alert" *ngIf="error.length > 0">
-  {{error}}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <label for="username">Username</label>
+            <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
+        </div>
+        <div class="row">
+            <label for="username">Password</label>
+            <input name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
+        </div>
+        <div class="row" style="float: right">
+            <button class="btn btn-outline-light" (click)="login()">Login</button>
+        </div>
+    </div>
 </div>
-<form class="form-signin" [formGroup]="loginForm" (ngSubmit)="login()">
-  <h1 class="h3 mb-3 font-weight-normal">Login please</h1>
-  <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus
-         formControlName="username">
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
-         formControlName="password">
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-</form>

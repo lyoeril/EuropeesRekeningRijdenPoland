@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/">Administration</a>
+    <button *ngIf="session.getItem('token') !== null" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div *ngIf="session.getItem('token') !== null" class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" [class.active]="router.url === '/home' || router.url === '/'">
+                <a class="nav-link" href="/home">
+                    <i class="fas fa-home"></i>
+                    <span *ngIf="router.url === '/home' || router.url === '/'" class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item" [class.active]="router.url === '/invoices'">
+                <a class="nav-link" href="/invoices">
+                    <i class="fas fa-file-alt"></i>
+                    <span *ngIf="router.url === '/invoices'" class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item" [class.active]="router.url === '/vehicles'">
+                <a class="nav-link" href="/vehicles">
+                    <i class="fas fa-car"></i>
+                    <span *ngIf="router.url === '/vehicles'" class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+        <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-light" style="float:right" (click)="logout()">Logout</button>
+    </div>
+</nav>

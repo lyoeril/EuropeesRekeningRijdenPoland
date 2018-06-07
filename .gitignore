@@ -15,3 +15,7 @@ RegistratieCentrale/target/
 RegistratieCentrale/nbproject/
 Rekeningadministratie_Overheid/target/
 /Rekeningadministratie_Overheid/nbproject/
+/RegistratieCentrale/nbproject/
+TrafficSimulator/src/main/resources/config\.properties
+Rekeningadministratie_Frontend/node_modules/
+RekeningrijdersApplicatie/
