@@ -32,8 +32,10 @@ import org.json.JSONObject;
     ,
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "TrafficQueue")
     ,
-    @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3"),
-    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "100"),
+    @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3")
+    ,
+    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "100")
+    ,
     @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "1000")})
 public class CarTrackerMQ implements MessageListener {
 
@@ -47,7 +49,7 @@ public class CarTrackerMQ implements MessageListener {
     @Inject
     public CarTrackerMQ(RegistrationService registrationService) {
         this.registrationService = registrationService;
-        this.sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -59,21 +61,26 @@ public class CarTrackerMQ implements MessageListener {
                 JSONObject obj = new JSONObject(textMessage.getText());
 
                 JSONObject dateObj = obj.getJSONObject("date");
-                
+
                 StringBuilder sb = new StringBuilder();
-                
+
                 sb.append(dateObj.getLong("year"));
+                sb.append("-");
                 sb.append(dateObj.getLong("month"));
+                sb.append("-");
                 sb.append(dateObj.getLong("dayOfMonth"));
+                sb.append(" ");
                 sb.append(dateObj.getLong("hourOfDay"));
+                sb.append(":");
                 sb.append(dateObj.getLong("minute"));
+                sb.append(":");
                 sb.append(dateObj.getLong("second"));
-                
+
                 Date date = sdf.parse(sb.toString());
 
-                registrationService.registerLocation(date, 
-                        obj.getJSONObject("location").getDouble("lat"), 
-                        obj.getJSONObject("location").getDouble("lng"),  
+                registrationService.registerLocation(date,
+                        obj.getJSONObject("location").getDouble("lat"),
+                        obj.getJSONObject("location").getDouble("lng"),
                         obj.getString("trackerId"));
             }
         } catch (JMSException | ParseException ex) {
