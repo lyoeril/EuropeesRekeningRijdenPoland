@@ -74,10 +74,15 @@ public class OverheidAPI {
     public Response getEmployee(
             @Context HttpHeaders headers,
             @Context SecurityContext securityContext) {
+        System.out.println("hier 1");
         if(!isOverheid(securityContext)){return Response.status(Status.UNAUTHORIZED).build();}
+        System.out.println("hier 2");
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        System.out.println("hier 3");
         User u = this.getUserFromToken(token);
+        System.out.println("hier 4");
         if(u!= null){
+            System.out.println("hier 5");
             return Response.accepted(new DTO_User(u)).build();
         }
 //        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
