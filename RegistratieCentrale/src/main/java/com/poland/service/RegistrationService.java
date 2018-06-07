@@ -5,17 +5,7 @@
  */
 package com.poland.service;
 
-import com.poland.entities.Location;
-import com.poland.entities.Ride;
-import com.poland.entities.Vehicle;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 

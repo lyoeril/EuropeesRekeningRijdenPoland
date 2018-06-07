@@ -32,7 +32,9 @@ import org.json.JSONObject;
     ,
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "TrafficQueue")
     ,
-    @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3")})
+    @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3"),
+    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "100"),
+    @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "1000")})
 public class CarTrackerMQ implements MessageListener {
 
     RegistrationService registrationService;
@@ -45,7 +47,7 @@ public class CarTrackerMQ implements MessageListener {
     @Inject
     public CarTrackerMQ(RegistrationService registrationService) {
         this.registrationService = registrationService;
-        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     }
 
     @Override
@@ -56,50 +58,26 @@ public class CarTrackerMQ implements MessageListener {
 
                 JSONObject obj = new JSONObject(textMessage.getText());
 
-                JSONObject locationObj = obj.getJSONObject("location");
                 JSONObject dateObj = obj.getJSONObject("date");
-
-                Double latitude = locationObj.getDouble("lat");
-                Double longitude = locationObj.getDouble("lng");
-                
-                long year = dateObj.getLong("year");
-                long month = dateObj.getLong("month");
-                long dayOfMonth = dateObj.getLong("dayOfMonth");
-                long hourOfDay = dateObj.getLong("hourOfDay");
-                long minute = dateObj.getLong("minute");
-                long second = dateObj.getLong("second");
                 
                 StringBuilder sb = new StringBuilder();
                 
-                sb.append(year);
-                sb.append("-");
-                sb.append(month);
-                sb.append("-");
-                sb.append(dayOfMonth);
-                sb.append(" ");
-                sb.append(hourOfDay);
-                sb.append(":");
-                sb.append(minute);
-                sb.append(":");
-                sb.append(second);
+                sb.append(dateObj.getLong("year"));
+                sb.append(dateObj.getLong("month"));
+                sb.append(dateObj.getLong("dayOfMonth"));
+                sb.append(dateObj.getLong("hourOfDay"));
+                sb.append(dateObj.getLong("minute"));
+                sb.append(dateObj.getLong("second"));
                 
                 Date date = sdf.parse(sb.toString());
 
-                String authorisationCode = obj.getString("trackerId");
-                registrationService.registerLocation(date, latitude, longitude, authorisationCode);
+                registrationService.registerLocation(date, 
+                        obj.getJSONObject("location").getDouble("lat"), 
+                        obj.getJSONObject("location").getDouble("lng"),  
+                        obj.getString("trackerId"));
             }
         } catch (JMSException | ParseException ex) {
             Logger.getLogger(CarTrackerMQ.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    /*
-    Format Expected result
-    {
-   "date" : 123456789,
-   "latitude" : 0,
-   "longitude" : 0,
-   "authorisationCode" : ""
-}
-
-     */
 }

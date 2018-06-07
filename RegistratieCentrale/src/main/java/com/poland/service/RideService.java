@@ -7,7 +7,9 @@ package com.poland.service;
 
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Ride;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -30,7 +32,7 @@ public class RideService {
 
     public Ride findOrCreateUncompletedRideByAutorisationCode(String authorisationCode) {
         if (authorisationCode != null || authorisationCode.equals("")) {
-            return rideDAO.findUncompletedRideByAutorisationCode(authorisationCode);
+            return rideDAO.findUncompletedRideByAuthorisationCode(authorisationCode);
         } else {
             return null;
         }
@@ -49,7 +51,7 @@ public class RideService {
         }
         return false;
     }
-    
+
     public Ride createRide(Ride ride) {
         try {
             if (rideDAO.find(ride.getId()) == null) {
@@ -78,5 +80,14 @@ public class RideService {
         } catch (IllegalArgumentException ex) {
             return false;
         }
+    }
+
+    public List<Ride> getRidesOnDate(String authenticationCode, Date start, Date end) {
+        if (authenticationCode != null && !authenticationCode.equals("") && start != null && end != null) {
+            return rideDAO.getRideByAuthorisationCodeAndDate(authenticationCode, start, end);
+        } else {
+            return new ArrayList<>();
+        }
+
     }
 }
