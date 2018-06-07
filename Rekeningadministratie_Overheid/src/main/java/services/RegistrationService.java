@@ -8,9 +8,11 @@ package services;
 import dao.interfaces.ICartrackerDAO;
 import dao.interfaces.IRekeningrijderDAO;
 import dao.interfaces.IUserGroupDAO;
+import dao.interfaces.IVehicleDAO;
 import domain.Cartracker;
 import domain.Rekeningrijder;
 import domain.UserGroup;
+import domain.Vehicle;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -31,15 +33,19 @@ public class RegistrationService {
     
     @Inject
     IUserGroupDAO iUserGroupDAO;
+    
+    @Inject
+    IVehicleDAO iVehicleDAO;
 
     public RegistrationService() {
     }    
     
     public RegistrationService(IRekeningrijderDAO iRekeningrijderDAO, ICartrackerDAO iCartrackerDAO,
-                                IUserGroupDAO iUserGroupDAO){
+                                IUserGroupDAO iUserGroupDAO, IVehicleDAO iVehicleDAO){
         this.iCartrackerDAO = iCartrackerDAO;
         this.iRekeningrijderDAO = iRekeningrijderDAO;
         this.iUserGroupDAO = iUserGroupDAO;
+        this.iVehicleDAO = iVehicleDAO;
     }
     
     //Rekeningrijder Management
@@ -95,5 +101,17 @@ public class RegistrationService {
     
     public UserGroup findByName(String usergroup){
         return iUserGroupDAO.findByName(usergroup);
+    }
+    
+    public List<Vehicle> findAllVehicles(){
+        return iVehicleDAO.findAllVehicles();
+    }
+    
+    public Vehicle findVehicleById(long id){
+        return iVehicleDAO.findVehicleById(id);
+    }
+    
+    public void updateVehicle(Vehicle vehicle){
+        iVehicleDAO.edit(vehicle);
     }
 }

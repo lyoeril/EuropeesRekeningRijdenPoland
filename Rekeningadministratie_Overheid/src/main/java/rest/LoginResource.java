@@ -1,5 +1,9 @@
 package rest;
 
+import domain.User;
+import domain.UserGroup;
+import java.util.HashSet;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
@@ -10,6 +14,8 @@ import javax.ws.rs.core.HttpHeaders;
 import static javax.ws.rs.core.MediaType.*;
 import javax.ws.rs.core.Response;
 import services.LoginService;
+import services.RegistrationService;
+import services.UserService;
 
 @Path("login")
 @Produces(APPLICATION_JSON)
@@ -18,6 +24,9 @@ public class LoginResource {
 
     @Inject
     private LoginService ls;
+    
+    @Inject
+    private UserService userService;
 
 //    @POST
 //    public Response login(User user) {
@@ -49,7 +58,13 @@ public class LoginResource {
         System.out.println("Valid: " + valid);
 
         if (valid) {
-            String token = ls.issueToken(username);
+            List<User> u = userService.findByUsername(username);
+            User user = u.get(0);
+            
+            HashSet<UserGroup> groups = user.getGroups();
+            
+            
+            String token = ls.issueToken(username, groups);
             System.out.println("token " + token);
             return Response.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

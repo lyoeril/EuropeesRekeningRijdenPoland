@@ -8,6 +8,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -49,7 +51,14 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
                 @Override
                 public boolean isUserInRole(String string) {
-                    return true;
+                    String[] test = jwt.getClaim("groups").as(String[].class);
+                    ArrayList tests = new ArrayList<>(Arrays.asList(test));
+                    if(tests.contains(string)){
+                        System.out.println("contains " + string);
+                        return true;
+                    }
+                    System.out.println("not contains " + string);
+                    return false;
                 }
 
                 @Override

@@ -14,15 +14,23 @@ import domain.Invoice;
 import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.User;
+import domain.Vehicle;
 import dto.DTO_User;
+import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.resource.spi.SecurityPermission;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,6 +39,7 @@ import javax.ws.rs.core.HttpHeaders;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 import services.InvoiceService;
 import services.RegistrationService;
 import services.UserService;
@@ -62,16 +71,20 @@ public class OverheidAPI {
 //    
     @GET
     @Produces(APPLICATION_JSON)
-    public Response getEmployee(@Context HttpHeaders headers) {
+    public Response getEmployee(
+            @Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
-        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
-        if (u != null) {
-            if(!isRekeningrijder){
-                return Response.accepted(new DTO_User(u)).build();
-            }            
+        if(u!= null){
+            return Response.accepted(new DTO_User(u)).build();
         }
-        return Response.noContent().build();
+//        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
+//        if (u != null) {
+//            if (!isRekeningrijder) {
+//                return Response.accepted(new DTO_User(u)).build();
+//            }
+//        }
+        return Response.status(Status.FORBIDDEN).build();
     }
 
     @GET
@@ -79,7 +92,7 @@ public class OverheidAPI {
     @Path("cartrackers")
     public Response getCartrackers() {
         List<Cartracker> cartrackers = registrationService.findAllCartrackers();
-        if(cartrackers != null){
+        if (cartrackers != null) {
             return Response.accepted(cartrackers).build();
         }
         return Response.status(Status.NOT_FOUND).build();
@@ -104,13 +117,14 @@ public class OverheidAPI {
     @Path("cartrackers/{id}")
     public Response getCartrackerById(@PathParam("id") long id) {
         Cartracker c = registrationService.findCartrackerById(id);
+
         if (c != null) {
-            Response.accepted(c).build();
+            return Response.accepted(c).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
 
-    @POST
+    @PUT
     @Produces(APPLICATION_JSON)
     @Path("cartrackers/{id}/update")
     public Response setCartracker(
@@ -178,16 +192,31 @@ public class OverheidAPI {
 //        return Response.status(Status.NOT_IMPLEMENTED).build();
 //    }
 //    
-    
+
     @GET
     @Path("invoices/{id}")
     public Response getInvoiceById(
-            @PathParam("id") long id){
+            @PathParam("id") long id) {
         Invoice i = invoiceService.findInvoiceById(id);
-        if(i != null){
-            return Response.accepted().build();
+        if (i != null) {
+            return Response.accepted(i).build();
         }
         return Response.status(Status.NOT_FOUND).build();
+    }
+
+    @PUT
+    @Path("invoices/{id}/update")
+    public Response updateInvoice(
+            @PathParam("id") long id,
+            @FormParam("status") InvoiceStatus status) {
+        Invoice i = invoiceService.findInvoiceById(id);
+        if (i != null && status != null) {
+            i.setStatus(status);
+            invoiceService.updateInvoice(i);
+            return Response.accepted(i).build();
+        }
+        return Response.notModified("Couldn't update invoice").build();
+
     }
 
     @GET
@@ -220,8 +249,54 @@ public class OverheidAPI {
     public Response getInvoicesByStatus(
             @PathParam("status") InvoiceStatus status) {
         List<Invoice> invoices = invoiceService.findInvoicesByStatus(status);
-        if(invoices != null){
+        if (invoices != null) {
             return Response.accepted(invoices).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+    
+    @GET
+    @Path("vehicles")
+    public Response getVehicles(){
+        List<Vehicle> vehicles = registrationService.findAllVehicles();
+        List<DTO_Vehicle> vehiclesDTO = new ArrayList<>();
+        if(vehicles != null){
+            for(Vehicle v: vehicles){
+                vehiclesDTO.add(new DTO_Vehicle(v));
+            }
+            return Response.accepted(vehiclesDTO).build();
+        }
+        return Response.status(Status.NOT_ACCEPTABLE).build();
+    }
+    
+    @GET
+    @Path("vehicles/{id}")
+    public Response getVehicleById(
+            @PathParam("id") long id){
+        Vehicle v = registrationService.findVehicleById(id);
+        if(v != null){
+            return Response.accepted(new DTO_Vehicle(v)).build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    @PUT
+    @Path("vehicles/{id}/update")
+    public Response updateVehicle(
+            @PathParam("id") long id,
+            @FormParam("licensePlate") String licensePlate,
+            @FormParam("vehicleType") VehicleType vehicleType,
+            @FormParam("cartrackerId") long cartrackerId){        
+        Vehicle v = registrationService.findVehicleById(id);
+        Cartracker c = registrationService.findCartrackerById(cartrackerId);
+        if(v != null){
+            v.setLicensePlate(licensePlate);
+            v.setVehicleType(vehicleType);
+            if(c != null){
+                v.setCartracker(c);
+            }
+            registrationService.updateVehicle(v);
+            return Response.accepted(v).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
     }

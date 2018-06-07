@@ -5,22 +5,35 @@
  */
 package dto;
 
+import domain.Rekeningrijder;
 import enums.VehicleType;
 import domain.Vehicle;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Laurent
  */
 public class DTO_Vehicle {
+
     private long id;
     private String licensePlate;
     private VehicleType vehicleType;
+    private List<Long> ownersHistory;
 
     public DTO_Vehicle(Vehicle v) {
         this.id = v.getId();
         this.licensePlate = v.getLicensePlate();
         this.vehicleType = v.getVehicleType();
+
+        if (v.getOwnersHistory() != null) {
+            ownersHistory = new ArrayList<>();
+            for (Rekeningrijder r : v.getOwnersHistory()) {
+                ownersHistory.add(r.getId());
+            }
+        }
+
     }
 
     public long getId() {
@@ -46,8 +59,13 @@ public class DTO_Vehicle {
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
-    
-    
-    
-    
+
+    public List<Long> getOwnersHistory() {
+        return ownersHistory;
+    }
+
+    public void setOwnersHistory(List<Long> ownersHistory) {
+        this.ownersHistory = ownersHistory;
+    }
+
 }
