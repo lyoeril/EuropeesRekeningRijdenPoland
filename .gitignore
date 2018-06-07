@@ -10,7 +10,9 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
 Simulator/target/
 RegistratieCentrale/target/
 RegistratieCentrale/nbproject/
 Rekeningadministratie_Overheid/target/
+TrafficSimulator/src/main/resources/config.properties
