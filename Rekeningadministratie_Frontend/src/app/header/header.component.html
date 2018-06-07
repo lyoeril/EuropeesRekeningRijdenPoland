@@ -6,25 +6,31 @@
     </button>
     <div *ngIf="session.getItem('token') !== null" class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" [class.active]="router.url === '/home' || router.url === '/'">
-                <a class="nav-link" href="/home">
+            <!-- <li class="nav-item" [class.active]="router.url === '/home' || router.url === '/'">
+                <a class="nav-link" href="/home" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
                     <i class="fas fa-home"></i>
                     <span *ngIf="router.url === '/home' || router.url === '/'" class="sr-only">(current)</span>
                 </a>
-            </li>
-            <li class="nav-item" [class.active]="router.url === '/invoices'">
-                <a class="nav-link" href="/invoices">
+            </li> -->
+            <li class="nav-item" [class.active]="router.url === '/invoices' || router.url === '/'">
+                <a class="nav-link" href="/invoices" data-toggle="tooltip" data-placement="bottom" title="Invoices">
                     <i class="fas fa-file-alt"></i>
                     <span *ngIf="router.url === '/invoices'" class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item" [class.active]="router.url === '/vehicles'">
-                <a class="nav-link" href="/vehicles">
+                <a class="nav-link" href="/vehicles" data-toggle="tooltip" data-placement="bottom" title="Vehicles">
                     <i class="fas fa-car"></i>
                     <span *ngIf="router.url === '/vehicles'" class="sr-only">(current)</span>
                 </a>
             </li>
+            <li class="nav-item" [class.active]="router.url === '/cartracker'">
+                <a class="nav-link" href="/cartracker" data-toggle="tooltip" data-placement="bottom" title="Create Cartrackers">
+                    <i class="fas fa-location-arrow"></i>
+                    <span *ngIf="router.url === '/cartracker'" class="sr-only">(current)</span>
+                </a>
+            </li>
         </ul>
-        <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-light" style="float:right" (click)="logout()">Logout</button>
+        <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-light float-right" (click)="logout()">Logout</button>
     </div>
 </nav>

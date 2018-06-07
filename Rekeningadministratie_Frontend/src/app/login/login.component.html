@@ -1,15 +1,25 @@
-<div class="main">
-    <div class="container">
-        <div class="row">
-            <label for="username">Username</label>
-            <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
-        </div>
-        <div class="row">
-            <label for="username">Password</label>
-            <input name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
-        </div>
-        <div class="row" style="float: right">
-            <button class="btn btn-outline-light" (click)="login()">Login</button>
-        </div>
-    </div>
+<div class="main w-50 mt-5">
+        <table class="w-100">
+            <tr>
+                <td>
+                    <p class="mr-2 my-0 align-self-center">Username</p>
+                </td>
+                <td>
+                    <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="mr-2 my-0 align-self-center">Password</p>
+                </td>
+                <td>
+                    <input name="password" type="text" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-outline-light float-right mt-1" (click)="login()"  data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Login</button>
+                </td>
+            </tr>
+        </table>
 </div>

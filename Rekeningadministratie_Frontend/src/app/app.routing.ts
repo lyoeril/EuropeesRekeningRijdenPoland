@@ -6,21 +6,33 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './_service/auth.service';
 import { InvoiceListComponent } from './invoice-list/invoice-list.component';
+import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { CartrackerComponent } from './cartracker/cartracker.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: HomeComponent,
+        component: InvoiceListComponent,
         canActivate: [AuthService]
     },
-    {
-        path: 'home',
-        component: HomeComponent,
-        canActivate: [AuthService]
-    },
+    // {
+    //     path: 'home',
+    //     component: HomeComponent,
+    //     canActivate: [AuthService]
+    // },
     {
         path: 'invoices',
         component: InvoiceListComponent,
+        canActivate: [AuthService]
+    },
+    {
+        path: 'vehicles',
+        component: VehicleListComponent,
+        canActivate: [AuthService]
+    },
+    {
+        path: 'cartracker',
+        component: CartrackerComponent,
         canActivate: [AuthService]
     },
     {
