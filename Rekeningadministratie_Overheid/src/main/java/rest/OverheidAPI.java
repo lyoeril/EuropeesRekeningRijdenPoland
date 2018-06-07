@@ -72,7 +72,12 @@ public class OverheidAPI {
     @GET
     @Produces(APPLICATION_JSON)
     public Response getEmployee(
-            @Context HttpHeaders headers) {
+            @Context HttpHeaders headers,
+            @Context SecurityContext securityContext) {
+        if(!isOverheid(securityContext)){
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+        
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
         if(u!= null){
@@ -339,5 +344,12 @@ public class OverheidAPI {
     private Rekeningrijder getRekeningrijderFromToken(String token) {
         String username = this.getUsernameFromToken(token);
         return this.getRekeningrijderFromUsername(username);
+    }
+    
+    private boolean isOverheid(SecurityContext context){
+        if(context.isUserInRole("OVERHEID")){
+            return true;
+        }
+        return false;
     }
 }
