@@ -74,10 +74,7 @@ public class OverheidAPI {
     public Response getEmployee(
             @Context HttpHeaders headers,
             @Context SecurityContext securityContext) {
-        if(!isOverheid(securityContext)){
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-        
+        if(!isOverheid(securityContext)){return Response.status(Status.UNAUTHORIZED).build();}
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
         if(u!= null){
@@ -96,6 +93,7 @@ public class OverheidAPI {
     @Produces(APPLICATION_JSON)
     @Path("cartrackers")
     public Response getCartrackers() {
+        
         List<Cartracker> cartrackers = registrationService.findAllCartrackers();
         if (cartrackers != null) {
             return Response.accepted(cartrackers).build();
