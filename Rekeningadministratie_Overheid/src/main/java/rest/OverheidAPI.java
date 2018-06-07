@@ -83,7 +83,7 @@ public class OverheidAPI {
         System.out.println("hier 4");
         if(u!= null){
             System.out.println("hier 5");
-            return Response.accepted(new DTO_User(u)).build();
+            return Response.accepted().build();
         }
 //        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
 //        if (u != null) {
