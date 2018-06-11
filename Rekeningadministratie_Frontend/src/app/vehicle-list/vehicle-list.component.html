@@ -1,0 +1,23 @@
+<div class="main">
+    Vehicles
+    <form class="form-inline my-2 float-right">
+        <input name="filter" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" (keyup)="filterVehicles($event.target.value)">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">License Plate</th>
+                <th scope="col">Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let vehicle of filteredVehicles">
+                <th scope="row">{{vehicle.id}}</th>
+                <td>{{vehicle.licensePlate}}</td>
+                <td>{{vehicle.vehicleType}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,7 +1,9 @@
+/// <reference path="../../node_modules/moment/moment.d.ts"" />
+
 import { Component } from '@angular/core';
 
 import fontawesome from '@fortawesome/fontawesome';
-import { faHome, faFileAlt, faCar } from '@fortawesome/fontawesome-free-solid';
+import { faHome } from '@fortawesome/fontawesome-free-solid';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,6 @@ export class AppComponent {
   title = 'app';
 
   constructor() {
-    fontawesome.library.add(faHome, faFileAlt, faCar);
+    fontawesome.library.add(faHome);
   }
 }
