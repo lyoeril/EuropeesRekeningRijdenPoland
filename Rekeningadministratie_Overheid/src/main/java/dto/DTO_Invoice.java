@@ -15,6 +15,7 @@ import java.util.Calendar;
  */
 public class DTO_Invoice {
     private long id;
+    private long cartrackerId;
     private double totalAmount;
     private InvoiceStatus status;
     private int year;
@@ -26,6 +27,7 @@ public class DTO_Invoice {
         this.status = invoice.getStatus();
         this.year = invoice.getYear();
         this.month = invoice.getMonth();
+        this.cartrackerId = invoice.getCarTrackerId();        
     }
 
     public long getId() {
@@ -66,6 +68,14 @@ public class DTO_Invoice {
 
     public void setMonth(int month) {
         this.month = month;
+    }
+
+    public long getCartrackerId() {
+        return cartrackerId;
+    }
+
+    public void setCartrackerId(long cartrackerId) {
+        this.cartrackerId = cartrackerId;
     }
     
     

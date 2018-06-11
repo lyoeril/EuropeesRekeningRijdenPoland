@@ -191,7 +191,11 @@ public class OverheidAPI {
         List<Invoice> invoices = invoiceService.findAllInvoices();
         if (invoices != null) {
             //return Response.accepted(invoices).build();
-            return Response.accepted(invoices.get(0)).build();
+            List<DTO_Invoice> invoiceDTO = new ArrayList<>();
+            for(Invoice i: invoices){
+                invoiceDTO.add(new DTO_Invoice(i));
+            }
+            return Response.accepted(invoiceDTO).build();
         }
         return Response.status(Status.NOT_IMPLEMENTED).build();
     }
