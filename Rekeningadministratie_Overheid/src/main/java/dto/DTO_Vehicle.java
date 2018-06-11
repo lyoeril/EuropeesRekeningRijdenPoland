@@ -18,6 +18,7 @@ import java.util.List;
 public class DTO_Vehicle {
 
     private long id;
+    private long cartrackerId;
     private String licensePlate;
     private VehicleType vehicleType;
     private List<Long> ownersHistory;
@@ -26,6 +27,11 @@ public class DTO_Vehicle {
         this.id = v.getId();
         this.licensePlate = v.getLicensePlate();
         this.vehicleType = v.getVehicleType();
+        
+        if(v.getCartracker() != null){
+            this.cartrackerId = v.getCartracker().getId();
+        }
+        
 
         if (v.getOwnersHistory() != null) {
             ownersHistory = new ArrayList<>();
@@ -67,5 +73,15 @@ public class DTO_Vehicle {
     public void setOwnersHistory(List<Long> ownersHistory) {
         this.ownersHistory = ownersHistory;
     }
+
+    public long getCartrackerId() {
+        return cartrackerId;
+    }
+
+    public void setCartrackerId(long cartrackerId) {
+        this.cartrackerId = cartrackerId;
+    }
+    
+    
 
 }
