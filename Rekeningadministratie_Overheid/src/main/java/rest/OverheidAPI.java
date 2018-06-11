@@ -15,6 +15,7 @@ import domain.KMRate;
 import domain.Rekeningrijder;
 import domain.User;
 import domain.Vehicle;
+import dto.DTO_Invoice;
 import dto.DTO_User;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
@@ -208,7 +209,7 @@ public class OverheidAPI {
             @PathParam("id") long id) {
         Invoice i = invoiceService.findInvoiceById(id);
         if (i != null) {
-            return Response.accepted(i).build();
+            return Response.accepted(new DTO_Invoice(i)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
