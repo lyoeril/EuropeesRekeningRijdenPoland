@@ -189,7 +189,8 @@ public class OverheidAPI {
     public Response getCalculatedInvoices() {
         List<Invoice> invoices = invoiceService.findAllInvoices();
         if (invoices != null) {
-            return Response.accepted(invoices).build();
+            //return Response.accepted(invoices).build();
+            return Response.accepted(invoices.get(0)).build();
         }
         return Response.status(Status.NOT_IMPLEMENTED).build();
     }
