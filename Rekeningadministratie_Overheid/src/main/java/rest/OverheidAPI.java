@@ -16,6 +16,7 @@ import domain.Rekeningrijder;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
+import dto.DTO_Rekeningrijder;
 import dto.DTO_User;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
@@ -75,16 +76,11 @@ public class OverheidAPI {
     public Response getEmployee(
             @Context HttpHeaders headers,
             @Context SecurityContext securityContext) {
-        System.out.println("hier 1");
         if(!isOverheid(securityContext)){return Response.status(Status.UNAUTHORIZED).build();}
-        System.out.println("hier 2");
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-        System.out.println("hier 3");
         User u = this.getUserFromToken(token);
-        System.out.println("hier 4");
         if(u!= null){
-            System.out.println("hier 5");
-            return Response.accepted().build();
+            return Response.accepted(new DTO_User(u)).build();
         }
 //        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
 //        if (u != null) {
@@ -253,7 +249,8 @@ public class OverheidAPI {
         Rekeningrijder r = registrationService.findRekeningrijderById(id);
         List<Invoice> invoices = r.getInvoices();
         if (invoices != null) {
-            return Response.accepted(invoices).build();
+            List<DTO_Invoice> dtoInvoices = toDTOInvoiceList(invoices);
+            return Response.accepted(dtoInvoices).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
@@ -264,7 +261,8 @@ public class OverheidAPI {
             @PathParam("status") InvoiceStatus status) {
         List<Invoice> invoices = invoiceService.findInvoicesByStatus(status);
         if (invoices != null) {
-            return Response.accepted(invoices).build();
+            List<DTO_Invoice> dtoInvoices = toDTOInvoiceList(invoices);
+            return Response.accepted(dtoInvoices).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
@@ -360,5 +358,13 @@ public class OverheidAPI {
             return true;
         }
         return false;
+    }
+    
+    private List<DTO_Invoice> toDTOInvoiceList(List<Invoice> invoices){
+        List<DTO_Invoice> dtoInvoices = new ArrayList<>();
+        for(Invoice i: invoices){
+            dtoInvoices.add(new DTO_Invoice(i));
+        }
+        return dtoInvoices;
     }
 }
