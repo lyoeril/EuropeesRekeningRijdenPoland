@@ -2,7 +2,7 @@
     <div class="row" style="display: flex">
         <div class="col">
             <a href="/">
-                <h1>{{ "Politie Systeem" | translate }}</h1>
+                <h1>{{ "policesystem" | translate }}</h1>
             </a>
         </div>
         <div class="col header-item">
@@ -10,8 +10,6 @@
             <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right" data-toggle="modal"
                 data-target="#loginModal">{{ "login" | translate }}</button>
             <button id="closeRegisterModal" [hidden]="true" data-toggle="modal" data-target="#registerModal"></button>
-            <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right; margin-right: 5px;"
-                data-toggle="modal" data-target="#registerModal">{{ "register" | translate }}</button>
             <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-danger" style="float:right" (click)="logout()">{{ "logout" | translate }}</button>
         </div>
         <div class="col-2 header-item">
