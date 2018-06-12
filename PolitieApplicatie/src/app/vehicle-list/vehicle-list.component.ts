@@ -1,36 +1,42 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../_service/http.service';
 import { Vehicle } from '../_model/Vehicle';
-import { TranslateService } from '@ngx-translate/core';
-import { HttpService } from '../_services/http.service';
 
 @Component({
     selector: 'app-vehicle-list',
-    templateUrl: 'vehicle-list.component.html',
-    styleUrls: ['vehicle-list.component.css']
+    templateUrl: 'vehicle-list.component.html'
 })
 
 export class VehicleListComponent implements OnInit {
-    @Input() vehicles: Vehicle[];
+    vehicles: Vehicle[] = [];
+    filteredVehicles: Vehicle[] = [];
 
-    toBeRemoved: Vehicle = null;
+    constructor(private http: HttpService) { }
 
-    constructor(
-        public translate: TranslateService,
-        private http: HttpService) { }
-
-    ngOnInit() { }
-
-    setToBeRemoved(vehicle: Vehicle) {
-        this.toBeRemoved = vehicle;
+    ngOnInit() {
+        this.getVehicles();
+        // this.http.getUser();
     }
 
-    removeVehicle() {
-        this.http.removeVehicle(this.toBeRemoved.id)
+    getVehicles() {
+        this.http.getVehicles()
             .then(response => {
-                if (response === true) {
-                    this.vehicles = this.vehicles.filter(v => v.id === this.toBeRemoved.id);
-                    location.reload();
-                }
+                this.vehicles = response;
+                this.filteredVehicles = response;
             });
+
+        this.http.getCartrackers();
+    }
+
+    filterVehicles(filter: string) {
+        if (filter !== '') {
+            filter = filter.toLowerCase();
+            this.filteredVehicles = this.vehicles.filter(v =>
+                (v.id.toString().toLowerCase().search(filter) >= 0 ||
+                v.licensePlate.toLowerCase().search(filter) >= 0 ||
+                v.vehicleType.toLowerCase().search(filter) >= 0));
+        } else {
+            this.filteredVehicles = this.vehicles;
+        }
     }
 }

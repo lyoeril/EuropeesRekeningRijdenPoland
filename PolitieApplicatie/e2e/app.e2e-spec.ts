@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('Politie-applicatie App', () => {
+describe('rekeningadministratie-frontend App', () => {
   let page: AppPage;
 
   beforeEach(() => {

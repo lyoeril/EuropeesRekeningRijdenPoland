@@ -1,25 +1,40 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Invoice} from '../_model/Invoice';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../_service/http.service';
+import { Invoice } from '../_model/Invoice';
 
 @Component({
     selector: 'app-invoice-list',
-    templateUrl: 'invoice-list.component.html',
-    styleUrls: ['invoice-list.component.css']
+    templateUrl: 'invoice-list.component.html'
 })
 
 export class InvoiceListComponent implements OnInit {
 
-    @Input() invoices: Invoice[];
+    invoices: Invoice[] = [];
+    filteredInvoices: Invoice[] = [];
 
-    constructor(public translate: TranslateService, private router: Router) {
+    constructor(private http: HttpService) { }
+
+    ngOnInit() {
+        this.getInvoices();
     }
 
-    ngOnInit() { }
+    getInvoices() {
+        this.http.getInvoices()
+            .then(response => {
+                this.invoices = response;
+                this.filteredInvoices = response;
+            });
+    }
 
-    goToInvoice(invoice: Invoice) {
-        const link = ['/invoice', invoice.date.getFullYear(), invoice.date.getMonth() + 1];
-        this.router.navigate(link);
+    filterInvoices(filter: string) {
+        if (filter !== '') {
+            filter = filter.toLowerCase();
+            this.filteredInvoices = this.invoices.filter(i => (
+                i.id.toString().toLowerCase().search(filter) >= 0 ||
+                i.status.toLowerCase().search(filter) >= 0
+            ));
+        } else {
+            this.filteredInvoices = this.invoices;
+        }
     }
 }

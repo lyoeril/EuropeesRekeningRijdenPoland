@@ -1,61 +1,51 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Routing
 import { routing } from './app.routing';
 
-// Components
 import { AppComponent } from './app.component';
-
 import { HomeComponent } from './home/home.component';
-import { NotFoundComponent } from './not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
-import { UserComponent } from './user/user.component';
+import { LoginComponent } from './login/login.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { InvoiceListComponent } from './invoice-list/invoice-list.component';
-import { InvoiceComponent } from './invoice/invoice.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { CartrackerComponent } from './cartracker/cartracker.component';
+import { NewCartrackerComponent } from './new-cartracker/new-cartracker.component';
+import { CartrackerListComponent } from './cartracker-list/cartracker-list.component';
 
-// Services
-import { HttpService } from './_services/http.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { EqualValidator } from './_directives/equal-validator.directive';
+import { HttpService } from './_service/http.service';
+import { AuthService } from './_service/auth.service';
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NotFoundComponent,
     HeaderComponent,
-    UserComponent,
+    LoginComponent,
+    NotFoundComponent,
     InvoiceListComponent,
-    InvoiceComponent,
     VehicleListComponent,
-    EqualValidator
+    CartrackerComponent,
+    NewCartrackerComponent,
+    CartrackerListComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    routing,
     HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+    HttpModule,
+    routing
   ],
-  providers: [HttpService],
+  providers: [
+    HttpService,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

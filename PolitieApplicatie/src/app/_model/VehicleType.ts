@@ -5,4 +5,3 @@ export enum VehicleType {
     AUTOBUS = 'autobus',
     TRUCK = 'truck'
 }
-

@@ -1,5 +1,5 @@
 {
-  "name": "Politie-applicatie",
+  "name": "rekeningadministratie-frontend",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "@agm/core": "^1.0.0-beta.3",
     "@angular/animations": "^5.2.0",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
@@ -22,13 +21,10 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
-    "@fortawesome/fontawesome": "^1.1.5",
-    "@fortawesome/fontawesome-free-regular": "^5.0.10",
-    "@fortawesome/fontawesome-free-solid": "^5.0.10",
-    "@ngx-translate/core": "^9.1.1",
-    "@ngx-translate/http-loader": "^2.0.1",
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "core-js": "^2.4.1",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },

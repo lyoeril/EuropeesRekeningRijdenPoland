@@ -1,43 +1,23 @@
-<div class="container shadow">
-    <h2>{{ "myvehicles" | translate }}</h2>
-</div>
-<div class="table-container shadow">
-    <table class="table table-hover">
+<div class="main">
+    Vehicles
+    <form class="form-inline my-2 float-right">
+        <input name="filter" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" (keyup)="filterVehicles($event.target.value)">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <table class="table table-hover table-dark">
         <thead>
             <tr>
-                <th scope="col">{{ "licenseplate" | translate }}</th>
-                <th scope="col">{{ "type" | translate }}</th>
-                <th scope="col">{{ "manage" | translate }}</th>
+                <th scope="col">#</th>
+                <th scope="col">License Plate</th>
+                <th scope="col">Type</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let vehicle of vehicles">
+            <tr *ngFor="let vehicle of filteredVehicles">
+                <th scope="row">{{vehicle.id}}</th>
                 <td>{{vehicle.licensePlate}}</td>
-                <td>{{ vehicle.vehicleType.toLowerCase().replace('_', '') | translate }}</td>
-                <td>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#removeModal" (click)="setToBeRemoved(vehicle)">{{ "remove" | translate }}</button>
-                </td>
+                <td>{{vehicle.vehicleType}}</td>
             </tr>
         </tbody>
     </table>
-</div>
-
-<div id="removeModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Are you sure?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to remove <strong *ngIf="toBeRemoved !== null">{{toBeRemoved.licensePlate}}</strong> from your list? You won't receive any invoices from this vehicle on here anymore.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">{{ "cancel" | translate }}</button>
-                <button type="button" class="btn btn-danger" (click)="removeVehicle()">{{ "remove" | translate }}</button>
-            </div>
-        </div>
-    </div>
 </div>

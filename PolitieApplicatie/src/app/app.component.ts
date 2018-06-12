@@ -3,7 +3,7 @@
 import { Component } from '@angular/core';
 
 import fontawesome from '@fortawesome/fontawesome';
-import { faEnvelope, faUserCircle, faHome } from '@fortawesome/fontawesome-free-solid';
+import { faHome } from '@fortawesome/fontawesome-free-solid';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,8 @@ import { faEnvelope, faUserCircle, faHome } from '@fortawesome/fontawesome-free-
 })
 export class AppComponent {
   title = 'app';
-  session = sessionStorage;
 
   constructor() {
-    fontawesome.library.add(faEnvelope, faUserCircle, faHome);
+    fontawesome.library.add(faHome);
   }
 }
