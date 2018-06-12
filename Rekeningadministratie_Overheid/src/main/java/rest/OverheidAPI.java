@@ -16,6 +16,7 @@ import domain.Rekeningrijder;
 import domain.Ride;
 import domain.User;
 import domain.Vehicle;
+import dto.DTO_Cartracker;
 import dto.DTO_Invoice;
 import dto.DTO_KMRate;
 import dto.DTO_Rekeningrijder;
@@ -110,7 +111,13 @@ public class OverheidAPI {
 
         List<Cartracker> cartrackers = registrationService.findAllCartrackers();
         if (cartrackers != null) {
-            return Response.accepted(cartrackers).build();
+            
+            List<DTO_Cartracker> dtoCartrackers = new ArrayList<>();
+            for(Cartracker c : cartrackers){
+                dtoCartrackers.add(new DTO_Cartracker(c));
+            }          
+            
+            return Response.accepted(dtoCartrackers).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
@@ -124,7 +131,7 @@ public class OverheidAPI {
         if (!hardware.isEmpty()) {
             Cartracker cartracker = new Cartracker(hardware);
             registrationService.addCartracker(cartracker);
-            return Response.accepted(cartracker).build();
+            return Response.accepted(new DTO_Cartracker(cartracker)).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
 
@@ -136,7 +143,7 @@ public class OverheidAPI {
         Cartracker c = registrationService.findCartrackerById(id);
 
         if (c != null) {
-            return Response.accepted(c).build();
+            return Response.accepted(new DTO_Cartracker(c)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
@@ -151,7 +158,7 @@ public class OverheidAPI {
         if (c != null) {
             c.setHardware(hardware);
             registrationService.updateCartracker(c);
-            return Response.accepted(c).build();
+            return Response.accepted(new DTO_Cartracker(c)).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
     }

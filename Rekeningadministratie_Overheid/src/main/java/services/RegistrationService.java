@@ -114,4 +114,9 @@ public class RegistrationService {
     public void updateVehicle(Vehicle vehicle){
         iVehicleDAO.edit(vehicle);
     }
+    
+    public Vehicle findVehicleByLicenseplate(String licenseplate){
+        return iVehicleDAO.findVehicleByLicenseplate(licenseplate);
+    }
+    
 }
