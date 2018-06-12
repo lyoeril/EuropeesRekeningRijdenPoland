@@ -8,6 +8,7 @@ import { AuthService } from './_service/auth.service';
 import { InvoiceListComponent } from './invoice-list/invoice-list.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { CartrackerComponent } from './cartracker/cartracker.component';
+import { KmRateListComponent } from './km-rate-list/km-rate-list.component';
 
 const routes: Routes = [
     {
@@ -31,8 +32,13 @@ const routes: Routes = [
         canActivate: [AuthService]
     },
     {
-        path: 'cartracker',
+        path: 'cartrackers',
         component: CartrackerComponent,
+        canActivate: [AuthService]
+    },
+    {
+        path: 'kmrates',
+        component: KmRateListComponent,
         canActivate: [AuthService]
     },
     {

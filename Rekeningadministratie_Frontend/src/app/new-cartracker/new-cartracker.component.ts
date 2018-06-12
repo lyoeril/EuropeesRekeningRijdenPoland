@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { HttpService } from '../_service/http.service';
+import { Cartracker } from '../_model/Cartracker';
 
 @Component({
     selector: 'app-new-cartracker',
@@ -8,6 +9,7 @@ import { HttpService } from '../_service/http.service';
 
 export class NewCartrackerComponent implements OnInit {
 
+    @Output() newCartracker: EventEmitter<Cartracker> = new EventEmitter();
     cartracker = { hardware: '' };
 
     constructor(private http: HttpService) { }
@@ -15,6 +17,11 @@ export class NewCartrackerComponent implements OnInit {
     ngOnInit() { }
 
     save() {
-        this.http.addCartracker(this.cartracker);
+        this.http.addCartracker(this.cartracker)
+            .then(response => {
+                if (response !== null) {
+                    this.newCartracker.emit(response);
+                }
+            });
     }
 }

@@ -1,8 +1,48 @@
 <div class="main">
-    Vehicles
+    <form class="form-inline my-2 float-left">
+        <p class="mr-sm-2 my-0 align-self-center">List limit: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{listLimit}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setListLimit(1)">1</a>
+                <a class="dropdown-item" (click)="setListLimit(5)">5</a>
+                <a class="dropdown-item" (click)="setListLimit(10)">10</a>
+                <a class="dropdown-item" (click)="setListLimit(15)">15</a>
+                <a class="dropdown-item" (click)="setListLimit(25)">25</a>
+                <a class="dropdown-item" (click)="setListLimit(50)">50</a>
+                <a class="dropdown-item" (click)="setListLimit(100)">100</a>
+            </div>
+        </div>
+    </form>
     <form class="form-inline my-2 float-right">
-        <input name="filter" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" (keyup)="filterVehicles($event.target.value)">
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        <p class="mr-sm-2 my-0 align-self-center">Type: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{filteredType}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setTypeFilter('All')">All</a>
+                <a *ngFor="let type of types()" class="dropdown-item" (click)="setTypeFilter(type)">{{type}}</a>
+            </div>
+        </div>
+        <p class="mr-sm-2 my-0 align-self-center">Search on: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{searchProperty}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setSearchFilter('ID')">ID</a>
+                <a class="dropdown-item" (click)="setSearchFilter('License Plate')">License Plate</a>
+                <a class="dropdown-item" (click)="setSearchFilter('Cartracker')">Cartracker</a>
+            </div>
+        </div>
+        <input name="filter" class="form-control" type="search" placeholder="Search..." aria-label="Search" [(ngModel)]="search"
+            (keyup)="filterVehicles()">
     </form>
     <table class="table table-hover table-dark">
         <thead>
@@ -10,13 +50,21 @@
                 <th scope="col">#</th>
                 <th scope="col">License Plate</th>
                 <th scope="col">Type</th>
+                <th scope="col">Cartracker</th>
+                <th scope="col">Manage</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let vehicle of filteredVehicles">
-                <th scope="row">{{vehicle.id}}</th>
-                <td>{{vehicle.licensePlate}}</td>
-                <td>{{vehicle.vehicleType}}</td>
+            <tr *ngFor="let vehicle of filteredVehicles; let i=index">
+                <th *ngIf="i < listLimit" scope="row">{{vehicle.id}}</th>
+                <td *ngIf="i < listLimit">{{vehicle.licensePlate}}</td>
+                <td *ngIf="i < listLimit">{{vehicle.vehicleType}}</td>
+                <td *ngIf="i < listLimit">{{vehicle.cartrackerId}}</td>
+                <td *ngIf="i < listLimit">
+                    <a (click)="edit(vehicle)" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                        <span class="fas fa-edit"></span>
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
