@@ -19,4 +19,5 @@ public interface IVehicleDAO {
     void delete(Vehicle vehicle);
     Vehicle findVehicleById(long id);
     List<Vehicle> findAllVehicles();
+    Vehicle findVehicleByLicenseplate(String licenseplate);
 }

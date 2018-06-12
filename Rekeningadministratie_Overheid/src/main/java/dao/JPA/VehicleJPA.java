@@ -61,5 +61,12 @@ public class VehicleJPA implements IVehicleDAO{
     public List<Vehicle> findAllVehicles() {
         return em.createNamedQuery("Vehicle.findAll").getResultList();
     }
+
+    @Override
+    public Vehicle findVehicleByLicenseplate(String licenseplate) {
+        return (Vehicle)em.createNamedQuery("Vehicle.findByLicenseplate")
+                .setParameter("licenseplate", licenseplate)
+                .getSingleResult();
+    }
     
 }

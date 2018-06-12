@@ -20,7 +20,9 @@ import javax.persistence.OneToOne;
 @Model
 @NamedQueries({
     @NamedQuery(name = "Vehicle.findAll",
-            query = "SELECT v FROM Vehicle v")
+            query = "SELECT v FROM Vehicle v"), 
+    @NamedQuery(name = "Vehicle.findByLicenseplate",
+            query = "SELECT v FROM Vehicle v WHERE v.licensePlate = :licenseplate")
 })
 public class Vehicle implements Serializable{
 
