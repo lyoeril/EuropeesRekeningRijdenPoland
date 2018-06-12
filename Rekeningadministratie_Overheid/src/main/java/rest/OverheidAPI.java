@@ -157,8 +157,11 @@ public class OverheidAPI {
     @GET
     @Path("kmrates")
     public Response getKMRates() {
+        System.out.println("1");
         List<KMRate> kmRates = invoiceService.findAllKMRates();
+        System.out.println("2");
         if(kmRates != null){
+            System.out.println("3");
             return Response.accepted(kmRates).build();
         }
         return Response.status(Status.FORBIDDEN).build();
