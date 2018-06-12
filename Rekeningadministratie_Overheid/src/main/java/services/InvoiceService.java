@@ -106,5 +106,9 @@ public class InvoiceService {
         return kmRateDAO.findByRegionVehicleType(region, vehicleType);
     }
     
+    public List<KMRate> findAllKMRates(){
+        return kmRateDAO.findAll();
+    }
+    
 }
 
