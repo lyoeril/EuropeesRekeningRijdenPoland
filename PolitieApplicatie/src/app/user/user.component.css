@@ -1,0 +1,14 @@
+.row {
+    padding: 5px 5px 5px 5px
+}
+
+.container {
+    background: white;
+    margin-bottom: 5px;
+}
+
+svg {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 5px;
+}

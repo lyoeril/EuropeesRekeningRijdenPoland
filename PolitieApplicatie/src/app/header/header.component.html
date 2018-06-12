@@ -1,0 +1,156 @@
+<div class="container shadow">
+    <div class="row" style="display: flex">
+        <div class="col">
+            <a href="/">
+                <h1>{{ "Politie Systeem" | translate }}</h1>
+            </a>
+        </div>
+        <div class="col header-item">
+            <button id="closeLoginModal" [hidden]="true" data-toggle="modal" data-target="#loginModal"></button>
+            <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right" data-toggle="modal"
+                data-target="#loginModal">{{ "login" | translate }}</button>
+            <button id="closeRegisterModal" [hidden]="true" data-toggle="modal" data-target="#registerModal"></button>
+            <button *ngIf="session.getItem('token') === null" class="btn btn-outline-danger" style="float:right; margin-right: 5px;"
+                data-toggle="modal" data-target="#registerModal">{{ "register" | translate }}</button>
+            <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-danger" style="float:right" (click)="logout()">{{ "logout" | translate }}</button>
+        </div>
+        <div class="col-2 header-item">
+            <a class="language" [class.selected]="usingLang === 'pl'" (click)="changeLang('pl')">PL</a>
+            <a class="language" [class.selected]="usingLang === 'en'" (click)="changeLang('en')">EN</a>
+            <a class="language" [class.selected]="usingLang === 'nl'" (click)="changeLang('nl')">NL</a>
+        </div>
+    </div>
+</div>
+
+<div id="loginModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ "login" | translate }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #loginForm="ngForm">
+                    <div class="form-group">
+                        <label for="username">{{ 'username' | translate }}</label>
+                        <input name="username" id="logusername" type="text" class="form-control" [(ngModel)]="usercreds.username" (keyup.enter)="login(usercreds)"
+                            placeholder="{{ 'username' | translate }}" required autofocus #logusername="ngModel">
+
+                        <div *ngIf="logusername.invalid && (logusername.dirty || logusername.touched)" class="alert alert-danger">
+                            <div *ngIf="logusername.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ 'password' | translate }}</label>
+                        <input name="password" id="logpassword" type="password" class="form-control" [(ngModel)]="usercreds.password" (keyup.enter)="login(usercreds)"
+                            placeholder="{{ 'password' | translate }}" required autofocus #logpassword="ngModel">
+
+                        <div *ngIf="logpassword.invalid && (logpassword.dirty || logpassword.touched)" class="alert alert-danger">
+                            <div *ngIf="logpassword.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div *ngFor="let alert of loginAlerts" class="alert alert-danger">
+                    {{ alert | translate }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="login(usercreds)" [disabled]="loginForm.invalid">{{ "login" | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="registerModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ "register" | translate }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #registerForm="ngForm">
+                    <div class="form-group">
+                        <label for="email">{{ 'email' | translate }}</label>
+                        <input name="email" id="regemail" type="email" class="form-control" [(ngModel)]="registercreds.email" placeholder="{{ 'email' | translate }}"
+                            required email autofocus #email="ngModel">
+
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                            <div *ngIf="email.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                            <div *ngIf="email.errors.email">
+                                {{ 'emailinvalid' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">{{ 'address' | translate }}</label>
+                        <input name="address" id="regaddress" type="text" class="form-control" [(ngModel)]="registercreds.address" placeholder="{{ 'address' | translate }}"
+                            required #address="ngModel">
+
+                        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger">
+                            <div *ngIf="address.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">{{ 'username' | translate }}</label>
+                        <input name="username" id="regusername" type="text" class="form-control" [(ngModel)]="registercreds.username" placeholder="{{ 'username' | translate }}"
+                            required #username="ngModel">
+
+                        <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+                            <div *ngIf="username.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">{{ 'password' | translate }}</label>
+                        <input name="password" id="password" type="password" class="form-control" [(ngModel)]="registercreds.password" placeholder="{{ 'password' | translate }}"
+                            required #password="ngModel">
+
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                            <div *ngIf="password.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">{{ 'repeatpassword' | translate }}</label>
+                        <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" [(ngModel)]="registercreds.repPassword"
+                            placeholder="{{ 'repeatpassword' | translate }}" required validateEqual="password" #confirmPassword="ngModel">
+
+                        <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)" class="alert alert-danger">
+                            <div *ngIf="confirmPassword.errors.required">
+                                {{ 'fieldrequired' | translate }}
+                            </div>
+
+                            <div *ngIf="!confirmPassword.errors.validateEqual">
+                                {{ 'passwordnomatch' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div *ngFor="let alert of registerAlerts" class="alert alert-danger">
+                    {{ alert | translate }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="register(registercreds)" [disabled]="registerForm.invalid">{{ "register" | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
