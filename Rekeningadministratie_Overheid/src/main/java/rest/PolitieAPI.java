@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -40,14 +42,21 @@ public class PolitieAPI {
 
     @GET
     @Path("vehicles")
-    public Response getVehicles() {
+    public Response getVehicles(
+            @DefaultValue("0") @QueryParam("offset") int offset,
+            @DefaultValue("2") @QueryParam("size") int size) {
+        
         List<Vehicle> vehicles = registrationService.findAllVehicles();
         if (vehicles != null) {
             List<DTO_Vehicle> dtoVehicles = new ArrayList<>();
             for (Vehicle v : vehicles) {
                 dtoVehicles.add(new DTO_Vehicle(v));
             }
-            return Response.accepted(dtoVehicles).build();
+            if((offset + size) > dtoVehicles.size()){
+                size = dtoVehicles.size() - offset;
+            }
+            final List<DTO_Vehicle> result = dtoVehicles.subList(offset, offset + size);
+            return Response.accepted(result).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
@@ -75,7 +84,7 @@ public class PolitieAPI {
     }
 
     @GET
-    @Path("vehicle/{id}/owners")
+    @Path("vehicles/{id}/owners")
     public Response getOwners(@PathParam("id") long id) {
         Vehicle v = registrationService.findVehicleById(id);
         if (v != null) {
