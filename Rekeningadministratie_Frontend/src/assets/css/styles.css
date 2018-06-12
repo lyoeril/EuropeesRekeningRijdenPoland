@@ -6,6 +6,10 @@ body {
     background-attachment: fixed; */
 }
 
+a :hover {
+    cursor: pointer;
+}
+
 .main {
     width: 80%;
     margin: auto;

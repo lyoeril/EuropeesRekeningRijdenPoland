@@ -20,6 +20,7 @@ import { CartrackerListComponent } from './cartracker-list/cartracker-list.compo
 
 import { HttpService } from './_service/http.service';
 import { AuthService } from './_service/auth.service';
+import { KmRateListComponent } from './km-rate-list/km-rate-list.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AuthService } from './_service/auth.service';
     VehicleListComponent,
     CartrackerComponent,
     NewCartrackerComponent,
-    CartrackerListComponent
+    CartrackerListComponent,
+    KmRateListComponent
   ],
   imports: [
     BrowserModule,

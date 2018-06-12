@@ -4,6 +4,8 @@ import { Http, Headers, Response } from '@angular/http';
 import * as queryString from 'querystring';
 import { Vehicle } from '../_model/Vehicle';
 import { Invoice } from '../_model/Invoice';
+import { Cartracker } from '../_model/Cartracker';
+import { KmRate } from '../_model/KmRate';
 
 @Injectable()
 export class HttpService {
@@ -55,8 +57,17 @@ export class HttpService {
             this.post('/login', usercreds)
                 .subscribe(data => {
                     sessionStorage.setItem('token', data.headers.get('Authorization'));
-                    sessionStorage.setItem('password', usercreds.password);
-                    resolve(true);
+                    this.get('/overheid')
+                        .subscribe(data2 => {
+                            if (data2.status === 202) {
+                                resolve(true);
+                            } else {
+                                sessionStorage.removeItem('token');
+                                resolve(null);
+                            }
+                        }, error => {
+                            this.handleError(error); resolve(null);
+                        });
                 }, error => {
                     if (error.status === 401) {
                         resolve('usernamepasswordnomatch');
@@ -74,12 +85,14 @@ export class HttpService {
     }
 
     // Cartrackers ============================================================================== Cartrackers
-    getCartrackers(options?: Headers): Promise<any> {
+    getCartrackers(options?: Headers): Promise<Cartracker[]> {
         return new Promise(resolve => {
             this.get('/overheid/cartrackers')
                 .subscribe(data => {
                     const cartrackers = [];
-                    console.log(data.json());
+                    data.json().forEach(c => {
+                        cartrackers.push(new Cartracker(c.id, c.hardware));
+                    });
                     resolve(cartrackers);
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -87,12 +100,13 @@ export class HttpService {
         });
     }
 
-    addCartracker(cartracker: any, options?: Headers): Promise<any> {
+    addCartracker(cartracker: any, options?: Headers): Promise<Cartracker> {
         return new Promise(resolve => {
             this.post('/overheid/cartrackers/new', cartracker)
                 .subscribe(data => {
-                    console.log(data);
-                    resolve(true);
+                    resolve(new Cartracker(data.json().id, data.json().hardware));
+                }, error => {
+                    this.handleError(error); resolve(null);
                 });
         });
     }
@@ -103,8 +117,24 @@ export class HttpService {
             this.get('/overheid/invoices')
                 .subscribe(data => {
                     const invoices = [];
-                    console.log(data.json());
+                    data.json().forEach(i => {
+                        invoices.push(new Invoice(i.id, new Date(i.year, i.month - 1), i.cartrackerId, i.totalAmount, i.status));
+                    });
                     resolve(invoices);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+    // Invoices ==================================================================================== Invoices
+    getKmRates(options?: Headers): Promise<KmRate[]> {
+        return new Promise(resolve => {
+            this.get('/overheid/kmrates')
+                .subscribe(data => {
+                    const kmRates = [];
+                    console.log(data.json());
+                    resolve(kmRates);
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
@@ -117,8 +147,9 @@ export class HttpService {
             this.get('/overheid/vehicles')
                 .subscribe(data => {
                     const vehicles = [];
+                    console.log(data.json());
                     data.json().forEach(v => {
-                        const newVehicle = new Vehicle(v.id, v.licensePlate, v.vehicleType);
+                        const newVehicle = new Vehicle(v.id, v.licensePlate, v.vehicleType, v.cartrackerId);
                         v.ownersHistory.forEach(u => {
                             newVehicle.ownerHistory.push(u);
                         });

@@ -4,17 +4,19 @@ import * as moment from 'moment';
 
 export class Invoice {
     id: number;
+    date: Date;
+    cartrackerId: number;
     totalSum: number;
     status: Status;
-    date: Date;
 
     movements: Movement[];
 
-    constructor(_id: number, _totalSum: number, _status: Status, _date: Date) {
+    constructor(_id: number, _date: Date, _cartrackerId: number, _totalSum: number, _status: Status) {
         this.id = _id;
+        this.date = _date;
+        this.cartrackerId = _cartrackerId;
         this.totalSum = _totalSum;
         this.status = _status;
-        this.date = _date;
     }
 
     dateToString(): string {

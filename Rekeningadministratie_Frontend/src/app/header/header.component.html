@@ -24,10 +24,16 @@
                     <span *ngIf="router.url === '/vehicles'" class="sr-only">(current)</span>
                 </a>
             </li>
-            <li class="nav-item" [class.active]="router.url === '/cartracker'">
-                <a class="nav-link" href="/cartracker" data-toggle="tooltip" data-placement="bottom" title="Create Cartrackers">
+            <li class="nav-item" [class.active]="router.url === '/cartrackers'">
+                <a class="nav-link" href="/cartrackers" data-toggle="tooltip" data-placement="bottom" title="Cartrackers">
                     <i class="fas fa-location-arrow"></i>
-                    <span *ngIf="router.url === '/cartracker'" class="sr-only">(current)</span>
+                    <span *ngIf="router.url === '/cartrackers'" class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item" [class.active]="router.url === '/kmrates'">
+                <a class="nav-link" href="/kmrates" data-toggle="tooltip" data-placement="bottom" title="Km Rates">
+                    <i class="fas fa-euro-sign"></i>
+                    <span *ngIf="router.url === '/kmrates'" class="sr-only">(current)</span>
                 </a>
             </li>
         </ul>

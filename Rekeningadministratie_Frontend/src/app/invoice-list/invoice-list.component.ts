@@ -11,6 +11,9 @@ export class InvoiceListComponent implements OnInit {
 
     invoices: Invoice[] = [];
     filteredInvoices: Invoice[] = [];
+    searchProperty = 'ID';
+
+    listLimit = 50;
 
     constructor(private http: HttpService) { }
 
@@ -21,20 +24,52 @@ export class InvoiceListComponent implements OnInit {
     getInvoices() {
         this.http.getInvoices()
             .then(response => {
-                this.invoices = response;
-                this.filteredInvoices = response;
+                if (response !== null) {
+                    this.invoices = response;
+                    this.filteredInvoices = response;
+                }
             });
+    }
+
+    setListLimit(limit) {
+        this.listLimit = limit;
+    }
+
+    setSearch(searchProperty) {
+        this.searchProperty = searchProperty;
     }
 
     filterInvoices(filter: string) {
         if (filter !== '') {
             filter = filter.toLowerCase();
-            this.filteredInvoices = this.invoices.filter(i => (
-                i.id.toString().toLowerCase().search(filter) >= 0 ||
-                i.status.toLowerCase().search(filter) >= 0
-            ));
+            switch (this.searchProperty) {
+                case 'ID':
+                    this.filteredInvoices = this.invoices.filter(v =>
+                        (v.id.toString().toLowerCase().search(filter) >= 0));
+                    break;
+                case 'Date':
+                    this.filteredInvoices = this.invoices.filter(v =>
+                        (v.dateToString().toLowerCase().search(filter) >= 0));
+                    break;
+                case 'Cartracker':
+                    this.filteredInvoices = this.invoices.filter(v =>
+                        (v.cartrackerId.toString().toLowerCase().search(filter) >= 0));
+                    break;
+                case 'Total Sum':
+                    this.filteredInvoices = this.invoices.filter(v =>
+                        (v.totalSum.toString().toLowerCase().search(filter) >= 0));
+                    break;
+                case 'Status':
+                    this.filteredInvoices = this.invoices.filter(v =>
+                        (v.status.toString().toLowerCase().search(filter) >= 0));
+                    break;
+            }
         } else {
             this.filteredInvoices = this.invoices;
         }
+    }
+
+    recalculateInvoice(invoice: Invoice) {
+        console.log('Recalculating...');
     }
 }

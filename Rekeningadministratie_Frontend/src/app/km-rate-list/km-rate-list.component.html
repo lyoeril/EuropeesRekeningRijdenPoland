@@ -18,6 +18,17 @@
         </div>
     </form>
     <form class="form-inline my-2 float-right">
+        <p class="mr-sm-2 my-0 align-self-center">Type: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{filteredType}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setTypeFilter('All')">All</a>
+                <a *ngFor="let type of types()" class="dropdown-item" (click)="setTypeFilter(type)">{{type}}</a>
+            </div>
+        </div>
         <p class="mr-sm-2 my-0 align-self-center">Search on: </p>
         <div class="dropdown mr-sm-3">
             <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -25,36 +36,30 @@
                 {{searchProperty}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" (click)="setSearch('ID')">ID</a>
-                <a class="dropdown-item" (click)="setSearch('Date')">Date</a>
-                <a class="dropdown-item" (click)="setSearch('Cartracker')">Cartracker</a>
-                <a class="dropdown-item" (click)="setSearch('Total Sum')">Total Sum</a>
-                <a class="dropdown-item" (click)="setSearch('Status')">Status</a>
+                <a class="dropdown-item" (click)="setSearch('Region')">Region</a>
+                <a class="dropdown-item" (click)="setSearch('Rate')">Rate</a>
             </div>
         </div>
-        <input class="form-control" type="search" placeholder="Search..." aria-label="Search" (keyup)="filterInvoices($event.target.value)">
+        <input name="filter" class="form-control" type="search" placeholder="Search..." aria-label="Search" [(ngModel)]="search"
+            (keyup)="filterKmRates()">
     </form>
     <table class="table table-hover table-dark">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">Cartracker</th>
-                <th scope="col">Total Sum</th>
-                <th scope="col">Status</th>
+                <th scope="col">Region</th>
+                <th scope="col">Vehicle Type</th>
+                <th scope="col">Rate</th>
                 <th scope="col">Manage</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let invoice of filteredInvoices; let i=index">
-                <th *ngIf="i < listLimit" scope="row">{{invoice.id}}</th>
-                <td *ngIf="i < listLimit">{{invoice.dateToString()}}</td>
-                <td *ngIf="i < listLimit">{{invoice.cartrackerId}}</td>
-                <td *ngIf="i < listLimit">{{invoice.totalSumToString()}}</td>
-                <td *ngIf="i < listLimit">{{invoice.status}}</td>
+            <tr *ngFor="let rate of filteredKmRates; let i=index">
+                <td *ngIf="i < listLimit">{{rate.region}}</td>
+                <td *ngIf="i < listLimit">{{rate.vehicleType}}</td>
+                <td *ngIf="i < listLimit">{{rate.rate}}</td>
                 <td *ngIf="i < listLimit">
-                    <a (click)="recalculateInvoice(invoice)" data-toggle="tooltip" data-placement="bottom" title="Recalculate">
-                        <span class="fas fa-calculator"></span>
+                    <a (click)="edit(rate)" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                        <span class="fas fa-edit"></span>
                     </a>
                 </td>
             </tr>
