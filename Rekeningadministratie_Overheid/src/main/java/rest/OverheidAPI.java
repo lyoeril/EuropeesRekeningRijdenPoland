@@ -17,6 +17,7 @@ import domain.Ride;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
+import dto.DTO_KMRate;
 import dto.DTO_Rekeningrijder;
 import dto.DTO_User;
 import dto.DTO_Vehicle;
@@ -30,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Singleton;
@@ -160,13 +162,18 @@ public class OverheidAPI {
         System.out.println("1");
         List<KMRate> kmRates = invoiceService.findAllKMRates();
         System.out.println("2");
-        if(kmRates != null){
+        if (kmRates != null) {
             System.out.println("3");
-            return Response.accepted(kmRates).build();
+            
+            List<DTO_KMRate> rates = new ArrayList<DTO_KMRate>();
+            for(KMRate k : kmRates){
+                rates.add(new DTO_KMRate(k));
+            }
+            return Response.accepted(rates).build();
         }
         return Response.status(Status.FORBIDDEN).build();
     }
-    
+
     @POST
     @Path("kmrates/new")
     public Response addKMRate(
@@ -175,27 +182,37 @@ public class OverheidAPI {
             @FormParam("rate") double rate) {
         KMRate k = new KMRate(region);
         k.addRatePerVehicleType(vehicleType, rate);
-        
-        try{
+
+        try {
             invoiceService.addKMRate(k);
             return Response.accepted(k).build();
-        } catch(Exception e){
+        } catch (Exception e) {
             return Response.status(Status.FORBIDDEN).build();
         }
     }
 
-    @GET
+    @PUT
     @Produces(APPLICATION_JSON)
-    @Path("kmrates/{region}")
+    @Path("kmrates/{region}/{vehicleType}")
     public Response getKMRateByRegion(
-            @PathParam("region") String region) {
-        if (!region.isEmpty()) {
-            KMRate kMRate = invoiceService.findKMRateByRegion(region);
-            if (kMRate != null) {
-                return Response.accepted(kMRate).build();
+            @PathParam("region") String region,
+            @PathParam("vehicleType") VehicleType vehicleType,
+            @FormParam("rate") double rate) {
+        try {
+            KMRate kmrate = invoiceService.findKMRateByRegion(region);
+            Map<VehicleType, Double> rates = kmrate.getRatePerVehicleType();
+            if (rates.containsKey(vehicleType)) {
+                rates.remove(vehicleType);
             }
+            rates.put(vehicleType, rate);
+            kmrate.setRatePerVehicleType(rates);
+            
+            invoiceService.updateKMRate(kmrate);
+            return Response.accepted(kmrate).build();
+
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).build();
         }
-        return Response.status(Status.BAD_REQUEST).build();
     }
 //    
 //    @POST
