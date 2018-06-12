@@ -13,6 +13,7 @@ import domain.Cartracker;
 import domain.Invoice;
 import domain.KMRate;
 import domain.Rekeningrijder;
+import domain.Ride;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
@@ -21,6 +22,12 @@ import dto.DTO_User;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.PermitAll;
@@ -42,6 +49,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
+import org.glassfish.hk2.utilities.reflection.Logger;
 import services.InvoiceService;
 import services.RegistrationService;
 import services.UserService;
@@ -76,10 +84,12 @@ public class OverheidAPI {
     public Response getEmployee(
             @Context HttpHeaders headers,
             @Context SecurityContext securityContext) {
-        if(!isOverheid(securityContext)){return Response.status(Status.UNAUTHORIZED).build();}
+        if (!isOverheid(securityContext)) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
-        if(u!= null){
+        if (u != null) {
             return Response.accepted(new DTO_User(u)).build();
         }
 //        boolean isRekeningrijder = Rekeningrijder.class.isAssignableFrom(u.getClass());
@@ -95,7 +105,7 @@ public class OverheidAPI {
     @Produces(APPLICATION_JSON)
     @Path("cartrackers")
     public Response getCartrackers() {
-        
+
         List<Cartracker> cartrackers = registrationService.findAllCartrackers();
         if (cartrackers != null) {
             return Response.accepted(cartrackers).build();
@@ -145,14 +155,35 @@ public class OverheidAPI {
     }
 
     @GET
-    @Path("KMRates")
+    @Path("kmrates")
     public Response getKMRates() {
-        return Response.status(Status.NOT_IMPLEMENTED).build();
+        List<KMRate> kmRates = invoiceService.findAllKMRates();
+        if(kmRates != null){
+            return Response.accepted(kmRates).build();
+        }
+        return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    @POST
+    @Path("kmrates/new")
+    public Response addKMRate(
+            @FormParam("region") String region,
+            @FormParam("vehicleType") VehicleType vehicleType,
+            @FormParam("rate") double rate) {
+        KMRate k = new KMRate(region);
+        k.addRatePerVehicleType(vehicleType, rate);
+        
+        try{
+            invoiceService.addKMRate(k);
+            return Response.accepted(k).build();
+        } catch(Exception e){
+            return Response.status(Status.FORBIDDEN).build();
+        }
     }
 
     @GET
     @Produces(APPLICATION_JSON)
-    @Path("KMRates/{region}")
+    @Path("kmrates/{region}")
     public Response getKMRateByRegion(
             @PathParam("region") String region) {
         if (!region.isEmpty()) {
@@ -188,20 +219,60 @@ public class OverheidAPI {
         if (invoices != null) {
             //return Response.accepted(invoices).build();
             List<DTO_Invoice> invoiceDTO = new ArrayList<>();
-            for(Invoice i: invoices){
+            for (Invoice i : invoices) {
                 invoiceDTO.add(new DTO_Invoice(i));
             }
             return Response.accepted(invoiceDTO).build();
         }
         return Response.status(Status.NOT_IMPLEMENTED).build();
     }
-//    
-//    @POST
-//    @Path("invoices/vehicle/{year}/{month}")
-//    public Response reCalculateInvoice(){
-//        return Response.status(Status.NOT_IMPLEMENTED).build();
-//    }
-//    
+
+    @POST
+    @Path("invoices/{rekeningrijderId}/{vehicleId}/{year}/{month}/")
+    public Response reCalculateInvoice(
+            @PathParam("rekeningrijderId") long rekeningrijderId,
+            @PathParam("vehicleId") long vehicleId,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+
+        Vehicle v = registrationService.findVehicleById(vehicleId);
+        long cartrackerId = v.getCartracker().getId();
+        Rekeningrijder r = registrationService.findRekeningrijderById(rekeningrijderId);
+
+        List<Ride> rides = new ArrayList<Ride>();
+
+        String baseUrl = "192.168.25.?";
+        try {
+            URL url = new URL(
+                    baseUrl
+                    + cartrackerId
+                    + year
+                    + month);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : Http error code: " + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String output;
+            System.out.println("Output from RegistrationServer .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+            }
+            conn.disconnect();
+
+        } catch (MalformedURLException e) {
+            System.out.println("exception: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("exception" + e.getMessage());
+        }
+
+        return Response.status(Status.NOT_ACCEPTABLE).build();
+    }
 
     @GET
     @Path("invoices/{id}")
@@ -226,7 +297,6 @@ public class OverheidAPI {
             return Response.accepted(i).build();
         }
         return Response.notModified("Couldn't update invoice").build();
-
     }
 
     @GET
@@ -266,45 +336,45 @@ public class OverheidAPI {
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
-    
+
     @GET
     @Path("vehicles")
-    public Response getVehicles(){
+    public Response getVehicles() {
         List<Vehicle> vehicles = registrationService.findAllVehicles();
         List<DTO_Vehicle> vehiclesDTO = new ArrayList<>();
-        if(vehicles != null){
-            for(Vehicle v: vehicles){
+        if (vehicles != null) {
+            for (Vehicle v : vehicles) {
                 vehiclesDTO.add(new DTO_Vehicle(v));
             }
             return Response.accepted(vehiclesDTO).build();
         }
         return Response.status(Status.NOT_ACCEPTABLE).build();
     }
-    
+
     @GET
     @Path("vehicles/{id}")
     public Response getVehicleById(
-            @PathParam("id") long id){
+            @PathParam("id") long id) {
         Vehicle v = registrationService.findVehicleById(id);
-        if(v != null){
+        if (v != null) {
             return Response.accepted(new DTO_Vehicle(v)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-    
+
     @PUT
     @Path("vehicles/{id}/update")
     public Response updateVehicle(
             @PathParam("id") long id,
             @FormParam("licensePlate") String licensePlate,
             @FormParam("vehicleType") VehicleType vehicleType,
-            @FormParam("cartrackerId") long cartrackerId){        
+            @FormParam("cartrackerId") long cartrackerId) {
         Vehicle v = registrationService.findVehicleById(id);
         Cartracker c = registrationService.findCartrackerById(cartrackerId);
-        if(v != null){
+        if (v != null) {
             v.setLicensePlate(licensePlate);
             v.setVehicleType(vehicleType);
-            if(c != null){
+            if (c != null) {
                 v.setCartracker(c);
             }
             registrationService.updateVehicle(v);
@@ -352,17 +422,17 @@ public class OverheidAPI {
         String username = this.getUsernameFromToken(token);
         return this.getRekeningrijderFromUsername(username);
     }
-    
-    private boolean isOverheid(SecurityContext context){
-        if(context.isUserInRole("OVERHEID")){
+
+    private boolean isOverheid(SecurityContext context) {
+        if (context.isUserInRole("OVERHEID")) {
             return true;
         }
         return false;
     }
-    
-    private List<DTO_Invoice> toDTOInvoiceList(List<Invoice> invoices){
+
+    private List<DTO_Invoice> toDTOInvoiceList(List<Invoice> invoices) {
         List<DTO_Invoice> dtoInvoices = new ArrayList<>();
-        for(Invoice i: invoices){
+        for (Invoice i : invoices) {
             dtoInvoices.add(new DTO_Invoice(i));
         }
         return dtoInvoices;
