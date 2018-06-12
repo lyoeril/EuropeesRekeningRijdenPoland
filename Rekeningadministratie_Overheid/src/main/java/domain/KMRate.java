@@ -53,8 +53,7 @@ public class KMRate implements Serializable{
         
     }
 
-    public KMRate(long id, String region) {
-        this.id = id;
+    public KMRate(String region) {
         this.region = region;
         ratePerVehicleType = new HashMap<>();
     }

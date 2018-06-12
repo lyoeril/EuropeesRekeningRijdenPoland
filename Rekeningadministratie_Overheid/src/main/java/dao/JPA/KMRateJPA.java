@@ -8,6 +8,7 @@ package dao.JPA;
 import dao.interfaces.IKMRateDAO;
 import domain.KMRate;
 import enums.VehicleType;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -63,5 +64,10 @@ public class KMRateJPA implements IKMRateDAO{
     @Override
     public KMRate findByRegionVehicleType(String region, VehicleType vehicleType) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<KMRate> findAll() {
+        return em.createNamedQuery("KMRate.findAll").getResultList();
     }
 }

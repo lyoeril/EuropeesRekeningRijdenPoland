@@ -18,14 +18,14 @@ public class DTO_User {
     private long id;
     private String username;
     private String email;
-    private HashSet<UserGroup> groups =  new HashSet<>();
+ //   private HashSet<UserGroup> groups =  new HashSet<>();
  //   private boolean km_prijs;
 
     public DTO_User(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.groups = user.getGroups();
+      //  this.groups = user.getGroups();
 //        this.km_prijs = user.getKm_prijs();
     }
 
@@ -53,13 +53,13 @@ public class DTO_User {
         this.email = email;
     }
 
-    public HashSet<UserGroup> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(HashSet<UserGroup> groups) {
-        this.groups = groups;
-    }
+//    public HashSet<UserGroup> getGroups() {
+//        return groups;
+//    }
+//
+//    public void setGroups(HashSet<UserGroup> groups) {
+//        this.groups = groups;
+//    }
 
 //    public boolean isKm_prijs() {
 //        return km_prijs;

@@ -7,6 +7,7 @@ package dao.interfaces;
 
 import domain.KMRate;
 import enums.VehicleType;
+import java.util.List;
 
 /**
  *
@@ -19,4 +20,5 @@ public interface IKMRateDAO {
     KMRate findById(long id);
     KMRate findByRegion(String region);
     KMRate findByRegionVehicleType(String region, VehicleType vehicleType);
+    List<KMRate> findAll();
 }

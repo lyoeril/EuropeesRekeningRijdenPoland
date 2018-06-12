@@ -28,24 +28,12 @@ public class KMRateTest {
     
     @Before
     public void setUp() {
-        km1 = new KMRate(1L, "region1");
-        km2 = new KMRate(2L, "region2");
+        km1 = new KMRate("region1");
+        km2 = new KMRate("region2");
     }
     
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of getId method, of class KMRate.
-     */
-    @Test
-    public void testGetId() {
-        System.out.println("getId");
-        KMRate instance = km1;
-        long expResult = 1L;
-        long result = instance.getId();
-        assertEquals(expResult, result);
     }
 
     /**
