@@ -1,25 +1,29 @@
-<div class="main w-50 mt-5">
-        <table class="w-100">
-            <tr>
-                <td>
-                    <p class="mr-2 my-0 align-self-center">Username</p>
-                </td>
-                <td>
-                    <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="mr-2 my-0 align-self-center">Password</p>
-                </td>
-                <td>
-                    <input name="password" type="text" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button class="btn btn-outline-light float-right mt-1" (click)="login()"  data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Login</button>
-                </td>
-            </tr>
-        </table>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pr-wrap">
+                <div class="pass-reset">
+                    <input type="email" placeholder="Email" />
+                    <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
+                </div>
+            </div>
+            <div class="wrap">
+                <p class="form-title">
+                    Sign in</p>
+                <form class="login">
+                <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
+                <input name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
+                <button class="btn btn-outline-light float-right mt-1" (click)="login()"  data-toggle="tooltip" data-placement="bottom" title="login">Login</button>
+                <div class="remember-forgot">
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+</body>
