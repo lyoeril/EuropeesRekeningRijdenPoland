@@ -78,10 +78,6 @@ public class InvoiceService {
         return invoiceDAO.findInvoicesByStatus(status);
     }
     
-    public Invoice calculateInvoice(Rekeningrijder rekeningrijder, int year, int month, Vehicle vehicle){
-        return new Invoice(1, 1, 2017, 1, rekeningrijder);
-    }
-    
     public void addKMRate(KMRate kmRate){
         kmRateDAO.create(kmRate);
     }
