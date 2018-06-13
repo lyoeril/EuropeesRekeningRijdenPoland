@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
         username: '',
         password: '',
     };
+    error = '';
 
     constructor(
         private http: HttpService,
@@ -28,7 +29,9 @@ export class LoginComponent implements OnInit {
                 if (response === true) {
                     this.router.navigate(['']);
                 }
-                console.log(response);
+                else {
+                this.error = 'Username or password incorrect';
+            }
             });
     }
 }
