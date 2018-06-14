@@ -61,4 +61,15 @@ public class Vehicle implements Serializable {
         this.rides = rides;
     }
 
+    public void addLocation(Ride ride) {
+        if (ride != null && !rides.contains(ride)) {
+            rides.add(ride);
+        }
+    }
+
+    public void removeLocation(Ride ride) {
+        if (ride != null && rides.contains(ride)) {
+            rides.remove(ride);
+        }
+    }
 }

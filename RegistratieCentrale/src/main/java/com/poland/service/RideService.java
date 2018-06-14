@@ -7,7 +7,10 @@ package com.poland.service;
 
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Ride;
+import com.poland.entities.Vehicle;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -20,6 +23,7 @@ import javax.inject.Inject;
 @Stateless
 public class RideService {
 
+    public static final long HOUR = 3600 * 1000;
     private RideDAO rideDAO;
 
     @Inject
@@ -30,9 +34,13 @@ public class RideService {
     public RideService() {
     }
 
-    public Ride findOrCreateUncompletedRideByAutorisationCode(String authorisationCode) {
-        if (authorisationCode != null || authorisationCode.equals("")) {
-            return rideDAO.findUncompletedRideByAuthorisationCode(authorisationCode);
+    public Ride findOrCreateRideByAutorisationCode(Date date, Vehicle vehicle) {
+        if (vehicle != null) {
+            Ride r = rideDAO.findRideByAuthorisationCodeAndDate(date, new Date(date.getTime() - HOUR), vehicle);
+            if (r == null) {
+                r = rideDAO.create(new Ride(date, vehicle));
+            }
+            return r;
         } else {
             return null;
         }

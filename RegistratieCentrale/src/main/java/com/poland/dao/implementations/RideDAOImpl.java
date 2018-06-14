@@ -8,6 +8,7 @@ package com.poland.dao.implementations;
 import com.poland.entities.Ride;
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Location;
+import com.poland.entities.Vehicle;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -23,11 +24,13 @@ import javax.persistence.Query;
 public class RideDAOImpl extends BasicDAOImpl<Ride> implements RideDAO {
 
     @Override
-    public Ride findUncompletedRideByAuthorisationCode(String authorisationCode) {
+    public Ride findRideByAuthorisationCodeAndDate(Date startDate, Date endDate, Vehicle vehicle) {
         Ride ride = null;
         try {
-            Query q = em.createQuery("select r from Ride r where r.vehicle = (select v from Vehicle v where v.authorisationCode = :authorisationCode) and r.endDate is null");
-            q.setParameter("authorisationCode", authorisationCode);
+            Query q = em.createQuery("select r from Ride r where r.vehicle = :vehicle and r.startDate <= :startDate and r.endDate >= :endDate");
+            q.setParameter("vehicle", vehicle);
+            q.setParameter("startDate", startDate);
+            q.setParameter("endDate", endDate);
             ride = (Ride) q.getSingleResult();
         } catch (Exception ise) {
             handleExceptions(ise);

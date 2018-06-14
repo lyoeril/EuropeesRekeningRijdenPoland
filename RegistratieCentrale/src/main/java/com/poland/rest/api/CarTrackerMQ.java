@@ -34,9 +34,9 @@ import org.json.JSONObject;
     ,
     @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3")
     ,
-    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "100")
+    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "1000")
     ,
-    @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "1000")})
+    @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "10000")})
 public class CarTrackerMQ implements MessageListener {
 
     RegistrationService registrationService;
@@ -49,7 +49,7 @@ public class CarTrackerMQ implements MessageListener {
     @Inject
     public CarTrackerMQ(RegistrationService registrationService) {
         this.registrationService = registrationService;
-        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     }
 
     @Override
@@ -65,15 +65,10 @@ public class CarTrackerMQ implements MessageListener {
                 StringBuilder sb = new StringBuilder();
 
                 sb.append(dateObj.getLong("year"));
-                sb.append("-");
                 sb.append(dateObj.getLong("month"));
-                sb.append("-");
                 sb.append(dateObj.getLong("dayOfMonth"));
-                sb.append(" ");
                 sb.append(dateObj.getLong("hourOfDay"));
-                sb.append(":");
                 sb.append(dateObj.getLong("minute"));
-                sb.append(":");
                 sb.append(dateObj.getLong("second"));
 
                 Date date = sdf.parse(sb.toString());

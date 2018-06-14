@@ -41,6 +41,10 @@ public class VehicleService {
         return null;
     }
 
+    public Vehicle editVehicle(Vehicle vehicle) {
+        return vehicleDAO.edit(vehicle);
+    }
+
     public void removeVehicle(Vehicle vehicle) {
         vehicleDAO.remove(vehicle);
     }

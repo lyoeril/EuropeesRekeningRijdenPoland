@@ -32,6 +32,8 @@ public class Ride implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
+    @Column(name = "missedMeasurement")
+    private boolean missedMeasurement;
     @ManyToOne
     @JoinColumn(name = "vehicleId", nullable = false)
     private Vehicle vehicle;
@@ -46,8 +48,9 @@ public class Ride implements Serializable {
     public Ride(Date startDate, Vehicle vehicle) {
         locations = new ArrayList<>();
         setStartDate(startDate);
+        setEndDate(startDate);
         setVehicle(vehicle);
-
+        missedMeasurement = false;
     }
 
     public long getId() {
@@ -72,6 +75,14 @@ public class Ride implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isMissedMeasurement() {
+        return missedMeasurement;
+    }
+
+    public void setMissedMeasurement(boolean missedMeasurement) {
+        this.missedMeasurement = missedMeasurement;
     }
 
     public Vehicle getVehicle() {

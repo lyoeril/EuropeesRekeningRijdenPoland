@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,10 +40,10 @@ public class CarTrackerDataAPI {
         this.registrationService = registrationService;
     }
 
-    @POST
+    @GET
     @Path("/get/RideByCode/{authenticationCode}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getLocationsByAuthenticationCode(@PathParam("authenticationCode") String authenticationCode, @FormParam("startDate") String start, @FormParam("endDate") String end) {
+    public Response getLocationsByAuthenticationCode(@PathParam("authenticationCode") String authenticationCode, @PathParam("startDate") String start, @PathParam("endDate") String end) {
         List<Ride> rides = new ArrayList<>();
 
         if (authenticationCode != null && !authenticationCode.equals("") && start != null && end != null) {
@@ -56,8 +57,6 @@ public class CarTrackerDataAPI {
             } catch (ParseException ex) {
                 Logger.getLogger(CarTrackerDataAPI.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
         } else {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }

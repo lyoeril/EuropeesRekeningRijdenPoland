@@ -6,6 +6,7 @@
 package com.poland.dao.interfaces.jpa;
 
 import com.poland.entities.Ride;
+import com.poland.entities.Vehicle;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface RideDAO extends BasicDAO<Ride> {
 
-    Ride findUncompletedRideByAuthorisationCode(String authorisationCode);
+    Ride findRideByAuthorisationCodeAndDate(Date startDate, Date endDate, Vehicle vehicle);
 
     List<Ride> getRideByAuthorisationCodeAndDate(String authorisationCode, Date startDate, Date endDate);
 
