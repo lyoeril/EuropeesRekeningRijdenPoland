@@ -1,3 +1,47 @@
-<p>
-  vehicle works!
-</p>
+  <div class="main">
+    Vehicles
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Details {{vehicle.licensePlate}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Here you can follow the selected car ofzo... blabla</h6>
+              <p class="card-text">BLALALALALLALA</p>
+              <ul class="card-text list-unstyled">
+                <li>license plate: {{TOFO}}</li>
+                <li>INFO: {{TOFO}}</li>
+                <li>INFO: {{TOFO}}</li>
+                <li>INFO: {{TOFO}}</li>
+                <li>INFO: {{TOFO}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Car history</h5>
+              <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">License Plate</th>
+                <th scope="col">Type</th>
+            </tr>
+        </thead>
+        <tbody class="vehicles">
+            <tr *ngFor="let vehicle of filteredVehicles"
+                (click)="onSelectVehicle(vehicle)">
+                <th scope="row">{{vehicle.id}}</th>
+                <td>{{vehicle.licensePlate}}</td>
+                <td>{{vehicle.vehicleType}}</td>
+            </tr>
+        </tbody>
+    </table>  
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
