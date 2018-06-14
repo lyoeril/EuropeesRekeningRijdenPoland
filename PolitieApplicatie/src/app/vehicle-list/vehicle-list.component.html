@@ -12,8 +12,9 @@
                 <th scope="col">Type</th>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let vehicle of filteredVehicles">
+        <tbody class="vehicles">
+            <tr *ngFor="let vehicle of filteredVehicles"
+                (click)="onSelectVehicle(vehicle)">
                 <th scope="row">{{vehicle.id}}</th>
                 <td>{{vehicle.licensePlate}}</td>
                 <td>{{vehicle.vehicleType}}</td>

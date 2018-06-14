@@ -5,6 +5,7 @@ import {NotFoundComponent} from './not-found/not-found.component';
 import {LoginComponent} from './login/login.component';
 import {AuthService} from './_service/auth.service';
 import {VehicleListComponent} from './vehicle-list/vehicle-list.component';
+import {VehicleComponent} from './vehicle/vehicle.component';
 
 const routes: Routes = [
   {
@@ -29,12 +30,12 @@ const routes: Routes = [
   },
   {
     path: 'vehicles/:id',
-    component: VehicleListComponent,
+    component: VehicleComponent,
     canActivate: [AuthService]
   },
   {
     path: 'vehicles/:id/track',
-    component: VehicleListComponent,
+    component: VehicleComponent,
     canActivate: [AuthService]
   },
   /*{

@@ -15,6 +15,7 @@ import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 
 import { HttpService } from './_service/http.service';
 import { AuthService } from './_service/auth.service';
+import { VehicleComponent } from './vehicle/vehicle.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AuthService } from './_service/auth.service';
     HeaderComponent,
     LoginComponent,
     NotFoundComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    VehicleComponent
   ],
   imports: [
     BrowserModule,

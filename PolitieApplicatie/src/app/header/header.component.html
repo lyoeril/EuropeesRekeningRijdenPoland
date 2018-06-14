@@ -11,25 +11,25 @@
                     <i class="fas fa-home"></i>
                     <span *ngIf="router.url === '/home' || router.url === '/'" class="sr-only">(current)</span>
                 </a>
-            </li> -->
+            </li>
             <li class="nav-item" [class.active]="router.url === '/invoices' || router.url === '/'">
                 <a class="nav-link" href="/invoices" data-toggle="tooltip" data-placement="bottom" title="Invoices">
                     <i class="fas fa-file-alt"></i>
                     <span *ngIf="router.url === '/invoices'" class="sr-only">(current)</span>
                 </a>
-            </li>
+            </li>-->
             <li class="nav-item" [class.active]="router.url === '/vehicles'">
                 <a class="nav-link" href="/vehicles" data-toggle="tooltip" data-placement="bottom" title="Vehicles">
                     <i class="fas fa-car"></i>
                     <span *ngIf="router.url === '/vehicles'" class="sr-only">(current)</span>
                 </a>
             </li>
-            <li class="nav-item" [class.active]="router.url === '/cartracker'">
+            <!--<li class="nav-item" [class.active]="router.url === '/cartracker'">
                 <a class="nav-link" href="/cartracker" data-toggle="tooltip" data-placement="bottom" title="Create Cartrackers">
                     <i class="fas fa-location-arrow"></i>
                     <span *ngIf="router.url === '/cartracker'" class="sr-only">(current)</span>
                 </a>
-            </li>
+            </li>-->
         </ul>
         <button *ngIf="session.getItem('token') !== null" class="btn btn-outline-light float-right" (click)="logout()">Logout</button>
     </div>
