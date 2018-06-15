@@ -18,7 +18,7 @@ export class VehicleListComponent implements OnInit {
 
   ngOnInit() {
     this.getVehicles();
-    // this.http.getUser();
+  
   }
 
   getVehicles() {
@@ -43,7 +43,8 @@ export class VehicleListComponent implements OnInit {
     }
   }
 
-  onSelectVehicle(vehicle: Vehicle) {
-    this.router.navigateByUrl('vehicles/' + vehicle.id);
+  goToVehicleDetails(vehicle: Vehicle) {
+    this.router.navigate(['/vehicles', vehicle.id]);
   }
+
 }

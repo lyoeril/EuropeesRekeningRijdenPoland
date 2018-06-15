@@ -14,7 +14,7 @@
         </thead>
         <tbody class="vehicles">
             <tr *ngFor="let vehicle of filteredVehicles"
-                (click)="onSelectVehicle(vehicle)">
+                (click)="goToVehicleDetails(vehicle)">
                 <th scope="row">{{vehicle.id}}</th>
                 <td>{{vehicle.licensePlate}}</td>
                 <td>{{vehicle.vehicleType}}</td>

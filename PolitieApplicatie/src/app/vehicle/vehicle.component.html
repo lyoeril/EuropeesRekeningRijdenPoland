@@ -4,7 +4,7 @@
         <div class="col">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Details {{vehicle.licensePlate}}</h5>
+              <h5 class="card-title">Details {{TOFDO}}</h5>
               <h6 class="card-subtitle mb-2 text-muted">Here you can follow the selected car ofzo... blabla</h6>
               <p class="card-text">BLALALALALLALA</p>
               <ul class="card-text list-unstyled">
@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody class="vehicles">
-            <tr *ngFor="let vehicle of filteredVehicles"
+            <tr *ngFor="let vehicle of vehicles"
                 (click)="onSelectVehicle(vehicle)">
                 <th scope="row">{{vehicle.id}}</th>
                 <td>{{vehicle.licensePlate}}</td>

@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
 import * as queryString from 'querystring';
 import { Vehicle } from '../_model/Vehicle';
-import { Invoice } from '../_model/Invoice';
 
 @Injectable()
 export class HttpService {
@@ -97,24 +96,12 @@ export class HttpService {
         });
     }
 
-    // Invoices ==================================================================================== Invoices
-    getInvoices(options?: Headers): Promise<Invoice[]> {
-        return new Promise(resolve => {
-            this.get('/overheid/invoices')
-                .subscribe(data => {
-                    const invoices = [];
-                    console.log(data.json());
-                    resolve(invoices);
-                }, error => {
-                    this.handleError(error); resolve(null);
-                });
-        });
-    }
+    
 
     // Vehicles ==================================================================================== Vehicles
     getVehicles(options?: Headers): Promise<Vehicle[]> {
         return new Promise(resolve => {
-            this.get('/overheid/vehicles')
+            this.get('/politie/vehicles')
                 .subscribe(data => {
                     const vehicles = [];
                     data.json().forEach(v => {
@@ -143,7 +130,20 @@ export class HttpService {
         });
     }
 
-
+    /*findVehicleById(vehiclesId: any, options?: Headers): Promise<any> {
+        return new Promise(resolve => {
+            this.get('/politie/vehicles/', vehiclesId)
+                .subscribe(data => {
+                    console.log(data.json());
+                    resolve(data.json());
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+    */
+    
+   
 
     // Other ========================================================================================== Other
     handleError(error) {
