@@ -5,6 +5,9 @@
  */
 package com.poland.rest.api;
 
+import com.poland.dto.entities.BasicLocationDTO;
+import com.poland.dto.entities.PoliceVehicleDTO;
+import com.poland.entities.Location;
 import com.poland.service.RegistrationService;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -48,14 +51,12 @@ public class PoliceAPI {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLocationStolenVehicle(@PathParam("uuid") String uuid) {
         if (uuid != null && !uuid.equals("")) {
-            JSONObject json = new JSONObject();
-            json.put("uuid", uuid);
-            JSONObject location = new JSONObject();
-            location.put("lat", 30);
-            location.put("lon", 30);
-            json.put("", location);
-            System.out.println(json.toString());
-            return Response.ok().entity(json).build();
+            Location location = new Location();
+            location.setLatitude(30);
+            location.setLongitude(-30);
+            PoliceVehicleDTO vehicleTarget = new PoliceVehicleDTO();
+            vehicleTarget.fromVehicleLocation(uuid, location);
+            return Response.ok().entity(vehicleTarget).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
