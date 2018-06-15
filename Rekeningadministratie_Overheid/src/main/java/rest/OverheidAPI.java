@@ -408,13 +408,18 @@ public class OverheidAPI {
         Vehicle v = registrationService.findVehicleById(id);
         Cartracker c = registrationService.findCartrackerById(cartrackerId);
         if (v != null) {
-            v.setLicensePlate(licensePlate);
-            v.setVehicleType(vehicleType);
+            if(licensePlate != null){
+                v.setLicensePlate(licensePlate);
+            }
+            if(vehicleType != null){
+                v.setVehicleType(vehicleType);
+            }
+            
             if (c != null) {
                 v.setCartracker(c);
             }
             registrationService.updateVehicle(v);
-            return Response.accepted(v).build();
+            return Response.accepted(new DTO_Vehicle(v)).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
