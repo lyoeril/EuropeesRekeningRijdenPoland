@@ -43,7 +43,7 @@ public class Location implements Serializable, Comparable<Location> {
     @Column(name = "longitude")
     private double longitude;
 
-    @ManyToOne
+//    @ManyToOne
     @JoinColumn(name = "rideId", nullable = false)
     private Ride ride;
 

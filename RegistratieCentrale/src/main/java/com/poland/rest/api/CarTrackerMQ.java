@@ -49,7 +49,7 @@ public class CarTrackerMQ implements MessageListener {
     @Inject
     public CarTrackerMQ(RegistrationService registrationService) {
         this.registrationService = registrationService;
-        this.sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -65,15 +65,20 @@ public class CarTrackerMQ implements MessageListener {
                 StringBuilder sb = new StringBuilder();
 
                 sb.append(dateObj.getLong("year"));
+                sb.append("-");
                 sb.append(dateObj.getLong("month"));
+                sb.append("-");
                 sb.append(dateObj.getLong("dayOfMonth"));
+                sb.append(" ");
                 sb.append(dateObj.getLong("hourOfDay"));
+                sb.append(":");
                 sb.append(dateObj.getLong("minute"));
+                sb.append(":");
                 sb.append(dateObj.getLong("second"));
 
                 Date date = sdf.parse(sb.toString());
 
-                registrationService.registerLocation(date,
+                registrationService.registerLocationSimple(date,
                         obj.getJSONObject("location").getDouble("lat"),
                         obj.getJSONObject("location").getDouble("lng"),
                         obj.getString("trackerId"));

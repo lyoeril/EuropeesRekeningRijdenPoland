@@ -20,7 +20,7 @@ public interface RideDAO extends BasicDAO<Ride> {
 
     List<Ride> getRideByAuthorisationCodeAndDate(String authorisationCode, Date startDate, Date endDate);
 
-    boolean addLocation(long rideid, long locationid);
-
-    boolean removeLocation(long rideid, long locationid);
+//    boolean addLocation(long rideid, long locationid);
+//
+//    boolean removeLocation(long rideid, long locationid);
 }

@@ -65,33 +65,48 @@ public class RegistrationService {
     public boolean registerLocation(Date date, Double latitude, Double longitude, String authorisationCode) {
 //        long start_time = System.nanoTime();
 
+//        Vehicle v = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
+//        Ride r = null;
+//
+//        if (v == null) {
+//            v = vehicleService.createVehicle(new Vehicle(authorisationCode));
+//        }
+//        Boolean done = false;
+//        for (Ride t : v.getRides()) {
+//            Date endDate = new Date(t.getEndDate().getTime() + HOUR);
+//            if (t.getStartDate().compareTo(date) <= 0 && endDate.compareTo(date) >= 0) {
+//                r = t;
+//                done = true;
+//                break;
+//            }
+//        }
+//        if (!done) {
+//            r = rideService.editRide(new Ride(date, v));
+//            v.addLocation(r);
+//            v = vehicleService.editVehicle(v);
+//        }
+//
+//        r.addLocation(new Location(date, latitude, longitude, r));
+//        r.setEndDate(date);
+//        rideService.editRide(r);
+//        long end_time = System.nanoTime();
+//        System.out.println((end_time - start_time) / 1e6);
+        return true;
+    }
+
+    public boolean registerLocationSimple(Date date, Double latitude, Double longitude, String authorisationCode) {
         Vehicle v = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
         Ride r = null;
 
         if (v == null) {
             v = vehicleService.createVehicle(new Vehicle(authorisationCode));
         }
-        Boolean done = false;
-        for (Ride t : v.getRides()) {
-            Date endDate = new Date(t.getEndDate().getTime() + HOUR);
-            if (t.getStartDate().compareTo(date) <= 0 && endDate.compareTo(date) >= 0) {
-                r = t;
-                done = true;
-                break;
-            }
-        }
-        if (!done) {
-            r = rideService.editRide(new Ride(date, v));
-            v.addLocation(r);
-            v = vehicleService.editVehicle(v);
-        }
 
-        r.addLocation(new Location(date, latitude, longitude, r));
+        r = rideService.findOrCreateRideByAutorisationCode(date, v);
+
+        locationService.createLocation(new Location(date, latitude, longitude, r));
         r.setEndDate(date);
         rideService.editRide(r);
-        
-//        long end_time = System.nanoTime();
-//        System.out.println((end_time - start_time) / 1e6);
         return true;
     }
 }

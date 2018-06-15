@@ -46,19 +46,19 @@ public class RideService {
         }
     }
 
-    public boolean addLocation(long rideId, long locationId) {
-        if (rideId != 0L && locationId > 0L) {
-            return rideDAO.addLocation(rideId, locationId);
-        }
-        return false;
-    }
-
-    public boolean removeLocation(long rideId, long locationId) {
-        if (rideId != 0L && locationId > 0L) {
-            return rideDAO.removeLocation(rideId, locationId);
-        }
-        return false;
-    }
+//    public boolean addLocation(long rideId, long locationId) {
+//        if (rideId != 0L && locationId > 0L) {
+//            return rideDAO.addLocation(rideId, locationId);
+//        }
+//        return false;
+//    }
+//
+//    public boolean removeLocation(long rideId, long locationId) {
+//        if (rideId != 0L && locationId > 0L) {
+//            return rideDAO.removeLocation(rideId, locationId);
+//        }
+//        return false;
+//    }
 
     public Ride createRide(Ride ride) {
         try {
@@ -77,12 +77,12 @@ public class RideService {
 
     public boolean deleteRide(long id) {
         try {
-            Ride ride = rideDAO.find(id);
+//            Ride ride = rideDAO.find(id);
 
-            ride.getLocations().forEach((t) -> {
-                ride.removeLocation(t);
-            });
-            rideDAO.edit(ride);
+//            ride.getLocations().forEach((t) -> {
+//                ride.removeLocation(t);
+//            });
+//            rideDAO.edit(ride);
             rideDAO.remove(rideDAO.find(id));
             return true;
         } catch (IllegalArgumentException ex) {

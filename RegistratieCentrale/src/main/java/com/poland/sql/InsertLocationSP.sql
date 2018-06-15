@@ -7,7 +7,7 @@ CREATE PROCEDURE `insertLocationSP` (
     in authorisationCode VARCHAR(255),
     out succeeded boolean)
 BEGIN
-	DECLARE vehicle_id bigint(20) DEFAULT 0;
+    DECLARE vehicle_id bigint(20) DEFAULT 0;
     DECLARE ride_id bigint(20) DEFAULT 0;
     DECLARE lastLocation datetime DEFAULT NULL;
     DECLARE diff double;
