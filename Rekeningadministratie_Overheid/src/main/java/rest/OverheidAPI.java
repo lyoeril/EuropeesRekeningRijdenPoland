@@ -107,7 +107,7 @@ public class OverheidAPI {
     
     @GET
     @Path("rekeningrijders/{id}")
-    private Response getRekeningrijderById(
+    public Response getRekeningrijderById(
         @PathParam("id") long id){
         Rekeningrijder r = registrationService.findRekeningrijderById(id);
         if(r != null){
