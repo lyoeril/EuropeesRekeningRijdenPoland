@@ -18,17 +18,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  *
  * @author Laurent
  */
+
+@Stateless
 public class RideService {
     
-    final static String BASE_URL = "192.168.25.?";
+    final static String BASE_URL = "http://192.168.25.14:8080/RegistratieCentrale/cartrackerdata/get/RideByCode/";
 
     
     @Inject
@@ -40,19 +45,24 @@ public class RideService {
     
     public void getRides(long vehicleId, int month, int year){
         
-        Vehicle v = registrationService.findVehicleById(vehicleId);
-        long cartrackerId = v.getCartracker().getId();
+        System.out.println("Registrationservice :" + registrationService.toString());
+        //Vehicle v = registrationService.findVehicleById(vehicleId);
+       // System.out.println("Vehicle: " + v);
+        //long cartrackerId = v.getCartracker().getId();
         //Cartracker c = registrationService.findCartrackerById(cartrackerId);
-        
+        long cartrackerId = 1L;
 
         List<Ride> rides = new ArrayList<Ride>();
+        
+            String startDate = "01-" + month + "-" + year;
+            String endDate = "01-" + month + 1 + "-" + year;
 
         try {
             URL url = new URL(
                     BASE_URL
                     + cartrackerId
-                    + year
-                    + month);
+                    + startDate
+                    + endDate);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             RequestConnection(conn, "GET");
 
