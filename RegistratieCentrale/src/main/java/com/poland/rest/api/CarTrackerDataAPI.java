@@ -6,6 +6,7 @@
 package com.poland.rest.api;
 
 import com.poland.entities.Ride;
+import com.poland.entities.Vehicle;
 import com.poland.service.RegistrationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ public class CarTrackerDataAPI {
     }
 
     @GET
-    @Path("/get/RideByCode/{authenticationCode}/{starDate}/{endDate}")
+    @Path("/get/RideByCode/{authenticationCode}/{startDate}/{endDate}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLocationsByAuthenticationCode(@PathParam("authenticationCode") String authenticationCode, @PathParam("startDate") String start, @PathParam("endDate") String end) {
         List<Ride> rides = new ArrayList<>();
@@ -56,6 +57,9 @@ public class CarTrackerDataAPI {
         } else {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
+        Ride r = new Ride(new Date(), new Vehicle());
+        r.setId(1);
+        rides.add(r);
         return Response.status(Response.Status.OK).entity(rides).build();
     }
 }

@@ -54,6 +54,7 @@ public class PoliceAPI {
             location.put("lat", 30);
             location.put("lon", 30);
             json.put("", location);
+            System.out.println(json.toString());
             return Response.ok().entity(json).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
