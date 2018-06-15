@@ -21,102 +21,93 @@ import javax.inject.Inject;
  *
  * @author Laurent
  */
-
 @Stateless
 public class RegistrationService {
-    
+
     @Inject
     ICartrackerDAO iCartrackerDAO;
-    
+
     @Inject
     IRekeningrijderDAO iRekeningrijderDAO;
-    
+
     @Inject
     IUserGroupDAO iUserGroupDAO;
-    
+
     @Inject
     IVehicleDAO iVehicleDAO;
 
     public RegistrationService() {
-    }    
-    
+    }
+
     public RegistrationService(IRekeningrijderDAO iRekeningrijderDAO, ICartrackerDAO iCartrackerDAO,
-                                IUserGroupDAO iUserGroupDAO, IVehicleDAO iVehicleDAO){
+            IUserGroupDAO iUserGroupDAO, IVehicleDAO iVehicleDAO) {
         this.iCartrackerDAO = iCartrackerDAO;
         this.iRekeningrijderDAO = iRekeningrijderDAO;
         this.iUserGroupDAO = iUserGroupDAO;
         this.iVehicleDAO = iVehicleDAO;
     }
-    
+
     //Rekeningrijder Management
-    
-    public void addRekeningrijder(Rekeningrijder rekeningrijder){
-        try{
-            iRekeningrijderDAO.create(rekeningrijder);
-        }catch(Exception e){
-            System.out.println("e = EEEEENEN EXCPEITONEIASDN" + e);
-        }
-        
+    public void addRekeningrijder(Rekeningrijder rekeningrijder) {
+        iRekeningrijderDAO.create(rekeningrijder);
     }
-    
-    public void updateRekeningrijder(Rekeningrijder rekeningrijder){
+
+    public void updateRekeningrijder(Rekeningrijder rekeningrijder) {
         iRekeningrijderDAO.edit(rekeningrijder);
     }
-    
-    public void deleteRekeningrijder(Rekeningrijder rekeningrijder){
+
+    public void deleteRekeningrijder(Rekeningrijder rekeningrijder) {
         iRekeningrijderDAO.delete(rekeningrijder);
     }
-    
-    public Rekeningrijder findRekeningrijderById(long id){
+
+    public Rekeningrijder findRekeningrijderById(long id) {
         return iRekeningrijderDAO.findById(id);
     }
-    
-    
+
     //Cartracker management
-    
-    public void addCartracker(Cartracker cartracker){
+    public void addCartracker(Cartracker cartracker) {
         iCartrackerDAO.create(cartracker);
     }
-    
-    public void updateCartracker(Cartracker cartracker){
+
+    public void updateCartracker(Cartracker cartracker) {
         iCartrackerDAO.edit(cartracker);
     }
-    
-    public void deleteCartracker(Cartracker cartracker){
+
+    public void deleteCartracker(Cartracker cartracker) {
         iCartrackerDAO.delete(cartracker);
     }
-    
-    public Cartracker findCartrackerById(long id){
+
+    public Cartracker findCartrackerById(long id) {
         return iCartrackerDAO.findById(id);
     }
-    
-    public List<Cartracker> findAllCartrackers(){
+
+    public List<Cartracker> findAllCartrackers() {
         return iCartrackerDAO.findAll();
     }
-    
+
     //UserGroup
-    public List<UserGroup> findAllUserGroups(){
+    public List<UserGroup> findAllUserGroups() {
         return iUserGroupDAO.findAll();
     }
-    
-    public UserGroup findByName(String usergroup){
+
+    public UserGroup findByName(String usergroup) {
         return iUserGroupDAO.findByName(usergroup);
     }
-    
-    public List<Vehicle> findAllVehicles(){
+
+    public List<Vehicle> findAllVehicles() {
         return iVehicleDAO.findAllVehicles();
     }
-    
-    public Vehicle findVehicleById(long id){
+
+    public Vehicle findVehicleById(long id) {
         return iVehicleDAO.findVehicleById(id);
     }
-    
-    public void updateVehicle(Vehicle vehicle){
+
+    public void updateVehicle(Vehicle vehicle) {
         iVehicleDAO.edit(vehicle);
     }
-    
-    public Vehicle findVehicleByLicenseplate(String licenseplate){
+
+    public Vehicle findVehicleByLicenseplate(String licenseplate) {
         return iVehicleDAO.findVehicleByLicenseplate(licenseplate);
     }
-    
+
 }

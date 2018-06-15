@@ -90,6 +90,7 @@ public class OverheidAPI {
         if (!isOverheid(securityContext)) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
+        
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
         if (u != null) {
@@ -102,6 +103,17 @@ public class OverheidAPI {
 //            }
 //        }
         return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    @GET
+    @Path("rekeningrijders/{id}")
+    private Response getRekeningrijderById(
+        @PathParam("id") long id){
+        Rekeningrijder r = registrationService.findRekeningrijderById(id);
+        if(r != null){
+            return Response.accepted(new DTO_Rekeningrijder(r)).build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
     }
 
     @GET
@@ -424,6 +436,9 @@ public class OverheidAPI {
         }
         return null;
     }
+    
+    
+   
 
     private Rekeningrijder getRekeningrijderFromUsername(String username) {
         User u = userService.findByUsername(username).get(0);
@@ -451,6 +466,7 @@ public class OverheidAPI {
     }
 
     private boolean isOverheid(SecurityContext context) {
+        System.out.println(context.isUserInRole("OVERHEID"));
         if (context.isUserInRole("OVERHEID")) {
             return true;
         }

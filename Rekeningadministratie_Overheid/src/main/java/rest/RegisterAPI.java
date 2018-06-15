@@ -49,7 +49,7 @@ public class RegisterAPI {
     @POST
     @Path("rekeningrijder")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(
+    public Response registerRekeningrijder(
             @FormParam("username") String username,
             @FormParam("password") String password,
             @FormParam("email") String email,
@@ -73,7 +73,7 @@ public class RegisterAPI {
     @POST
     @Path("user")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(
+    public Response registerUser(
             @FormParam("username") String username,
             @FormParam("password") String password,
             @FormParam("email") String email) {
@@ -81,6 +81,30 @@ public class RegisterAPI {
         UserGroup group = registrationService.findByName("OVERHEID");
         System.out.println("group: " + group.getGroupName());
         u.addGroup(group);
+        boolean finished = userService.register(u);
+        System.out.println("Finished? " + finished);
+        if (finished) {
+            System.out.println("is finished");
+            return Response.ok(new DTO_User(u)).build();
+        }
+        return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    
+    @POST
+    @Path("systeembeheerder")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerSysteembeheerder(
+            @FormParam("username") String username,
+            @FormParam("password") String password,
+            @FormParam("email") String email) {
+        User u = new User(username, password, email);
+        UserGroup overheid = registrationService.findByName("OVERHEID");
+        UserGroup politie = registrationService.findByName("POLITIE");
+        System.out.println("group: " + overheid.getGroupName());
+        System.out.println("group: " + politie.getGroupName());
+        u.addGroup(overheid);
+        u.addGroup(politie);
         boolean finished = userService.register(u);
         System.out.println("Finished? " + finished);
         if (finished) {

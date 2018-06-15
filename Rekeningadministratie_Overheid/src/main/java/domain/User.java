@@ -35,6 +35,7 @@ public class User implements Serializable{
     private String username;
     private String password;
     private String email;
+    private boolean km_prijs;
     
     @ManyToMany(mappedBy = "users", cascade = ALL)
     private HashSet<UserGroup> groups =  new HashSet<>();
@@ -46,6 +47,7 @@ public class User implements Serializable{
         this.username = username;
         this.password = password;
         this.email = email;
+        this.km_prijs = false;
     }
 
     public String getUsername() {
@@ -97,5 +99,14 @@ public class User implements Serializable{
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public boolean isKm_prijs() {
+        return km_prijs;
+    }
+
+    public void setKm_prijs(boolean km_prijs) {
+        this.km_prijs = km_prijs;
+    }
+    
     
 }
