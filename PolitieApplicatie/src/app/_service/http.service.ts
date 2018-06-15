@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
 import * as queryString from 'querystring';
 import { Vehicle } from '../_model/Vehicle';
+import { User } from '../_model/User';
 import { VehicleType } from '../_model/VehicleType';
 
 @Injectable()
@@ -143,6 +144,24 @@ export class HttpService {
                 });
         });
     }
+
+//NOG TESTEN
+   findOwners(vehiclesId: Number, options?: Headers): Promise<User[]> {
+        return new Promise(resolve => {
+             this.get('/politie/vehicle/' + vehiclesId + '/owners')
+                .subscribe(data => {
+                    const users = [];
+                    data.json().forEach(u => {
+                        const newUser = new User(u.id, u.username, u.email, u.address);
+                        users.push(newUser);
+                    });
+                    resolve(users);
+                }, error => {
+                    this.handleError(error); resolve(null);
+            });
+        });
+    }
+   
     
 
     
