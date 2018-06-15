@@ -4,21 +4,52 @@ import enums.VehicleType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.inject.Model;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+@Entity
+@Model
+@NamedQueries({
+    @NamedQuery(name = "Vehicle.findAll",
+            query = "SELECT v FROM Vehicle v"), 
+    @NamedQuery(name = "Vehicle.findByLicenseplate",
+            query = "SELECT v FROM Vehicle v WHERE v.licensePlate = :licenseplate")
+})
 public class Vehicle implements Serializable{
-    private long id;
-    private String autorisationNumber;
-    private String serialNumber;
-    
-    private List<Rekeningrijder> ownersHistory;
-    private Cartracker cartracker;
-    private VehicleType vehicleType;
 
-    public Vehicle(String autorisationNumber, String serialNumber, VehicleType vehicleType) {
-        this.autorisationNumber = autorisationNumber;
-        this.serialNumber = serialNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @OneToMany
+    private List<Rekeningrijder> ownersHistory;
+
+    @OneToOne
+    private Cartracker cartracker;
+
+    @Enumerated(EnumType.STRING)
+    private VehicleType vehicleType;
+    
+    private String licensePlate;
+    
+    //JPA
+    public Vehicle(){
+        
+    }
+
+    public Vehicle(VehicleType vehicleType, String licensePlate) {
         this.ownersHistory = new ArrayList<>();
         this.vehicleType = vehicleType;
+        this.licensePlate = licensePlate;
     }
 
     public long getId() {
@@ -27,22 +58,6 @@ public class Vehicle implements Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getAutorisationNumber() {
-        return autorisationNumber;
-    }
-
-    public void setAutorisationNumber(String autorisationNumber) {
-        this.autorisationNumber = autorisationNumber;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
     }
 
     public List<Rekeningrijder> getOwnersHistory() {
@@ -60,7 +75,23 @@ public class Vehicle implements Serializable{
     public void setCartracker(Cartracker cartracker) {
         this.cartracker = cartracker;
     }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
     
     
-    
+
 }

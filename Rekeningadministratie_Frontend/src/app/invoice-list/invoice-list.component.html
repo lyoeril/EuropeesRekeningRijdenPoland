@@ -1,0 +1,63 @@
+<div class="main">
+    <form class="form-inline my-2 float-left">
+        <p class="mr-sm-2 my-0 align-self-center">List limit: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{listLimit}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setListLimit(1)">1</a>
+                <a class="dropdown-item" (click)="setListLimit(5)">5</a>
+                <a class="dropdown-item" (click)="setListLimit(10)">10</a>
+                <a class="dropdown-item" (click)="setListLimit(15)">15</a>
+                <a class="dropdown-item" (click)="setListLimit(25)">25</a>
+                <a class="dropdown-item" (click)="setListLimit(50)">50</a>
+                <a class="dropdown-item" (click)="setListLimit(100)">100</a>
+            </div>
+        </div>
+    </form>
+    <form class="form-inline my-2 float-right">
+        <p class="mr-sm-2 my-0 align-self-center">Search on: </p>
+        <div class="dropdown mr-sm-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                {{searchProperty}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="setSearch('ID')">ID</a>
+                <a class="dropdown-item" (click)="setSearch('Date')">Date</a>
+                <a class="dropdown-item" (click)="setSearch('Cartracker')">Cartracker</a>
+                <a class="dropdown-item" (click)="setSearch('Total Sum')">Total Sum</a>
+                <a class="dropdown-item" (click)="setSearch('Status')">Status</a>
+            </div>
+        </div>
+        <input class="form-control" type="search" placeholder="Search..." aria-label="Search" (keyup)="filterInvoices($event.target.value)">
+    </form>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Cartracker</th>
+                <th scope="col">Total Sum</th>
+                <th scope="col">Status</th>
+                <th scope="col">Manage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let invoice of filteredInvoices; let i=index">
+                <th *ngIf="i < listLimit" scope="row">{{invoice.id}}</th>
+                <td *ngIf="i < listLimit">{{invoice.dateToString()}}</td>
+                <td *ngIf="i < listLimit">{{invoice.cartrackerId}}</td>
+                <td *ngIf="i < listLimit">{{invoice.totalSumToString()}}</td>
+                <td *ngIf="i < listLimit">{{invoice.status}}</td>
+                <td *ngIf="i < listLimit">
+                    <a (click)="recalculateInvoice(invoice)" data-toggle="tooltip" data-placement="bottom" title="Recalculate">
+                        <span class="fas fa-calculator"></span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

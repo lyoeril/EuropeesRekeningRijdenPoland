@@ -1,8 +1,8 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 
 
 @Entity
-@NamedQuery(name = "usergroup.findAll", query = "SELECT ug FROM usergroup ug")
+@NamedQuery(name = "UserGroup.findAll", query = "SELECT ug FROM UserGroup ug")
 public class UserGroup implements Serializable {
 
     @Id
@@ -35,6 +35,7 @@ public class UserGroup implements Serializable {
         this.usergroup = usergroup;
     }
 
+    @JsonIgnore
     public Set<User> getUsers() {
         return users;
     }
@@ -64,26 +65,26 @@ public class UserGroup implements Serializable {
         return usergroup;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof UserGroup)) {
-            return false;
-        }
-
-        UserGroup otherGroup = (UserGroup) obj;
-        if (this.hashCode() == otherGroup.hashCode()) {
-            return true;
-        }
-
-        return this.usergroup.equals(otherGroup.usergroup);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.usergroup);
-        return hash;
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (!(obj instanceof UserGroup)) {
+//            return false;
+//        }
+//
+//        UserGroup otherGroup = (UserGroup) obj;
+//        if (this.hashCode() == otherGroup.hashCode()) {
+//            return true;
+//        }
+//
+//        return this.usergroup.equals(otherGroup.usergroup);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 59 * hash + Objects.hashCode(this.usergroup);
+//        return hash;
+//    }
 
 }
 

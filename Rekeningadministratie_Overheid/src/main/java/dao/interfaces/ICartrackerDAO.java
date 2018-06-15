@@ -17,5 +17,7 @@ public interface ICartrackerDAO {
     void create(Cartracker cartracker);
     void edit(Cartracker cartracker);
     void delete(Cartracker cartracker);
-    Cartracker findById();
+    Cartracker findById(long id);
+
+    List<Cartracker> findAll();
 }

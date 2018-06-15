@@ -5,22 +5,46 @@
  */
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.inject.Model;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 /**
  *
  * @author Laurent
  */
-public class Cartracker {
+
+@Entity
+@Model
+@NamedQueries({
+    @NamedQuery(name = "Cartracker.findAll",
+            query = "SELECT c FROM Cartracker c")
+})
+public class Cartracker implements Serializable{
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String hardware;
     
     private List<Ride> rides;
+    
+    //JPA
+    public Cartracker(){
+        
+    }
 
     public Cartracker(String hardware) {
         this.hardware = hardware;
-        this.rides = new ArrayList<>();
+        this.rides = new ArrayList<>(); 
     }
 
     public long getId() {
@@ -38,5 +62,15 @@ public class Cartracker {
     public void setHardware(String hardware) {
         this.hardware = hardware;
     }
+
+    public List<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
+    }
+    
+    
     
 }

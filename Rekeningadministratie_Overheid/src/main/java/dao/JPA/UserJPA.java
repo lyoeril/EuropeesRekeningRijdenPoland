@@ -1,11 +1,8 @@
 package dao.JPA;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +15,7 @@ public class UserJPA implements IUserDAO{
     
     private static final Logger LOGGER = Logger.getLogger(UserJPA.class.getName());
 
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em ;
 
     public UserJPA(){   

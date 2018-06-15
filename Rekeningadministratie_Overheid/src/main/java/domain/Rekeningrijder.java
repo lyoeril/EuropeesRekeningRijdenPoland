@@ -5,48 +5,37 @@
  */
 package domain;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Laurent
  */
-public class Rekeningrijder {
-    
-    private long id;
-    private String name;
+@Entity
+public class Rekeningrijder extends User implements Serializable {
+
     private String address;
-    private boolean useRRApp;
+    private String city;
     
-    private List<Invoice> invoices;
-    private List<Vehicle> ownedVehicles;
+    @OneToMany
+    private List<Invoice> invoices = new ArrayList<>();
     
+    @OneToMany      
+    private List<Vehicle> ownedVehicles = new ArrayList<>();
 
-    public Rekeningrijder(String name, String address, boolean useRRApp) {
-        this.name = name;
+    public Rekeningrijder() {
+    }
+
+    public Rekeningrijder(String username, String password, String address, String city, String email) {
+        super(username, password, email);
         this.address = address;
-        this.useRRApp = useRRApp;
-        this.invoices = new ArrayList<>();
-        this.ownedVehicles = new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    }  
+    
 
     public String getAddress() {
         return address;
@@ -54,14 +43,6 @@ public class Rekeningrijder {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isUseRRApp() {
-        return useRRApp;
-    }
-
-    public void setUseRRApp(boolean useRRApp) {
-        this.useRRApp = useRRApp;
     }
 
     public List<Invoice> getInvoices() {
@@ -72,6 +53,7 @@ public class Rekeningrijder {
         this.invoices = invoices;
     }
 
+    @JsonIgnore
     public List<Vehicle> getOwnedVehicles() {
         return ownedVehicles;
     }
@@ -79,6 +61,16 @@ public class Rekeningrijder {
     public void setOwnedVehicles(List<Vehicle> ownedVehicles) {
         this.ownedVehicles = ownedVehicles;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
     
     
+    
+
 }

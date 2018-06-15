@@ -1,14 +1,16 @@
 package dao.JPA;
 
-import dao.interfaces.IUserGroup;
 import domain.UserGroup;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import dao.interfaces.IUserGroupDAO;
+import javax.ejb.Stateless;
 
-public class UserGroupJPA implements IUserGroup {
+@Stateless
+public class UserGroupJPA implements IUserGroupDAO {
 
-    @PersistenceContext(unitName = "TODO")
+    @PersistenceContext(unitName = "Rekeningadministratie_Overheid")
     private EntityManager em;
 
     public void setEm(EntityManager em) {

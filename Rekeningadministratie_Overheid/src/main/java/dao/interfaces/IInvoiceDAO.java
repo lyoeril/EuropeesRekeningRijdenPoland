@@ -7,6 +7,9 @@ package dao.interfaces;
 
 import domain.Invoice;
 import domain.Rekeningrijder;
+import domain.Vehicle;
+import enums.InvoiceStatus;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,7 +22,12 @@ public interface IInvoiceDAO {
     void delete(Invoice invoice);
     Invoice findById(long id);
     List<Invoice> findByRekeningrijder(Rekeningrijder rekeningrijder);
-    List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, String month);
+    Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month);
     List<Invoice> findByVehicle(Rekeningrijder rekeningrijder);
-    List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, String month);
+    List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle);
+    List<Invoice> findAllInvoices();
+
+    Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month);
+
+    List<Invoice> findInvoicesByStatus(InvoiceStatus status);
 }
