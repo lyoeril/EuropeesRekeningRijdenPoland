@@ -25,15 +25,15 @@ public class Vehicle implements Serializable {
     @Column(name = "authorisationCode", unique = true)
     private String authorisationCode;
 
-//    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Ride> rides;
+    @Transient
+    private List<Ride> rides;
 
     public Vehicle() {
-//        rides = new ArrayList<>();
+        rides = new ArrayList<>();
     }
 
     public Vehicle(String authorisationCode) {
-//        rides = new ArrayList<>();
+        rides = new ArrayList<>();
         setAuthorisationCode(authorisationCode);
     }
 
@@ -53,23 +53,23 @@ public class Vehicle implements Serializable {
         this.authorisationCode = authorisationCode;
     }
 
-//    public List<Ride> getRides() {
-//        return rides;
-//    }
-//
-//    public void setRides(List<Ride> rides) {
-//        this.rides = rides;
-//    }
-//
-//    public void addLocation(Ride ride) {
-//        if (ride != null && !rides.contains(ride)) {
-//            rides.add(ride);
-//        }
-//    }
-//
-//    public void removeLocation(Ride ride) {
-//        if (ride != null && rides.contains(ride)) {
-//            rides.remove(ride);
-//        }
-//    }
+    public List<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
+    }
+
+    public void addRide(Ride ride) {
+        if (ride != null && !rides.contains(ride)) {
+            rides.add(ride);
+        }
+    }
+
+    public void removeRide(Ride ride) {
+        if (ride != null && rides.contains(ride)) {
+            rides.remove(ride);
+        }
+    }
 }

@@ -5,6 +5,9 @@
  */
 package com.poland.rest.api;
 
+import com.poland.dto.entities.DTOConverter;
+import com.poland.dto.entities.RideDTO;
+import com.poland.entities.Location;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
 import com.poland.service.RegistrationService;
@@ -49,7 +52,7 @@ public class CarTrackerDataAPI {
             try {
                 Date startDate = sdf.parse(start);
                 Date endDate = sdf.parse(end);
-                
+
                 rides = registrationService.getRideService().getRidesOnDate(authenticationCode, startDate, endDate);
             } catch (ParseException ex) {
                 Logger.getLogger(CarTrackerDataAPI.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,9 +60,19 @@ public class CarTrackerDataAPI {
         } else {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
+
+        //Default data (database empty)
         Ride r = new Ride(new Date(), new Vehicle());
         r.setId(1);
+        Location l = new Location(new Date(), 50, 50, r);
+        l.setId(1);
+        r.addLocation(l);
         rides.add(r);
-        return Response.status(Response.Status.OK).entity(rides).build();
+        //
+
+        List<RideDTO> rideTargetList = new ArrayList<>();
+        DTOConverter.toRideDTOList(rides, rideTargetList);
+
+        return Response.status(Response.Status.OK).entity(rideTargetList).build();
     }
 }

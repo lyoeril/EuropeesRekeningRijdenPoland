@@ -38,15 +38,15 @@ public class Ride implements Serializable {
     @JoinColumn(name = "vehicleId", nullable = false)
     private Vehicle vehicle;
 
-//    @OneToMany(mappedBy = "ride", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Location> locations;
+    @Transient
+    private List<Location> locations;
 
     public Ride() {
-//        locations = new ArrayList<>();
+        locations = new ArrayList<>();
     }
 
     public Ride(Date startDate, Vehicle vehicle) {
-//        locations = new ArrayList<>();
+        locations = new ArrayList<>();
         setStartDate(startDate);
         setEndDate(startDate);
         setVehicle(vehicle);
@@ -93,23 +93,23 @@ public class Ride implements Serializable {
         this.vehicle = vehicle;
     }
 
-//    public List<Location> getLocations() {
-//        return locations;
-//    }
-//
-//    public void setLocations(List<Location> locations) {
-//        this.locations = locations;
-//    }
-//
-//    public void addLocation(Location location) {
-//        if (location != null && !locations.contains(location)) {
-//            locations.add(location);
-//        }
-//    }
-//
-//    public void removeLocation(Location location) {
-//        if (location != null && locations.contains(location)) {
-//            locations.remove(location);
-//        }
-//    }
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
+
+    public void addLocation(Location location) {
+        if (location != null && !locations.contains(location)) {
+            locations.add(location);
+        }
+    }
+
+    public void removeLocation(Location location) {
+        if (location != null && locations.contains(location)) {
+            locations.remove(location);
+        }
+    }
 }

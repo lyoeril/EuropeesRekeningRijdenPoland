@@ -82,11 +82,11 @@ public class RegistrationService {
 //        }
 //        if (!done) {
 //            r = rideService.editRide(new Ride(date, v));
-//            v.addLocation(r);
+//            v.addRide(r);
 //            v = vehicleService.editVehicle(v);
 //        }
 //
-//        r.addLocation(new Location(date, latitude, longitude, r));
+//        r.addRide(new Location(date, latitude, longitude, r));
 //        r.setEndDate(date);
 //        rideService.editRide(r);
 //        long end_time = System.nanoTime();
