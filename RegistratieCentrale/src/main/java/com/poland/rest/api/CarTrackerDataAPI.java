@@ -37,7 +37,7 @@ public class CarTrackerDataAPI {
     }
 
     @GET
-    @Path("/get/RideByCode/{authenticationCode}")
+    @Path("/get/RideByCode/{authenticationCode}/{starDate}/{endDate}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLocationsByAuthenticationCode(@PathParam("authenticationCode") String authenticationCode, @PathParam("startDate") String start, @PathParam("endDate") String end) {
         List<Ride> rides = new ArrayList<>();
