@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute } from '@angular/router';
 import {HttpService} from '../_service/http.service';
+import { Vehicle } from '../_model/Vehicle';
 
 @Component({
   selector: 'app-vehicle',
@@ -12,7 +13,8 @@ import {HttpService} from '../_service/http.service';
 export class VehicleComponent implements OnInit {
 
 vehicleId: number;
-vehicle = {};
+//vehicle = {};
+vehicle: Vehicle;
 //historyVehicles: HistoryVehicles[];
 
 constructor(private route: ActivatedRoute, private http: HttpService) {
@@ -21,21 +23,15 @@ constructor(private route: ActivatedRoute, private http: HttpService) {
 
 
 ngOnInit() {
-   /* if (this.vehicleId && this.vehicleId.length > 0) {
-      this.http.findVehicleById(this.vehicleId).subscribe(res => {
-        if (res && res.length === 1) {
-          this.vehicle = res[0];
-          this.http.getHistory(this.vehicleId, 10).subscribe(historyVehicles => {
-            this.historyVehicles = historyVehicles;
-          });
-        }
-      });
-    }
-    */
-  }
+this.getVehicle(this.vehicleId);
 }
 
-
-	
-	
-
+getVehicle(vehicleId: number) {
+        this.http.findVehicleById(vehicleId)
+            .then(vehicle => {
+                this.vehicle = vehicle;
+                console.log(this.vehicle);
+            });
+          
+    }
+}

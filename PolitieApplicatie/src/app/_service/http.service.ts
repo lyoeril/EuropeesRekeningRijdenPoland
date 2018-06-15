@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Headers, Response } from '@angular/http';
 import * as queryString from 'querystring';
 import { Vehicle } from '../_model/Vehicle';
+import { VehicleType } from '../_model/VehicleType';
 
 @Injectable()
 export class HttpService {
@@ -130,18 +131,20 @@ export class HttpService {
         });
     }
 
-    /*findVehicleById(vehiclesId: any, options?: Headers): Promise<any> {
+    
+    findVehicleById(vehiclesId: Number, options?: Headers): Promise<Vehicle> {
         return new Promise(resolve => {
-            this.get('/politie/vehicles/', vehiclesId)
+            this.get('/politie/vehicles/' + vehiclesId)
                 .subscribe(data => {
-                    console.log(data.json());
-                    resolve(data.json());
+                    console.log(data);
+                    resolve(new Vehicle(data.json().id, data.json().licensePlate, data.json().vehicleType));
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
         });
     }
-    */
+    
+
     
    
 
