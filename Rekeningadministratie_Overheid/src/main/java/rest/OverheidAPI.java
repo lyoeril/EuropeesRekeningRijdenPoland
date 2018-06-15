@@ -276,9 +276,6 @@ public class OverheidAPI {
 
         Vehicle v = registrationService.findVehicleById(vehicleId);
         long cartrackerId = v.getCartracker().getId();
-        Rekeningrijder r = registrationService.findRekeningrijderById(rekeningrijderId);
-
-        List<Ride> rides = new ArrayList<Ride>();
 
         String baseUrl = "192.168.25.?";
         try {

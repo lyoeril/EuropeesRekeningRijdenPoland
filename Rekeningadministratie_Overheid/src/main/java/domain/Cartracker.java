@@ -35,6 +35,7 @@ public class Cartracker implements Serializable{
     private long id;
     private String hardware;
     
+    @Transient
     private List<Ride> rides;
     
     //JPA

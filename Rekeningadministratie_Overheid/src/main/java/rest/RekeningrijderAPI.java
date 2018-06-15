@@ -89,7 +89,7 @@ public class RekeningrijderAPI {
             @Context HttpHeaders headers,
             @FormParam("email") String email,
             @FormParam("address") String address,
-            @FormParam("password") String password){
+            @FormParam("password") String password) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
@@ -111,6 +111,9 @@ public class RekeningrijderAPI {
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
         Invoice i = new Invoice(1, 20.00, 2017, 1, rekeningrijder);
+        if (rekeningrijder == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
         rekeningrijder.getInvoices().add(i);
         registrationService.updateRekeningrijder(rekeningrijder);
         invoiceService.addInvoice(i);
@@ -123,14 +126,17 @@ public class RekeningrijderAPI {
     public Response getInvoices(@Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
+        if (rekeningrijder == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
 
         List<Invoice> invoices = rekeningrijder.getInvoices();
         if (invoices != null) {
             List<DTO_Invoice> dto_invoices = new ArrayList<>();
-            for(Invoice i : invoices){
+            for (Invoice i : invoices) {
                 dto_invoices.add(new DTO_Invoice(i));
-            }            
-            
+            }
+
             return Response.accepted(dto_invoices).build();
         }
         return Response.status(Status.NOT_FOUND).build();
@@ -162,7 +168,7 @@ public class RekeningrijderAPI {
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
         Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
-        if(toReturn != null){
+        if (toReturn != null) {
             return Response.accepted(new DTO_Invoice(toReturn)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
@@ -197,7 +203,7 @@ public class RekeningrijderAPI {
         if (r != null) {
             List<Vehicle> vehicles = r.getOwnedVehicles();
             List<DTO_Vehicle> vehicleNames = new ArrayList<>();
-            for(Vehicle v: vehicles){
+            for (Vehicle v : vehicles) {
                 DTO_Vehicle vehicle = new DTO_Vehicle(v);
                 vehicleNames.add(vehicle);
             }
@@ -219,12 +225,14 @@ public class RekeningrijderAPI {
                 String username = this.getUsernameFromToken(token);
 
                 List<Vehicle> vehicles = this.getRekeningrijderFromUsername(username).getOwnedVehicles();
-
-                for (Vehicle vehicle : vehicles) {
-                    if (vehicle.getId() == carId) {
-                        return Response.ok(vehicle).build();
+                if (vehicles != null) {
+                    for (Vehicle vehicle : vehicles) {
+                        if (vehicle.getId() == carId) {
+                            return Response.ok(vehicle).build();
+                        }
                     }
                 }
+
             } catch (Exception e) {
                 return Response.status(Status.NOT_FOUND).build();
             }
@@ -242,13 +250,16 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if(r == null){
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         Vehicle v = new Vehicle(vehicleType, licensePlate);
         v.getOwnersHistory().add(r);
         r.getOwnedVehicles().add(v);
         registrationService.updateRekeningrijder(r);
         return Response.accepted().build();
     }
-    
+
     @PUT
     @Produces(APPLICATION_JSON)
     @Path("cars/{carId}/update")
@@ -259,16 +270,19 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if(r == null){
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         List<Vehicle> vehicles = r.getOwnedVehicles();
         Vehicle old = new Vehicle(vehicleType, licensePlate);
-        for(Vehicle v: vehicles){
-            if(v.getLicensePlate() == licensePlate){
+        for (Vehicle v : vehicles) {
+            if (v.getLicensePlate() == licensePlate) {
                 r.getOwnedVehicles().remove(v);
                 old.setVehicleType(vehicleType);
                 r.getOwnedVehicles().add(v);
                 registrationService.updateRekeningrijder(r);
             }
-        }        
+        }
         return Response.accepted().build();
     }
 
@@ -280,6 +294,9 @@ public class RekeningrijderAPI {
             @PathParam("carId") long carId) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if(r == null){
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         for (Vehicle v : r.getOwnedVehicles()) {
             if (v.getId() == carId) {
                 r.getOwnedVehicles().remove(v);

@@ -42,7 +42,7 @@ public class RideService {
         
         Vehicle v = registrationService.findVehicleById(vehicleId);
         long cartrackerId = v.getCartracker().getId();
-        Cartracker c = registrationService.findCartrackerById(cartrackerId);
+        //Cartracker c = registrationService.findCartrackerById(cartrackerId);
         
 
         List<Ride> rides = new ArrayList<Ride>();
@@ -56,6 +56,9 @@ public class RideService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             RequestConnection(conn, "GET");
 
+            if(conn == null){
+                throw new RuntimeException("Failed : No Connection");
+            }
             if (conn.getResponseCode() != 200) {
                 throw new RuntimeException("Failed : Http error code: " + conn.getResponseCode());
             }
