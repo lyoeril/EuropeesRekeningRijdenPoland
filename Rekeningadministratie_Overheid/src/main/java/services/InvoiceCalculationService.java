@@ -10,6 +10,7 @@ import domain.Invoice;
 import domain.KMRate;
 import domain.Location;
 import domain.Rekeningrijder;
+import domain.Ride;
 import enums.VehicleType;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,94 +68,96 @@ public class InvoiceCalculationService {
             int month,
             int year,
             Rekeningrijder rekeningrijder,
-            List<Location> locations,
+            List<Ride> rides,
             VehicleType vehicleType) {
 
-        System.out.println("test");
+        //Prep Loading the rates        
         this.loadRates();
 
-        double latitude;
-        double longitude;
-
+        //Last location for calculating distance
         Location lastLocation = null;
 
         double totalPrice = 0.0;
-        try {
-            for (Location l : locations) {
-                if (lastLocation == null) {
-                    lastLocation = l;
-                }
-
-                latitude = l.getLatitude();
-                longitude = l.getLongitude();
-
-                //System.out.println("Found latitude: " + latitude + " AND longitude: " + longitude);
-                String pointRegion = "";
-                for (String region : jsonfiles) {
-                    this.polyService = new PolygonService(loadGeoJsonFile(region));
-                    boolean isInside = this.polyService.isInside(longitude, latitude);
-                    if (isInside) {
-                        pointRegion = region;
+        
+        /**
+         * Looping through every ride in Month
+         */
+        for (Ride ride : rides) {
+            List<Location> locations = ride.getLocations();
+            try {
+                for (Location l : locations) {
+                    if (lastLocation == null) {
+                        lastLocation = l;
                     }
-                }
 
-//                System.out.println("After checking regions: " + pointRegion);
-                PointPairDistance pp = new PointPairDistance();
-                pp.initialize(new Coordinate(lastLocation.getLongitude(), lastLocation.getLatitude()),
-                        new Coordinate(longitude, latitude));
+                    double latitude = l.getLatitude();
+                    double longitude = l.getLongitude();
 
-                double distance = pp.getDistance() * 100;
+                    //System.out.println("Found latitude: " + latitude + " AND longitude: " + longitude);
+                    String pointRegion = "";
+                    for (String region : jsonfiles) {
+                        this.polyService = new PolygonService(loadGeoJsonFile(region));
+                        boolean isInside = this.polyService.isInside(longitude, latitude);
+                        if (isInside) {
+                            pointRegion = region;
+                        }
+                    }
 
-                double rate = 0.0;
+                    //Calculating distance
+                    PointPairDistance pp = new PointPairDistance();
+                    pp.initialize(new Coordinate(lastLocation.getLongitude(), lastLocation.getLatitude()),
+                            new Coordinate(longitude, latitude));
 
-                int minusDotJson = pointRegion.length() - 5;
-                String stringPointRegion = pointRegion.substring(9, minusDotJson);
-                System.out.println("Region: " + stringPointRegion);
+                    double distance = pp.getDistance() * 100;
 
-                if (pointRegion != "") {
-                    if (invoiceService == null) {
-                        KMRate kmr = invoiceService.findKMRateByRegion(stringPointRegion);
-                        rate = kmr.getRateFromVehicleType(vehicleType);
-                    } else {
-                        for (KMRate tmpKMRate : kmrates) {
-                            if (tmpKMRate.getRegion().equals(stringPointRegion)) {
-                                rate = tmpKMRate.getRateFromVehicleType(vehicleType);
-                                System.out.println("rate: " + rate);
+                    double rate = 0.0;
+
+                    //Substring to get Region
+                    int minusDotJson = pointRegion.length() - 5;
+                    String stringPointRegion = pointRegion.substring(9, minusDotJson);
+                    System.out.println("Region: " + stringPointRegion);
+
+                    //Calculating price per distance
+                    if (pointRegion != "") {
+                        if (invoiceService == null) {
+                            KMRate kmr = invoiceService.findKMRateByRegion(stringPointRegion);
+                            rate = kmr.getRateFromVehicleType(vehicleType);
+                        } else {
+                            for (KMRate tmpKMRate : kmrates) {
+                                if (tmpKMRate.getRegion().equals(stringPointRegion)) {
+                                    rate = tmpKMRate.getRateFromVehicleType(vehicleType);
+                                    System.out.println("rate: " + rate);
+                                }
                             }
                         }
                     }
+
+                    double price = rate * distance;
+                    System.out.println(
+                            "Price: \t\t" + rate + " *"
+                            + "\nDistance: \t" + distance
+                            + "\nResult: \t" + price);
+
+                    totalPrice += price;
+
+                    System.out.println("*******************************************************");
+
+                    //Resetting lastLocation for next ride
+                    lastLocation = l;
                 }
+                System.out.println("Total Price: " + totalPrice);
 
-                double price = rate * distance;
-                System.out.println(
-                        "Price: \t\t" + rate + " *"
-                        + "\nDistance: \t" + distance
-                        + "\nResult: \t" + price);
-
-                totalPrice += price;
-
-                System.out.println("*******************************************************");
-
-                lastLocation = l;
-            }
-            System.out.println("Total Price: " + totalPrice);
-
-            Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
-            invoiceService.addInvoice(invoice);
-            return invoice;
-
-//            double firstieTude = 18.598400;
-//            double lastiTude = 53.013755;
-//
-//            double firstOfsec = 18.600551;
-//            double lastOfSec = 53.014604;
-            //find point inside json files
-            //add price to invoicetotal
-            //if last location -> return new invoice
+                Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
+                invoiceService.addInvoice(invoice);
+                return invoice;
+                
 //            invoiceService.addInvoice(i);
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            lastLocation = null;
         }
+
         return null;
     }
 

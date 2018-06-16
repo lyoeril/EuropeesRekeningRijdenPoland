@@ -9,6 +9,7 @@ import dao.interfaces.IInvoiceDAO;
 import dao.interfaces.IKMRateDAO;
 import domain.Location;
 import domain.Rekeningrijder;
+import domain.Ride;
 import enums.VehicleType;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,11 +41,15 @@ public class TestInvoiceCalculationService {
         Location l1 = new Location(1L, c1, 52.40533, 19.27417);
         Location l2 = new Location(2L, c1, 52.23478, 19.17059);
         
+        List<Ride> rides = new ArrayList<Ride>();
+        Ride r = new Ride(1L, c1, c1);
         List<Location> locations = new ArrayList<>();
         locations.add(l1);
         locations.add(l2);
+        r.setLocations(locations);
+        rides.add(r);
         
-        ics.calculateInvoice(3L, 1, 2018, new Rekeningrijder(), locations, VehicleType.VAN);
+        ics.calculateInvoice(3L, 1, 2018, new Rekeningrijder(), rides, VehicleType.VAN);
     }
 
 }
