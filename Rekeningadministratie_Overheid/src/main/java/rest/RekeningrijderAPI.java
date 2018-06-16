@@ -228,7 +228,7 @@ public class RekeningrijderAPI {
                 if (vehicles != null) {
                     for (Vehicle vehicle : vehicles) {
                         if (vehicle.getId() == carId) {
-                            return Response.ok(vehicle).build();
+                            return Response.ok(new DTO_Vehicle(vehicle)).build();
                         }
                     }
                 }

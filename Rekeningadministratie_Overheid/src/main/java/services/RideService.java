@@ -12,6 +12,7 @@ import domain.Cartracker;
 import domain.Rekeningrijder;
 import domain.Ride;
 import domain.Vehicle;
+import dto.DTO_Ride;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -33,7 +35,7 @@ import javax.inject.Inject;
 @Stateless
 public class RideService {
     
-    final static String BASE_URL = "http://192.168.25.14:8080/RegistratieCentrale/cartrackerdata/get/RideByCode/";
+    final static String BASE_URL = "http://192.168.25.14:8080/RegistratieCentrale/webapi/cartrackerdata/get/RideByCode/";
 
     
     @Inject
@@ -52,19 +54,25 @@ public class RideService {
         //Cartracker c = registrationService.findCartrackerById(cartrackerId);
         long cartrackerId = 1L;
 
-        List<Ride> rides = new ArrayList<Ride>();
+        List<DTO_Ride> rides = new ArrayList<DTO_Ride>();
         
-            String startDate = "01-" + month + "-" + year;
-            String endDate = "01-" + month + 1 + "-" + year;
+//            String startDate = "01-" + month + "-" + year;
+//            String endDate = "01-" + (month + 1) + "-" + year;
+            
+            String startDate = "16-" + "05" + "-" + year;
+            String endDate = "15-" + "06" + "-" + year;
+            String cID = "00f524061d";
 
         try {
             URL url = new URL(
                     BASE_URL
-                    + cartrackerId
-                    + startDate
-                    + endDate);
+//                    + cartrackerId 
+                    + cID
+                    + "/" + startDate
+                    + "/" + endDate);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             RequestConnection(conn, "GET");
+            System.out.println("URL: " + url);
 
             if(conn == null){
                 throw new RuntimeException("Failed : No Connection");
@@ -76,17 +84,21 @@ public class RideService {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             String output;
+            String huh = "";
             System.out.println("Output from RegistrationServer .... \n");
             while ((output = br.readLine()) != null) {
-                output += output;
-                System.out.println(output);
+                huh += output;
+                System.out.println("Output: " + output);
             }
             conn.disconnect();
             
             ObjectMapper mapper = new ObjectMapper();
-            rides = mapper.readValue(output, new TypeReference<List<Ride>>(){});
+            //Object[] test = mapper.readValue(huh, new TypeReference<Object[]>(){});
             
-            for(Ride r: rides){
+            DTO_Ride[] ridesArray;
+            ridesArray = mapper.readValue(huh, new TypeReference<DTO_Ride[]>(){});
+            
+            for(DTO_Ride r: ridesArray){
                 System.out.println("ride: " + r.getId());
             }
 
