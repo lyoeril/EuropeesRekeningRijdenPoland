@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import dao.interfaces.IUserDAO;
 import domain.UserGroup;
-import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import org.junit.After;
 import org.junit.Before;
@@ -48,6 +41,7 @@ public class LoginServiceTest {
 
     /**
      * Test of authenticate method, of class LoginService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAuthenticate() throws Exception {
@@ -57,6 +51,7 @@ public class LoginServiceTest {
 
     /**
      * Test of issueToken method, of class LoginService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testIssueToken() throws Exception {

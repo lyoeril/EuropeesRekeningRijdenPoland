@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
-import dao.JPA.RekeningrijderJPA;
 import dao.interfaces.ICartrackerDAO;
 import dao.interfaces.IRekeningrijderDAO;
 import dao.interfaces.IUserGroupDAO;
@@ -15,13 +9,9 @@ import domain.Rekeningrijder;
 import domain.UserGroup;
 import domain.Vehicle;
 import enums.VehicleType;
-import java.util.List;
-import javax.ejb.embeddable.EJBContainer;
-import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -72,6 +62,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of addRekeningrijder method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddRekeningrijder() throws Exception {
@@ -82,6 +73,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of updateRekeningrijder method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testUpdateRekeningrijder() throws Exception {
@@ -94,6 +86,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of deleteRekeningrijder method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testDeleteRekeningrijder() throws Exception {
@@ -104,6 +97,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findRekeningrijderById method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindRekeningrijderById() throws Exception {
@@ -115,6 +109,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of addCartracker method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddCartracker() throws Exception {
@@ -124,6 +119,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of updateCartracker method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testUpdateCartracker() throws Exception {
@@ -135,6 +131,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of deleteCartracker method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testDeleteCartracker() throws Exception {
@@ -145,6 +142,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findCartrackerById method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindCartrackerById() throws Exception {
@@ -156,6 +154,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findAllCartrackers method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindAllCartrackers() throws Exception {
@@ -168,6 +167,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findAllUserGroups method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindAllUserGroups() throws Exception {
@@ -177,6 +177,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findByName method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindByName() throws Exception {
@@ -186,6 +187,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findAllVehicles method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindAllVehicles() throws Exception {
@@ -195,6 +197,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findVehicleById method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindVehicleById() throws Exception {
@@ -204,6 +207,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of updateVehicle method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testUpdateVehicle() throws Exception {
@@ -213,6 +217,7 @@ public class RegistrationServiceTest {
 
     /**
      * Test of findVehicleByLicenseplate method, of class RegistrationService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindVehicleByLicenseplate() throws Exception {

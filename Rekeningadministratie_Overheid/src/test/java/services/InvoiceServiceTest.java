@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
 import dao.interfaces.IInvoiceDAO;
@@ -15,13 +10,9 @@ import enums.InvoiceStatus;
 import enums.VehicleType;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import javax.ejb.embeddable.EJBContainer;
-import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -64,6 +55,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of addInvoice method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddInvoice() throws Exception {
@@ -73,6 +65,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of updateInvoice method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testUpdateInvoice() throws Exception {
@@ -83,6 +76,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of deleteInvoice method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testDeleteInvoice() throws Exception {
@@ -92,6 +86,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoiceById method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoiceById() throws Exception {
@@ -101,6 +96,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoicesByRekeningrijder method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoicesByRekeningrijder() throws Exception {
@@ -110,6 +106,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoiceByRekeningrijderMonth method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoiceByRekeningrijderMonth() throws Exception {
@@ -120,6 +117,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoiceVehicleMonth method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoiceVehicleMonth() throws Exception {
@@ -131,6 +129,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoiceByCartrackerYearMonth method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoiceByCartrackerYearMonth() throws Exception {
@@ -140,6 +139,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findAllInvoices method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindAllInvoices() throws Exception {
@@ -149,6 +149,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findInvoicesByStatus method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindInvoicesByStatus() throws Exception {
@@ -158,6 +159,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of addKMRate method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddKMRate() throws Exception {
@@ -167,6 +169,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of updateKMRate method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testUpdateKMRate() throws Exception {
@@ -176,6 +179,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of deleteKMRate method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testDeleteKMRate() throws Exception {
@@ -185,6 +189,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findKMRateById method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindKMRateById() throws Exception {
@@ -194,6 +199,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findKMRateByRegion method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindKMRateByRegion() throws Exception {
@@ -203,6 +209,7 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findKMRateByRegionType method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindKMRateByRegionType() throws Exception {
@@ -212,11 +219,11 @@ public class InvoiceServiceTest {
 
     /**
      * Test of findAllKMRates method, of class InvoiceService.
+     * @throws java.lang.Exception
      */
     @Test
     public void testFindAllKMRates() throws Exception {
         invoiceService.findAllKMRates();
         Mockito.verify(kmRateDAO, Mockito.times(1)).findAll();
     }
-
 }
