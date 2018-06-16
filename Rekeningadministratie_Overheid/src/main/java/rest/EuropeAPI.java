@@ -25,11 +25,11 @@ public class EuropeAPI {
     @Produces({MediaType.APPLICATION_JSON})
     public Response registerLocation(@PathParam("uuid") String uuid, JSONObject jsonObject) {
         if (uuid != null && !uuid.equals("")) {
-            JSONObject json = new JSONObject();
-            json.put("uuid", uuid);
-            json.put("tripTotalKM", 50.12);
-            json.put("tripPrice", 13.4);
-            return Response.ok().entity(json).build();
+//            JSONObject json = new JSONObject();
+//            json.put("uuid", uuid);
+//            json.put("tripTotalKM", 50.12);
+//            json.put("tripPrice", 13.4);
+            return Response.ok().build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
