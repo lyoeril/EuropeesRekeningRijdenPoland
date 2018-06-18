@@ -45,14 +45,13 @@ public class RideService {
     public RideService() {
     }
     
-    public List<Ride> getRides(long vehicleId, int month, int year){
+    public List<Ride> getRides(long cartrackerId, int month, int year){
         
         System.out.println("Registrationservice :" + registrationService.toString());
         //Vehicle v = registrationService.findVehicleById(vehicleId);
        // System.out.println("Vehicle: " + v);
         //long cartrackerId = v.getCartracker().getId();
         //Cartracker c = registrationService.findCartrackerById(cartrackerId);
-        long cartrackerId = 1L;
 
         List<DTO_Ride> rides = new ArrayList<DTO_Ride>();
         

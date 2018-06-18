@@ -209,7 +209,7 @@ public class RekeningrijderAPI {
 
     @GET
     @Produces(APPLICATION_JSON)
-    @Path("rides/vehicle/{id}/date/{year}/{month}")
+    @Path("rides/cartracker/{id}/date/{year}/{month}")
     public Response getRidesOfVehicle(
             @Context HttpHeaders headers,
             @PathParam("id") long id,
