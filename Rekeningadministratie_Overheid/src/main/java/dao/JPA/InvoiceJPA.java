@@ -82,11 +82,13 @@ public class InvoiceJPA implements IInvoiceDAO {
 
     @Override
     public Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month) {
+        System.out.println("info inside jpa: \n" + cartrackerId + "\n" + year + "\n" + month);
          try {
             Query q = em.createNamedQuery("Invoice.findByCartrackerYearMonth");
             q.setParameter("cartrackerid", cartrackerId);
             q.setParameter("year", year);
             q.setParameter("month", month);
+             System.out.println("query to start: " + q.toString());
             return (Invoice)q.getSingleResult();
         } catch (NoResultException e) {
             return null;

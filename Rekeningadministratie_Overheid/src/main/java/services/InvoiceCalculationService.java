@@ -94,14 +94,17 @@ public class InvoiceCalculationService {
         Map<String, Geometry> regionsGeometry = new HashMap<>();
         regionsGeometry = loadGeoJSONFiles.getRegions();
 
-        System.out.println("RegionsGEOMETRY TESTING: " + regionsGeometry);
-        for (Map.Entry<String, Geometry> entry : regionsGeometry.entrySet()) {
-            System.out.println(entry.getKey() + "/" + entry.getValue());
-        }
-
+        //System.out.println("RegionsGEOMETRY TESTING: " + regionsGeometry);
+//        for (Map.Entry<String, Geometry> entry : regionsGeometry.entrySet()) {
+//            //System.out.println(entry.getKey() + "/" + entry.getValue());
+//        }
+        System.out.println("total rides: " + rides.size());
         for (Ride ride : rides) {
+            System.out.println("Ride: " + ride.getId());
             List<Location> locations = ride.getLocations();
             try {
+                System.out.println("****************************************************************************");
+                System.out.println("locationsize: " + locations.size());
                 for (Location l : locations) {
                     if (lastLocation == null) {
                         lastLocation = l;
@@ -128,13 +131,13 @@ public class InvoiceCalculationService {
 
                     double rate = 0.0;
 
-                    //Substring to get Region
-                    int minusDotJson = pointRegion.length() - 5;
-                    String stringPointRegion = pointRegion.substring(9, minusDotJson);
-                    System.out.println("Region: " + stringPointRegion);
-
+                    //System.out.println("Region: " + stringPointRegion);
                     //Calculating price per distance
                     if (pointRegion != "") {
+                        int minusDotJson = pointRegion.length() - 5;
+                        System.out.println("pointRegion: " + pointRegion);
+                        String stringPointRegion = pointRegion.substring(9, minusDotJson);
+                        
                         if (invoiceService == null) {
                             KMRate kmr = invoiceService.findKMRateByRegion(stringPointRegion);
                             rate = kmr.getRateFromVehicleType(vehicleType);
@@ -149,10 +152,10 @@ public class InvoiceCalculationService {
                     }
 
                     double price = rate * distance;
-                    System.out.println(
-                            "Price: \t\t" + rate + " *"
-                            + "\nDistance: \t" + distance
-                            + "\nResult: \t" + price);
+//                    System.out.println(
+//                            "Price: \t\t" + rate + " *"
+//                            + "\nDistance: \t" + distance
+//                            + "\nResult: \t" + price);
 
                     totalPrice += price;
 
@@ -161,32 +164,44 @@ public class InvoiceCalculationService {
                     //Resetting lastLocation for next ride
                     lastLocation = l;
                 }
-                System.out.println("Total Price: " + totalPrice);
-
-                Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
-                System.out.println("New Invoice adding...");
-
-                Invoice check = invoiceService.findInvoiceByCartrackerYearMonth(cartrackerId, year, month);
-                if (check != null) {
-                    invoiceService.updateInvoice(invoice);
-                    rekeningrijder.getInvoices().remove(check);
-                    rekeningrijder.getInvoices().add(invoice);
-                    registrationService.updateRekeningrijder(rekeningrijder);
-                    return invoice;
-                }
-
-                invoiceService.addInvoice(invoice);
-                rekeningrijder.getInvoices().add(invoice);
-                registrationService.updateRekeningrijder(rekeningrijder);
-                return invoice;
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             lastLocation = null;
         }
+        System.out.println("Total Price: " + totalPrice);
+        System.out.println("New Invoice adding...");
+        Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
+        
+        Invoice check = invoiceService.findInvoiceByCartrackerYearMonth(cartrackerId, year, month);
+        System.out.println("check: " + check);
+        if (check != null) {
+            
+            //rekeningrijder.getInvoices().remove(check);
+            //rekeningrijder.getInvoices().add(invoice);
+            System.out.println("Lau");
+           // registrationService.updateRekeningrijder(rekeningrijder);
+            System.out.println("rent");
+            System.out.println("rekeningrijder: " + rekeningrijder);
+            rekeningrijder.getInvoices().remove(check);
+            registrationService.updateRekeningrijder(rekeningrijder);
+            
+            
+            return invoice;
+        }
 
-        return null;
+        invoiceService.addInvoice(invoice);
+        
+        System.out.println("1");
+        rekeningrijder.getInvoices().add(invoice);
+        System.out.println("2");
+        registrationService.updateRekeningrijder(rekeningrijder);
+        
+        
+        System.out.println("3");
+        
+        return invoice;
     }
 
     private Geometry loadGeoJsonFile(String path) {

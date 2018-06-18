@@ -14,12 +14,14 @@ import java.util.Calendar;
  * @author Laurent
  */
 public class DTO_Invoice {
+
     private long id;
     private long cartrackerId;
     private double totalAmount;
     private InvoiceStatus status;
     private int year;
     private int month;
+    private long rekeningrijderId;
 
     public DTO_Invoice(Invoice invoice) {
         this.id = invoice.getInvoiceNumber();
@@ -27,7 +29,8 @@ public class DTO_Invoice {
         this.status = invoice.getStatus();
         this.year = invoice.getYear();
         this.month = invoice.getMonth();
-        this.cartrackerId = invoice.getCarTrackerId();        
+        this.cartrackerId = invoice.getCarTrackerId();
+        this.rekeningrijderId = invoice.getRekeningrijder().getId();
     }
 
     public long getId() {
@@ -77,8 +80,15 @@ public class DTO_Invoice {
     public void setCartrackerId(long cartrackerId) {
         this.cartrackerId = cartrackerId;
     }
+
+    public long getRekeningrijderId() {
+        return rekeningrijderId;
+    }
+
+    public void setRekeningrijderId(long rekeningrijderId) {
+        this.rekeningrijderId = rekeningrijderId;
+    }
     
     
-    
-    
+
 }
