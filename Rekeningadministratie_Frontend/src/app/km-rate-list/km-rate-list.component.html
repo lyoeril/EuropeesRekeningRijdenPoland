@@ -43,6 +43,7 @@
         <input name="filter" class="form-control" type="search" placeholder="Search..." aria-label="Search" [(ngModel)]="search"
             (keyup)="filterKmRates()">
     </form>
+
     <table class="table table-hover table-dark">
         <thead>
             <tr>
@@ -52,17 +53,48 @@
                 <th scope="col">Manage</th>
             </tr>
         </thead>
+        <div>
+        </div>
         <tbody>
             <tr *ngFor="let rate of filteredKmRates; let i=index">
                 <td *ngIf="i < listLimit">{{rate.region}}</td>
                 <td *ngIf="i < listLimit">{{rate.vehicleType}}</td>
-                <td *ngIf="i < listLimit">{{rate.rate}}</td>
+                <td *ngIf="i < listLimit">{{rate.rate}} €/km</td>
                 <td *ngIf="i < listLimit">
-                    <a (click)="edit(rate)" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                    <a (click)="edit(rate)" data-toggle="modal" data-target="#editModal" data-placement="bottom" title="Edit">
                         <span class="fas fa-edit"></span>
                     </a>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <div *ngIf="isLoading" >
+        <span class="fas fa-spinner fa-pulse mx-auto" style="width: 100%"></span>
+    </div>
 </div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+        <div class="modal-dialog bg-dark" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header bg-dark">
+                    <h5 class="modal-title" id="editModalLabel">Edit KmRate</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <form *ngIf="editKmRate !== null">
+                        <div class="form-group">
+                            <label for="kmRate" class="col-form-label">Rate:</label>
+                            <input name="kmRate" type="text" class="form-control" id="kmRate" [(ngModel)]="editKmRate.rate">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-light" (click)="updateKmRate()" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>

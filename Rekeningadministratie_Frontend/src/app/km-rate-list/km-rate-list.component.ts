@@ -10,26 +10,32 @@ import { VehicleType } from '../_model/VehicleType';
 })
 
 export class KmRateListComponent implements OnInit {
-    kmRates: KmRate[] = [];
-    filteredKmRates: KmRate[] = [];
-    search = '';
-    searchProperty = 'Region';
-    filteredType = 'All';
+    private kmRates: KmRate[] = [];
+    private filteredKmRates: KmRate[] = [];
+    private search = '';
+    private searchProperty = 'Region';
+    private filteredType: VehicleType | string = 'All';
 
-    listLimit = 50;
+    private listLimit = 50;
+
+    private editKmRate: KmRate = null;
+
+    private isLoading = true;
 
     constructor(private http: HttpService) { }
 
     ngOnInit() {
-        this.getInvoices();
+        this.getKmRates();
     }
 
-    getInvoices() {
+    getKmRates() {
         this.http.getKmRates()
             .then(response => {
                 if (response !== null) {
                     this.kmRates = response;
                     this.filteredKmRates = response;
+                    this.isLoading = false;
+                    console.log(this.isLoading);
                 }
             });
     }
@@ -72,11 +78,18 @@ export class KmRateListComponent implements OnInit {
 
         if (this.filteredType !== 'All') {
             this.filteredKmRates = this.filteredKmRates.filter(k =>
-                (k.vehicleType.valueOf().toLowerCase().replace('_', '') === this.filteredType));
+                (k.vehicleType === this.filteredType));
         }
     }
 
     edit(kmRate: KmRate) {
-        console.log('Editting...');
+        this.editKmRate = new KmRate(kmRate.id, kmRate.region, kmRate.vehicleType, kmRate.rate);
+    }
+
+    updateKmRate() {
+        this.http.updateKmRate(this.editKmRate)
+            .then(response => {
+                location.reload();
+            });
     }
 }

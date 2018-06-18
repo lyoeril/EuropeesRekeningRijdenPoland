@@ -20,12 +20,10 @@ export class VehicleListComponent implements OnInit {
     private filteredType: VehicleType | string = 'All';
 
     public listLimit = 50;
-
-    editUser = null;
-    userQuery = '';
-    userResults: User[] = [];
+    private isLoading = true;
 
     editVehicle = null;
+
     cartrackerQuery = '';
     cartrackerResults: Cartracker[] = [];
 
@@ -46,6 +44,8 @@ export class VehicleListComponent implements OnInit {
                     if (this.filteredVehicles.length > 0) {
                         this.editVehicle = this.filteredVehicles[0];
                     }
+
+                    this.isLoading = false;
                 }
             });
     }
@@ -104,25 +104,6 @@ export class VehicleListComponent implements OnInit {
             this.cartrackerQuery = '';
         }
     }
-
-    searchUser() {
-        if (this.userQuery !== '') {
-            this.http.getUsersByUsername(this.userQuery)
-                .then(response => {
-                    if (response !== null) {
-                        this.userResults = response;
-                    } else {
-                        this.userResults = [];
-                    }
-                });
-        }
-    }
-
-    setCurrentOwner(user: User) {
-        this.editUser = user;
-        this.userQuery = user.username;
-    }
-
     setEditVehicleType(type: VehicleType) {
         this.editVehicle.vehicleType = type;
     }
@@ -153,6 +134,7 @@ export class VehicleListComponent implements OnInit {
                 this.filteredVehicles = this.vehicles;
                 console.log(this.vehicles);
                 this.filterVehicles();
+                location.reload();
             });
     }
 }

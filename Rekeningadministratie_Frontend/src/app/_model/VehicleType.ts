@@ -1,7 +1,7 @@
 export enum VehicleType {
-    UNKNOWN,
-    PASSENGER_CAR,
-    VAN,
-    AUTOBUS,
-    TRUCK
+    UNKNOWN = 'UNKNOWN',
+    PASSENGER_CAR = 'PASSENGER_CAR',
+    VAN = 'VAN',
+    AUTOBUS = 'AUTOBUS',
+    TRUCK = 'TRUCK'
 }

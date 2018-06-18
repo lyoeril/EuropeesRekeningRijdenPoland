@@ -15,6 +15,7 @@ export class CartrackerListComponent implements OnInit {
     searchProperty = 'ID';
 
     listLimit = 50;
+    private isLoading = true;
 
     constructor(private http: HttpService) { }
 
@@ -29,6 +30,7 @@ export class CartrackerListComponent implements OnInit {
                     this.cartrackers = response;
                     this.filteredCartrackers = response;
                 }
+                this.isLoading = false;
             });
     }
 
