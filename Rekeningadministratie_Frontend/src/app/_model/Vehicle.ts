@@ -1,20 +1,23 @@
 import { VehicleType } from './VehicleType';
 import { User } from './User';
+import { Cartracker } from './Cartracker';
 
 export class Vehicle {
     id: number;
     licensePlate: string;
+    currentOwner: User;
     vehicleType: VehicleType;
-    cartrackerId: number;
+    cartracker: Cartracker;
 
-    ownerHistory: number[];
+    ownerHistory: User[];
 
-    constructor(_id: number, _licensePlate: string, _type: VehicleType, _cartrackerId: number) {
+    constructor(_id: number, _licensePlate: string, _type: VehicleType, _cartracker: Cartracker) {
         this.id = _id;
         this.licensePlate = _licensePlate;
         this.vehicleType = _type;
-        this.cartrackerId = _cartrackerId;
+        this.cartracker = _cartracker;
 
         this.ownerHistory = [];
+        this.currentOwner = null;
     }
 }

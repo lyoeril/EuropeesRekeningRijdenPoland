@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
 
 export class LoginComponent implements OnInit {
 
-    usercreds = {
+    private usercreds = {
         username: '',
         password: '',
     };
+
+    private alert = null;
 
     constructor(
         private http: HttpService,
@@ -26,8 +28,9 @@ export class LoginComponent implements OnInit {
             .then(response => {
                 if (response === true) {
                     this.router.navigate(['']);
+                } else if (response !== null) {
+                    this.alert = response;
                 }
-                console.log(response);
             });
     }
 }
