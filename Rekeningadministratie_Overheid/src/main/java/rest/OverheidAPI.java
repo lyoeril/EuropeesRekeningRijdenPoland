@@ -53,8 +53,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import org.glassfish.hk2.utilities.reflection.Logger;
+import services.InvoiceCalculationService;
 import services.InvoiceService;
 import services.RegistrationService;
+import services.RideService;
 import services.UserService;
 
 /**
@@ -75,6 +77,12 @@ public class OverheidAPI {
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private RideService rideService;
+    
+    @Inject
+    private InvoiceCalculationService ics;
 
 //    @GET
 //    @Produces(APPLICATION_JSON)
@@ -304,48 +312,28 @@ public class OverheidAPI {
         return Response.status(Status.NOT_IMPLEMENTED).build();
     }
 
-    @POST
-    @Path("invoices/{rekeningrijderId}/{vehicleId}/{year}/{month}/")
-    public Response reCalculateInvoice(
-            @PathParam("rekeningrijderId") long rekeningrijderId,
+//    @POST
+//    @Path("invoices/{rekeningrijderId}/{vehicleId}/{year}/{month}/")
+//    public Response reCalculateInvoice(){
+//        
+//    }
+    
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("invoices/{rekeningrijderId}/{vehicleId}/{year}/{month}")
+    public Response calculateInvoice(
+            @PathParam("rekengingrijderId") long rekeningrijderId,
             @PathParam("vehicleId") long vehicleId,
             @PathParam("year") int year,
             @PathParam("month") int month) {
-
-        Vehicle v = registrationService.findVehicleById(vehicleId);
-        long cartrackerId = v.getCartracker().getId();
-
-        String baseUrl = "192.168.25.?";
-        try {
-            URL url = new URL(
-                    baseUrl
-                    + cartrackerId
-                    + year
-                    + month);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : Http error code: " + conn.getResponseCode());
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String output;
-            System.out.println("Output from RegistrationServer .... \n");
-            while ((output = br.readLine()) != null) {
-                System.out.println(output);
-            }
-            conn.disconnect();
-
-        } catch (MalformedURLException e) {
-            System.out.println("exception: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("exception" + e.getMessage());
-        }
-
-        return Response.status(Status.NOT_ACCEPTABLE).build();
+        List<Ride> rides = rideService.getRides(vehicleId, month, year);
+        Rekeningrijder rekeningrijder = registrationService.findRekeningrijderById(rekeningrijderId);
+        
+        VehicleType type = registrationService.findVehicleById(vehicleId).getVehicleType();
+        Invoice i = ics.calculateInvoice(vehicleId, month, year, rekeningrijder, rides, type);
+        System.out.println("invoice ending: " + i);
+        System.out.println("(0)-(0)");
+        return Response.accepted(new DTO_Invoice(i)).build();
     }
 
     @GET
