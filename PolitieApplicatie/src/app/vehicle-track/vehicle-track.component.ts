@@ -1,23 +1,29 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {HttpService} from '../_service/http.service';
 import {Vehicle} from '../_model/Vehicle';
 import {VehicleType} from '../_model/VehicleType';
+import {ActivatedRoute} from '@angular/router';
+import {HttpService} from '../_service/http.service';
+import {AgmPolylinePoint} from '@agm/core';
 
 @Component({
-  selector: 'app-vehicle',
-  templateUrl: './vehicle.component.html',
-  styleUrls: ['./vehicle.component.css'],
-  providers: [HttpService]
+  selector: 'app-vehicle-track',
+  templateUrl: './vehicle-track.component.html',
+  styleUrls: ['./vehicle-track.component.css']
 })
-
-export class VehicleComponent implements OnInit {
+export class VehicleTrackComponent implements OnInit {
 
   vehicleId: number;
-// vehicle = {};
   vehicle: Vehicle = new Vehicle(0, '', VehicleType.UNKNOWN);
 
-// historyVehicles: HistoryVehicles[];
+  // google maps zoom level
+  zoom = 8;
+  // initial center position for the map
+  lat = 51.673858;
+  lng = 7.815982;
+
+  points: AgmPolylinePoint[] = [
+    new AgmPolylinePoint()
+  ];
 
   constructor(private route: ActivatedRoute, private http: HttpService) {
     this.route.params.subscribe(params => this.vehicleId = params['id']);

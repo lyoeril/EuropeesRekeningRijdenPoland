@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import { AgmCoreModule } from '@agm/core';
 
 // Routing
 import { routing } from './app.routing';
@@ -16,6 +17,7 @@ import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { HttpService } from './_service/http.service';
 import { AuthService } from './_service/auth.service';
 import { VehicleComponent } from './vehicle/vehicle.component';
+import { VehicleTrackComponent } from './vehicle-track/vehicle-track.component';
 
 
 @NgModule({
@@ -25,11 +27,14 @@ import { VehicleComponent } from './vehicle/vehicle.component';
     LoginComponent,
     NotFoundComponent,
     VehicleListComponent,
-    VehicleComponent
+    VehicleComponent,
+    VehicleTrackComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    // TODO: insert valid Google Maps JavaScript API key
+    AgmCoreModule.forRoot({apiKey: ''}),
     HttpClientModule,
     HttpModule,
     routing

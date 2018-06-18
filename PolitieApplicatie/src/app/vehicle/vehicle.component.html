@@ -1,31 +1,31 @@
-  <div class="main">
-    Vehicles
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Details | {{vehicle.licensePlate}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Here you can follow the selected car ofzo... blabla</h6>
-              <p class="card-text">BLALALALALLALA</p>
-              <ul class="card-text list-unstyled">
-                <li>Vehicle id : {{vehicle.id}}</li>
-                <li>license plate :{{vehicle.licensePlate}}</li>
-                <li>vehicle type : {{vehicle.vehicleType}}</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Car history</h5>
-              
-
- 
-          </div>
+<div class="main">
+  Details
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Details | {{vehicle.licensePlate}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Here you can follow the selected car ofzo... blabla</h6>
+          <p class="card-text">BLALALALALLALA</p>
+          <ul class="card-text list-unstyled">
+            <li>Vehicle id : {{vehicle.id}}</li>
+            <li>license plate :{{vehicle.licensePlate}}</li>
+            <li>vehicle type : {{vehicle.vehicleType}}</li>
+          </ul>
         </div>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <span class="card-title">
+            <h5 style="display:inline">Car history</h5>
+            <button class="btn btn-primary float-right" routerLink="track">Track</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

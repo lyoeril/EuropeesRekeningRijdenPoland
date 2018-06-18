@@ -6,6 +6,7 @@ import {LoginComponent} from './login/login.component';
 import {AuthService} from './_service/auth.service';
 import {VehicleListComponent} from './vehicle-list/vehicle-list.component';
 import {VehicleComponent} from './vehicle/vehicle.component';
+import {VehicleTrackComponent} from './vehicle-track/vehicle-track.component';
 
 const routes: Routes = [
   {
@@ -35,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: 'vehicles/:id/track',
-    component: VehicleComponent,
+    component: VehicleTrackComponent,
     canActivate: [AuthService]
   },
   /*{
