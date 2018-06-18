@@ -64,7 +64,6 @@ export class VehicleListComponent implements OnInit {
     }
 
     setTypeFilter(type) {
-        console.log(type);
         this.filteredType = type;
         this.filterVehicles();
     }
@@ -98,12 +97,17 @@ export class VehicleListComponent implements OnInit {
 
     edit(vehicle: Vehicle) {
         this.editVehicle = new Vehicle(vehicle.id, vehicle.licensePlate, vehicle.vehicleType, vehicle.cartracker);
+    }
+
+    link(vehicle: Vehicle) {
+        this.editVehicle = new Vehicle(vehicle.id, vehicle.licensePlate, vehicle.vehicleType, vehicle.cartracker);
         if (this.editVehicle.cartracker !== null) {
             this.cartrackerQuery = this.editVehicle.cartracker.hardware;
         } else {
             this.cartrackerQuery = '';
         }
     }
+
     setEditVehicleType(type: VehicleType) {
         this.editVehicle.vehicleType = type;
     }
@@ -129,12 +133,18 @@ export class VehicleListComponent implements OnInit {
     updateVehicle() {
         this.http.updateVehicle(this.editVehicle)
             .then(response => {
-                let veh = this.vehicles.filter(v => v.id === response.id)[0];
-                veh = response;
-                this.filteredVehicles = this.vehicles;
-                console.log(this.vehicles);
-                this.filterVehicles();
-                location.reload();
+                if (response !== null) {
+                    location.reload();
+                }
+            });
+    }
+
+    linkVehicle() {
+        this.http.linkVehicle(this.editVehicle, this.editVehicle.cartracker)
+            .then(response => {
+                if (response !== null) {
+                    location.reload();
+                }
             });
     }
 }

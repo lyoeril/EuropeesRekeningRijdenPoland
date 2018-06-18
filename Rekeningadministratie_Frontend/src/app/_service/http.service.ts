@@ -212,14 +212,16 @@ export class HttpService {
     }
 
     recalculateInvoice(invoice: Invoice, options?: Headers): Promise<Invoice> {
-        const body = {};
         const year = invoice.date.getFullYear();
         const month = invoice.date.getMonth() - 1;
         return new Promise(resolve => {
-            this.post('/overheid/invoices/' + invoice.user.id + '/' + invoice.cartrackerId + '/' + year + '/' + month, body)
+            this.get('/overheid/invoices/' + invoice.user.id + '/' + invoice.cartrackerId + '/' + year + '/' + month)
                 .subscribe(data => {
-                    console.log(data);
-                    resolve(null);
+                    const i = data.json();
+                    this.getUser(i.rekeningrijderId)
+                        .then(user => {
+                            resolve(new Invoice(i.id, new Date(i.year, i.month), i.cartrackerId, i.totalAmount, i.status, user));
+                        });
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
@@ -232,7 +234,6 @@ export class HttpService {
             this.get('/overheid/kmrates')
                 .subscribe(data => {
                     const kmRates = [];
-                    console.log(data.json());
                     data.json().forEach(k => {
                         kmRates.push(new KmRate(k.id, k.region, VehicleType.AUTOBUS, k.rates.AUTOBUS));
                         kmRates.push(new KmRate(k.id, k.region, VehicleType.PASSENGER_CAR, k.rates.PASSENGER_CAR));
@@ -252,7 +253,6 @@ export class HttpService {
         return new Promise(resolve => {
             this.put('/overheid/kmrates/' + kmRate.region + '/' + kmRate.vehicleType.toString(), body)
                 .subscribe(data => {
-                    console.log(data.json());
                     resolve(new KmRate(data.json().id, data.json().region, data.json().vehicleType, data.json().rate));
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -266,8 +266,6 @@ export class HttpService {
             this.get('/overheid/vehicles')
                 .subscribe(data => {
                     const vehicles = [];
-                    console.log('Vehicles');
-                    console.log(data.json());
                     data.json().forEach(v => {
                         this.getCartracker(v.cartrackerId)
                             .then(cartracker => {
@@ -305,7 +303,6 @@ export class HttpService {
         return new Promise(resolve => {
             this.put('/overheid/vehicles/' + vehicle.id + '/update', body)
                 .subscribe(data => {
-                    console.log(data.json());
                     resolve(true);
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -313,6 +310,17 @@ export class HttpService {
         });
     }
 
+    linkVehicle(vehicle: Vehicle, cartracker: Cartracker, options?: Headers): Promise<any> {
+        const body = { cartrackerUUID: cartracker.hardware };
+        return new Promise(resolve => {
+            this.put('/overheid/vehicles/' + vehicle.id + '/link', body)
+                .subscribe(data => {
+                    resolve(true);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
 
     // Other ========================================================================================== Other
     handleError(error) {
