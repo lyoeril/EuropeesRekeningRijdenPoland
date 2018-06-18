@@ -67,4 +67,17 @@ public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO 
         }
         return vehicle;
     }
+
+    @Override
+    public List<Vehicle> getVehiclesIfStolen() {
+        List<Vehicle> vehicles = null;
+        try {
+            Query q = em.createQuery("SELECT v FROM Vehicle v WHERE v.stolen = :stolen");
+            q.setParameter("stolen", true);
+            vehicles = (List<Vehicle>) q.getResultList();
+        } catch (Exception ise) {
+            handleExceptions(ise);
+        }
+        return vehicles;
+    }
 }

@@ -27,4 +27,6 @@ public interface VehicleDAO extends BasicDAO<Vehicle> {
     void removeRide(long id);
 
     Vehicle getVehicleByAuthorisationCode(String authorisationCode);
+    
+    List<Vehicle> getVehiclesIfStolen();
 }

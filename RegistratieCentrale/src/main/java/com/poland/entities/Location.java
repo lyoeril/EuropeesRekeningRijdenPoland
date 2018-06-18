@@ -43,8 +43,8 @@ public class Location implements Serializable, Comparable<Location> {
     @Column(name = "longitude")
     private double longitude;
 
-//    @ManyToOne
-    @JoinColumn(name = "rideId", nullable = false)
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
+    @JoinColumn(name = "rideId")
     private Ride ride;
 
     public Location() {
@@ -113,6 +113,5 @@ public class Location implements Serializable, Comparable<Location> {
     public int compareTo(Location o) {
         return getDate().compareTo(o.getDate());
     }
-    
-    
+
 }

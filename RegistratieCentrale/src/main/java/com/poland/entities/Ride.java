@@ -35,6 +35,7 @@ public class Ride implements Serializable {
     @Column(name = "missedMeasurement")
     private boolean missedMeasurement;
 
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
     @JoinColumn(name = "vehicleId", nullable = false)
     private Vehicle vehicle;
 

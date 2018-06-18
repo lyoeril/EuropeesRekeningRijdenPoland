@@ -102,7 +102,7 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
         } else if (ex instanceof IllegalArgumentException) {
             System.out.println("Illegal Argument Exception");
         } else if (ex instanceof NoResultException) {
-            System.out.println("No Results found");
+            //System.out.println("No Results found");
         }
     }
 

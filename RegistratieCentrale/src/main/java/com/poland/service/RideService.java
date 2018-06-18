@@ -5,6 +5,7 @@
  */
 package com.poland.service;
 
+import com.poland.dao.interfaces.jpa.LocationDAO;
 import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
@@ -25,10 +26,12 @@ public class RideService {
 
     public static final long HOUR = 3600 * 1000;
     private RideDAO rideDAO;
+    private LocationDAO locationDAO;
 
     @Inject
-    public RideService(RideDAO rideDAO) {
+    public RideService(RideDAO rideDAO, LocationDAO locationDAO) {
         this.rideDAO = rideDAO;
+        this.locationDAO = locationDAO;
     }
 
     public RideService() {
@@ -59,7 +62,6 @@ public class RideService {
 //        }
 //        return false;
 //    }
-
     public Ride createRide(Ride ride) {
         try {
             if (rideDAO.find(ride.getId()) == null) {
@@ -77,13 +79,12 @@ public class RideService {
 
     public boolean deleteRide(long id) {
         try {
-//            Ride ride = rideDAO.find(id);
+            Ride ride = rideDAO.find(id);
 
-//            ride.getLocations().forEach((t) -> {
-//                ride.removeLocation(t);
-//            });
-//            rideDAO.edit(ride);
-            rideDAO.remove(rideDAO.find(id));
+            ride.setVehicle(null);
+
+            ride = rideDAO.edit(ride);
+            rideDAO.remove(ride);
             return true;
         } catch (IllegalArgumentException ex) {
             return false;
@@ -92,10 +93,13 @@ public class RideService {
 
     public List<Ride> getRidesOnDate(String authenticationCode, Date start, Date end) {
         if (authenticationCode != null && !authenticationCode.equals("") && start != null && end != null) {
-            return rideDAO.getRideByAuthorisationCodeAndDate(authenticationCode, start, end);
+            List<Ride> rides = rideDAO.getRideByAuthorisationCodeAndDate(authenticationCode, start, end);
+            for (Ride ride : rides) {
+                ride.setLocations(locationDAO.findLocationsByRideId(ride.getId()));
+            }
+            return rides;
         } else {
             return new ArrayList<>();
         }
-
     }
 }

@@ -8,6 +8,7 @@ package com.poland.service;
 import com.poland.dao.interfaces.jpa.VehicleDAO;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -55,7 +56,6 @@ public class VehicleService {
 //
 //        vehicleDAO.edit(vehicle);
 //    }
-
     public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
         return vehicleDAO.getVehicleByAuthorisationCode(authorisationCode);
     }
@@ -63,7 +63,6 @@ public class VehicleService {
 //    public void removeRide(long id) {
 //        vehicleDAO.removeRide(id);
 //    }
-
     public List<Ride> getAllRidesByVehicle(long id) {
         return vehicleDAO.getAllRidesByVehicleId(id);
     }
@@ -76,4 +75,12 @@ public class VehicleService {
         return vehicleDAO.getAllFinishedRidesByVehicleId(id);
     }
 
+    public List<Vehicle> getVehiclesIfStolen() {
+        List<Vehicle> vehicles = vehicleDAO.getVehiclesIfStolen();
+        if (vehicles != null) {
+            return vehicles;
+        } else {
+            return new ArrayList<>();
+        }
+    }
 }

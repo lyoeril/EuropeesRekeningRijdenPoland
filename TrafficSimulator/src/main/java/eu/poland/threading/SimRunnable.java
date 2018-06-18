@@ -37,7 +37,7 @@ public class SimRunnable implements Runnable {
         
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
                 loc = new LocationSerializable(ride.progress(), ride.getId());
                 producer.sendMessage(gson.toJson(loc));
             } catch (InterruptedException ie) {

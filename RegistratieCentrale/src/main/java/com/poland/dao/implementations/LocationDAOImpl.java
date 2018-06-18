@@ -11,17 +11,13 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.ParameterMode;
 import javax.persistence.Query;
-import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 /**
  *
  * @author PC-YOERI
  */
-
 @Stateless
 @Default
 public class LocationDAOImpl extends BasicDAOImpl<Location> implements LocationDAO {
@@ -30,13 +26,27 @@ public class LocationDAOImpl extends BasicDAOImpl<Location> implements LocationD
     public List<Location> findLocationsByRideId(long id) {
         List<Location> locations = null;
         try {
-            Query q = em.createQuery("select l from Location l where l.ride = (select r from Ride r where r.id = :id)");
+            Query q = em.createQuery("select l from Location l where l.ride = (select r from Ride r where r.id = :id) order by l.date desc");
             q.setParameter("id", id);
             locations = (List<Location>) q.getResultList();
         } catch (Exception ise) {
             handleExceptions(ise);
         }
         return locations;
+    }
+
+    @Override
+    public Location findLastLocationByAuthenticationCode(String authenticationCode) {
+        Location location = null;
+        try {
+            Query q = em.createQuery("select l from Location l where l.ride = (select r from Ride r where r.vehicle = (select v from Vehicle v where v.authorisationCode : auth)) order by l.date desc");
+            q.setParameter("auth", authenticationCode);
+            q.setMaxResults(1);
+            location = (Location) q.getSingleResult();
+        } catch (Exception ise) {
+            handleExceptions(ise);
+        }
+        return location;
     }
 
     @Override

@@ -48,5 +48,15 @@ public class DTOConverter {
                 vehicleTargetList.add(vdto);
             });
         }
+    }   
+    
+    public static void toPoliceVehicleDTOList(List<Vehicle> vehicleList, List<PoliceVehicleDTO> policeVehicleTargetList) {
+        if (vehicleList != null) {
+            vehicleList.forEach(v -> {
+                PoliceVehicleDTO vdto = new PoliceVehicleDTO();
+                vdto.fromVehicleLocation(v.getAuthorisationCode(),v.getLocation());
+                policeVehicleTargetList.add(vdto);
+            });
+        }
     }
 }

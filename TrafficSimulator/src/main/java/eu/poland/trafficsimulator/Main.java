@@ -12,7 +12,7 @@ import javax.jms.JMSException;
  */
 public class Main {
 
-    private static String activeMQIp = "192.168.25.14";
+    private static String activeMQIp = "127.0.0.1";
 
     private static SimulationController simulator;
 

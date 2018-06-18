@@ -73,6 +73,19 @@ public class LocationService {
 
     }
 
+    public Location findLastLocationByAuthenticationCode(String authenticationCode) {
+        try {
+            if (authenticationCode != null && !authenticationCode.equals("")) {
+                return locationDAO.findLastLocationByAuthenticationCode(authenticationCode);
+            } else {
+                return null;
+            }
+        } catch (NullPointerException x) {
+            return null;
+        }
+
+    }
+
     public boolean insertLocationStoreProcedure(Date date, Double latitude, Double longitude, String authorisationCode) {
         if (date == null || latitude >= 90 || latitude <= -90 || longitude >= 180 || longitude <= -180 || authorisationCode == null || authorisationCode.equals("")) {
             return false;

@@ -34,9 +34,9 @@ import org.json.JSONObject;
     ,
     @ActivationConfigProperty(propertyName = "resourceAdapter", propertyValue = "activemq-rar-5.15.3")
     ,
-    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "1000")
+    @ActivationConfigProperty(propertyName = "maxSessions", propertyValue = "10")
     ,
-    @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "10000")})
+    @ActivationConfigProperty(propertyName = "maxMessagesPerSessions", propertyValue = "1000")})
 public class CarTrackerMQ implements MessageListener {
 
     RegistrationService registrationService;

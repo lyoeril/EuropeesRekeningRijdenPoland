@@ -62,38 +62,6 @@ public class RegistrationService {
         return locationService.insertLocationStoreProcedure(date, latitude, longitude, authorisationCode);
     }
 
-    public boolean registerLocation(Date date, Double latitude, Double longitude, String authorisationCode) {
-//        long start_time = System.nanoTime();
-
-//        Vehicle v = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
-//        Ride r = null;
-//
-//        if (v == null) {
-//            v = vehicleService.createVehicle(new Vehicle(authorisationCode));
-//        }
-//        Boolean done = false;
-//        for (Ride t : v.getRides()) {
-//            Date endDate = new Date(t.getEndDate().getTime() + HOUR);
-//            if (t.getStartDate().compareTo(date) <= 0 && endDate.compareTo(date) >= 0) {
-//                r = t;
-//                done = true;
-//                break;
-//            }
-//        }
-//        if (!done) {
-//            r = rideService.editRide(new Ride(date, v));
-//            v.addRide(r);
-//            v = vehicleService.editVehicle(v);
-//        }
-//
-//        r.addRide(new Location(date, latitude, longitude, r));
-//        r.setEndDate(date);
-//        rideService.editRide(r);
-//        long end_time = System.nanoTime();
-//        System.out.println((end_time - start_time) / 1e6);
-        return true;
-    }
-
     public boolean registerLocationSimple(Date date, Double latitude, Double longitude, String authorisationCode) {
         Vehicle v = vehicleService.getVehicleByAuthorisationCode(authorisationCode);
         Ride r = null;
@@ -104,9 +72,42 @@ public class RegistrationService {
 
         r = rideService.findOrCreateRideByAutorisationCode(date, v);
 
-        locationService.createLocation(new Location(date, latitude, longitude, r));
+        Location l = locationService.createLocation(new Location(date, latitude, longitude, r));
         r.setEndDate(date);
         rideService.editRide(r);
+
+
+        if (v.getLocation() == null) {
+            v.setLocation(locationService.createLocation(new Location(date, latitude, longitude, null)));
+        } else {
+            Location location = v.getLocation();
+            location.setDate(date);
+            location.setLatitude(latitude);
+            location.setLongitude(longitude);
+            v.setLocation(location);
+        }
+        vehicleService.editVehicle(v);
         return true;
+    }
+
+    public void reportStolenVehicle(String uuid, Location location) {
+        Vehicle v = vehicleService.getVehicleByAuthorisationCode(uuid);
+
+        if (v == null && location != null) {
+            Location l = locationService.createLocation(location);
+            v = vehicleService.createVehicle(new Vehicle(uuid, true, true));
+            v.setLocation(l);
+            vehicleService.editVehicle(v);
+        } else if (v != null && location != null && v.isForeignCar()) {
+            v.changeStolen();
+            Location l = v.getLocation();
+            l.setLatitude(location.getLatitude());
+            l.setLongitude(location.getLongitude());
+            v.setLocation(l);
+            vehicleService.editVehicle(v);
+        } else if (v != null && !v.isForeignCar()) {
+            v.changeStolen();
+            vehicleService.editVehicle(v);
+        }
     }
 }
