@@ -131,7 +131,6 @@
                     <target>1.8</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
-                         <proc:none/>
                     </compilerArguments>
                 </configuration>
             </plugin>
