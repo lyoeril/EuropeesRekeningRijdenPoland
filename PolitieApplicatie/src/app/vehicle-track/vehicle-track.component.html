@@ -17,14 +17,28 @@
         <div class="card-body">
           <span class="card-title">
             <h5>Live Tracking</h5>
+          </span>
+          <span class="card-text">
             <agm-map
-              [latitude]="lat"
-              [longitude]="lng"
-              [zoom]="zoom"
+              [latitude]="points[0].latitude"
+              [longitude]="points[0].longitude"
+              [zoom]="initZoom"
               [disableDefaultUI]="false"
               [zoomControl]="false">
-              <agm-polyline>
-                [points]="points"
+              <agm-marker
+                [latitude]="points[0].latitude"
+                [longitude]="points[0].longitude">
+                <agm-info-window>
+                  <strong>InfoWindow content</strong>
+                </agm-info-window>
+              </agm-marker>
+              <agm-polyline
+                [strokeColor]="strokeColor">
+                <agm-polyline-point
+                  *ngFor="let p of points; let i = index"
+                  [latitude]="p.latitude"
+                  [longitude]="p.longitude">
+                </agm-polyline-point>
               </agm-polyline>
             </agm-map>
           </span>

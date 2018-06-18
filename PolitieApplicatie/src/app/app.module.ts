@@ -19,7 +19,6 @@ import { AuthService } from './_service/auth.service';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { VehicleTrackComponent } from './vehicle-track/vehicle-track.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
