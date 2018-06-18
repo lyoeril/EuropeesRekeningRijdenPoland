@@ -2,6 +2,7 @@ package com.poland.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.*;
 
@@ -125,15 +126,30 @@ public class Location implements Serializable, Comparable<Location> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Location other = (Location) obj;
-        if (getId() == 0l) {
-            if (other.getId() != 0l) {
-                return false;
-            }
-        } else if (getId() != other.getId()) {
+        final Location other = (Location) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 11 * hash + Objects.hashCode(this.date);
+        hash = 11 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
+        hash = 11 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
+        return hash;
     }
 
 }
