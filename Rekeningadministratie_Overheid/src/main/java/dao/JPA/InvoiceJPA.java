@@ -68,13 +68,13 @@ public class InvoiceJPA implements IInvoiceDAO {
     }
 
     @Override
-    public Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
+    public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
         try {
             Query q = em.createNamedQuery("Invoice.findByRekeningrijderMonth");
             q.setParameter("id", rekeningrijder.getId());
             q.setParameter("year", year);
             q.setParameter("month", month);
-            return (Invoice) q.getSingleResult();
+            return q.getResultList();
         } catch (NoResultException e) {
             return null;
         }

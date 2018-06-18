@@ -161,7 +161,7 @@ public class RekeningrijderAPI {
         try {
             Invoice i = invoiceService.findInvoiceById(id);
             if (i != null) {
-                return Response.ok(i).build();
+                return Response.ok(new DTO_Invoice(i)).build();
             }
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -179,23 +179,28 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
-        if (toReturn != null) {
-            return Response.accepted(new DTO_Invoice(toReturn)).build();
+        List<Invoice> invoices = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
+        List<DTO_Invoice> dtoInvoices = new ArrayList<>();
+        for(Invoice i: invoices){
+            dtoInvoices.add(new DTO_Invoice(i));
+        }
+        
+        
+        if (dtoInvoices != null) {
+            return Response.accepted(dtoInvoices).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
 
     //TODO
     @PUT
-    @Path("invoices/{year}/{month}/")
+    @Path("invoices/{id}")
     public Response payInvoice(
             @Context HttpHeaders headers,
-            @PathParam("year") int year,
-            @PathParam("month") int month) {
+            @PathParam("id") long id) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(r, year, month);
+        Invoice toReturn = invoiceService.findInvoiceById(id);
         if (toReturn != null) {
             toReturn.setStatus(InvoiceStatus.PAID);
             invoiceService.updateInvoice(toReturn);

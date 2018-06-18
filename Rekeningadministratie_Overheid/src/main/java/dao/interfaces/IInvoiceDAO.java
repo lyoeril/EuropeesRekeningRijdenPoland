@@ -22,7 +22,7 @@ public interface IInvoiceDAO {
     void delete(Invoice invoice);
     Invoice findById(long id);
     List<Invoice> findByRekeningrijder(Rekeningrijder rekeningrijder);
-    Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month);
+    List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month);
     List<Invoice> findByVehicle(Rekeningrijder rekeningrijder);
     List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle);
     List<Invoice> findAllInvoices();
