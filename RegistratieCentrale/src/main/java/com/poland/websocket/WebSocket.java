@@ -54,6 +54,7 @@ public class WebSocket {
                         });
                     } catch (InterruptedException e) {
                         run = false;
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

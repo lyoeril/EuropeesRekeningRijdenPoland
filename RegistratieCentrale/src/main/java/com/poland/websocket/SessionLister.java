@@ -10,12 +10,10 @@ public class SessionLister {
 
     private static SessionLister sessionLister = null;
 
-    private static Map<String, List<String>> sessionMapVehicles;
-    private static Map<String, Thread> sessionMapRunnable;
+    private static Map<String, List<String>> sessionMapVehicles= new HashMap<>();;
+    private static Map<String, Thread> sessionMapRunnable= new HashMap<>();;
 
     protected SessionLister() {
-        sessionMapVehicles = new HashMap<>();
-        sessionMapRunnable = new HashMap<>();
     }
 
     public static SessionLister getInstance() {

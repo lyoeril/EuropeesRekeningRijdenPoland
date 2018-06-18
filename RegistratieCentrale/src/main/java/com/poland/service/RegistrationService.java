@@ -19,7 +19,7 @@ import javax.inject.Inject;
 @Stateless
 public class RegistrationService {
 
-    public static final long HOUR = 3600 * 1000;
+    public static final long HOUR = 3600L * 1000L;
     private LocationService locationService;
     private RideService rideService;
     private VehicleService vehicleService;
@@ -72,7 +72,7 @@ public class RegistrationService {
 
         r = rideService.findOrCreateRideByAutorisationCode(date, v);
 
-        Location l = locationService.createLocation(new Location(date, latitude, longitude, r));
+        locationService.createLocation(new Location(date, latitude, longitude, r));
         r.setEndDate(date);
         rideService.editRide(r);
 

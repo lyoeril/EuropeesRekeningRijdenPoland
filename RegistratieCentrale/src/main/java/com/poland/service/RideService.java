@@ -24,7 +24,7 @@ import javax.inject.Inject;
 @Stateless
 public class RideService {
 
-    public static final long HOUR = 3600 * 1000;
+    public static final long HOUR = 3600L * 1000L;
     private RideDAO rideDAO;
     private LocationDAO locationDAO;
 

@@ -114,4 +114,26 @@ public class Location implements Serializable, Comparable<Location> {
         return getDate().compareTo(o.getDate());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Location other = (Location) obj;
+        if (getId() == 0l) {
+            if (other.getId() != 0l) {
+                return false;
+            }
+        } else if (getId() != other.getId()) {
+            return false;
+        }
+        return true;
+    }
+
 }
