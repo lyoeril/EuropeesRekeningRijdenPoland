@@ -63,11 +63,6 @@ public class InvoiceJPA implements IInvoiceDAO {
     }
 
     @Override
-    public List<Invoice> findByRekeningrijder(Rekeningrijder rekeningrijder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
         try {
             Query q = em.createNamedQuery("Invoice.findByRekeningrijderMonth");
@@ -78,16 +73,6 @@ public class InvoiceJPA implements IInvoiceDAO {
         } catch (NoResultException e) {
             return null;
         }
-    }
-
-    @Override
-    public List<Invoice> findByVehicle(Rekeningrijder rekeningrijder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

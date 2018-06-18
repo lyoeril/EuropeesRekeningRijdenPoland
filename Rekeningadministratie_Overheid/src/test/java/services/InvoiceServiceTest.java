@@ -95,16 +95,6 @@ public class InvoiceServiceTest {
     }
 
     /**
-     * Test of findInvoicesByRekeningrijder method, of class InvoiceService.
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testFindInvoicesByRekeningrijder() throws Exception {
-        invoiceService.findInvoicesByRekeningrijder(rekeningrijder);
-        Mockito.verify(invoiceDAO, Mockito.times(1)).findByRekeningrijder(rekeningrijder);
-    }
-
-    /**
      * Test of findInvoiceByRekeningrijderMonth method, of class InvoiceService.
      * @throws java.lang.Exception
      */
@@ -115,17 +105,6 @@ public class InvoiceServiceTest {
 
     }
 
-    /**
-     * Test of findInvoiceVehicleMonth method, of class InvoiceService.
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testFindInvoiceVehicleMonth() throws Exception {
-        Calendar date = new GregorianCalendar();
-        Vehicle vehicle = new Vehicle(VehicleType.VAN, "licensePlate");
-        invoiceService.findInvoiceVehicleMonth(rekeningrijder, date, vehicle);
-        Mockito.verify(invoiceDAO, Mockito.times(1)).findByVehicleMonth(rekeningrijder, date, vehicle);
-    }
 
     /**
      * Test of findInvoiceByCartrackerYearMonth method, of class InvoiceService.

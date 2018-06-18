@@ -65,7 +65,7 @@ public class RekeningrijderAPI {
 
     @Inject
     private UserService userService;
-    
+
     @Inject
     private InvoiceCalculationService ics;
 
@@ -181,11 +181,10 @@ public class RekeningrijderAPI {
 
         List<Invoice> invoices = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
         List<DTO_Invoice> dtoInvoices = new ArrayList<>();
-        for(Invoice i: invoices){
+        for (Invoice i : invoices) {
             dtoInvoices.add(new DTO_Invoice(i));
         }
-        
-        
+
         if (dtoInvoices != null) {
             return Response.accepted(dtoInvoices).build();
         }
@@ -196,10 +195,9 @@ public class RekeningrijderAPI {
     @PUT
     @Path("invoices/{id}")
     public Response payInvoice(
-            @Context HttpHeaders headers,
             @PathParam("id") long id) {
-        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+//        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+//        Rekeningrijder r = this.getRekeningrijderFromToken(token);
         Invoice toReturn = invoiceService.findInvoiceById(id);
         if (toReturn != null) {
             toReturn.setStatus(InvoiceStatus.PAID);
@@ -221,7 +219,7 @@ public class RekeningrijderAPI {
         List<DTO_Ride> dtoRides = new ArrayList<>();
         for (Ride r : rides) {
             List<DTO_Location> dtoLocations = new ArrayList<>();
-            for(Location l : r.getLocations()) {
+            for (Location l : r.getLocations()) {
                 dtoLocations.add(new DTO_Location(l.getDate().toString(), l.getId(), l.getLatitude(), l.getLongitude()));
             }
             dtoRides.add(new DTO_Ride(r.getId(), r.getStartDate().toString(), r.getEndDate().toString(), dtoLocations));
@@ -345,15 +343,16 @@ public class RekeningrijderAPI {
         }
         return Response.status(Status.FORBIDDEN).build();
     }
-    
+
     @GET
     @Produces(APPLICATION_JSON)
     @Path("invoicecalc")
-    public Response calcInvoice(){
+    public Response calcInvoice(
+            @Context HttpHeaders headers) {
         Calendar c1 = new GregorianCalendar(2018, 01, 01);
         Location l1 = new Location(1L, c1, 52.40533, 19.27417);
         Location l2 = new Location(2L, c1, 52.23478, 19.17059);
-        
+
         List<Ride> rides = new ArrayList<Ride>();
         Ride r = new Ride(1L, c1, c1);
         List<Location> locations = new ArrayList<>();
@@ -362,7 +361,11 @@ public class RekeningrijderAPI {
         r.setLocations(locations);
         rides.add(r);
         
-        Invoice returnable = ics.calculateInvoice(3L, 1, 2018, new Rekeningrijder(), rides, VehicleType.VAN);
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder rekrij = this.getRekeningrijderFromToken(token);
+        System.out.println("rekrij: " + rekrij.getUsername());
+
+        Invoice returnable = ics.calculateInvoice(99, 1, 2018, rekrij, rides, VehicleType.VAN);
         return Response.accepted(returnable).build();
     }
 
