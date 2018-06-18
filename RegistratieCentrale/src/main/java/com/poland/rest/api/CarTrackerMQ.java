@@ -5,7 +5,9 @@ package com.poland.rest.api;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.poland.entities.Vehicle;
 import com.poland.service.RegistrationService;
+import com.poland.websocket.SessionLister;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import javax.websocket.Session;
 import org.json.JSONObject;
 
 /**
@@ -81,6 +84,13 @@ public class CarTrackerMQ implements MessageListener {
                         obj.getJSONObject("location").getDouble("lat"),
                         obj.getJSONObject("location").getDouble("lng"),
                         obj.getString("trackerId"));
+                
+                Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(obj.getString("trackerId"));
+                if(v.isStolen()){
+                    for (Session session : SessionLister.getInstance().getTrackerMapSessions().get(v.getAuthorisationCode())){
+                        session.getAsyncRemote().sendText(textMessage.getText());
+                    }
+                }
             }
         } catch (JMSException | ParseException ex) {
             Logger.getLogger(CarTrackerMQ.class.getName()).log(Level.SEVERE, null, ex);

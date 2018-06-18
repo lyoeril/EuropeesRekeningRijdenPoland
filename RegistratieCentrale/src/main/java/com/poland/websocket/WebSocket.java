@@ -33,45 +33,25 @@ public class WebSocket {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("uuid") String authenticationCode) {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean run = true;
-                while (run) {
-                    try {
-                        Thread.sleep((long) 10000);
-                        Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(authenticationCode);
-                        if (v != null && v.isStolen()) {
-                            if (v.isForeignCar()) {
-//EUROPE THINGS UPDATE LOCATION FROM EXTERNAL APIs
-                            } else {
-                                PoliceVehicleDTO vehicleTarget = new PoliceVehicleDTO();
-                                vehicleTarget.fromVehicleLocation(v.getAuthorisationCode(), v.getLocation());
-                                session.getAsyncRemote().sendObject(vehicleTarget);
-                            }
-                        }else{
-                            run = false;
-                            Thread.currentThread().interrupt();
-                        }
-                    } catch (InterruptedException e) {
-                        run = false;
-                        Thread.currentThread().interrupt();
-                    }
-                }
-            }
-        });
-        t.start();
-        SessionLister.getInstance().getSessionMapRunnable().put(session.getId(), t);
+        if (SessionLister.getInstance().getTrackerMapSessions().get(authenticationCode) == null) {
+            SessionLister.getInstance().getTrackerMapSessions().put(authenticationCode, new ArrayList<>());
+            SessionLister.getInstance().getTrackerMapSessions().get(authenticationCode).add(session);
+        } else {
+            SessionLister.getInstance().getTrackerMapSessions().get(authenticationCode).add(session);
+        }
     }
 
     @OnClose
-    public void onClose(Session session) {
-        SessionLister.getInstance().getSessionMapRunnable().get(session).interrupt();
-        SessionLister.getInstance().getSessionMapRunnable().remove(session);
+    public void onClose(Session session, @PathParam("uuid") String authenticationCode) {
+        if (SessionLister.getInstance().getTrackerMapSessions().get(authenticationCode) != null) {
+            SessionLister.getInstance().getTrackerMapSessions().get(authenticationCode).remove(session);
+        } else {
+
+        }
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session, @PathParam("uuid") String authenticationCode) {
 //        if (SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).contains(message)) {
 //            SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).remove(message);
 //        } else {

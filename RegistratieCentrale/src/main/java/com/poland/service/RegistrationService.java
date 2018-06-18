@@ -92,6 +92,12 @@ public class RegistrationService {
         r.setEndDate(date);
         rideService.editRide(r);
 
+        if (v.isStolen()) {
+            if (polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude()) != polyService.isInside(latitude, longitude)) {
+                
+            }
+        }
+
         if (v.getLocation() == null) {
             v.setLocation(locationService.createLocation(new Location(date, latitude, longitude, null)));
         } else {
@@ -102,11 +108,6 @@ public class RegistrationService {
             v.setLocation(location);
         }
 
-        if (v.isStolen()) {
-            if (polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude()) == polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude())) {
-
-            }
-        }
         vehicleService.editVehicle(v);
         return true;
     }
