@@ -42,12 +42,12 @@ public class RegistrationService {
         this.rideService = rideService;
         this.vehicleService = vehicleService;
 
-        this.json = new GeoJsonReader();
-
-        this.polyService = new PolygonService(loadGeoJsonFile("/poland.json"));
+//        this.json = new GeoJsonReader();
+//        this.polyService = new PolygonService(loadGeoJsonFile("/poland.json"));
     }
 
     public RegistrationService() {
+
     }
 
     public LocationService getLocationService() {
@@ -92,11 +92,11 @@ public class RegistrationService {
         r.setEndDate(date);
         rideService.editRide(r);
 
-        if (v.isStolen()) {
-            if (polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude()) != polyService.isInside(latitude, longitude)) {
-                
-            }
-        }
+//        if (v.isStolen()) {
+//            if (polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude()) != polyService.isInside(latitude, longitude)) {
+//
+//            }
+//        }
 
         if (v.getLocation() == null) {
             v.setLocation(locationService.createLocation(new Location(date, latitude, longitude, null)));
@@ -133,21 +133,21 @@ public class RegistrationService {
         }
     }
 
-    private Geometry loadGeoJsonFile(String path) {
-        System.out.printf("Loading %s. . .\n", path);
-        try {
-            InputStreamReader in = new InputStreamReader(ClassLoader.class.getResourceAsStream(path));
-            Geometry ret = json.read(in);
-            in.close();
-            return ret;
-        } catch (ParseException ex) {
-            //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.printf("Please verify the integrity of %s.\n", path);
-            System.exit(1);
-            return null;
-        } catch (IOException ex) {
-            Logger.getLogger(RegistrationService.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
+//    private Geometry loadGeoJsonFile(String path) {
+//        System.out.printf("Loading %s. . .\n", path);
+//        try {
+//            InputStreamReader in = new InputStreamReader(ClassLoader.class.getResourceAsStream(path));
+//            Geometry ret = json.read(in);
+//            in.close();
+//            return ret;
+//        } catch (ParseException ex) {
+//            //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
+//            System.out.printf("Please verify the integrity of %s.\n", path);
+//            System.exit(1);
+//            return null;
+//        } catch (IOException ex) {
+//            Logger.getLogger(RegistrationService.class.getName()).log(Level.SEVERE, null, ex);
+//            return null;
+//        }
+//    }
 }

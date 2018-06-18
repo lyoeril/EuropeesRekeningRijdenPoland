@@ -49,9 +49,9 @@ public class WebSocket {
 
         }
     }
-
+    
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("uuid") String authenticationCode) {
+    public void onMessage(String message, Session session, @PathParam("uuid") String uuid) {
 //        if (SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).contains(message)) {
 //            SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).remove(message);
 //        } else {

@@ -101,12 +101,7 @@
             <artifactId>activemq-all</artifactId>
             <version>5.15.3</version>
         </dependency>        
-        <dependency>
-            <groupId>org.ebaysf.web</groupId>
-            <artifactId>cors-filter</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
+        <dependency> 
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
             <version>1.15.0</version>
