@@ -24,7 +24,7 @@ public class CorsResponseFilter implements ContainerResponseFilter{
         
         System.out.println("URL " + requestContext.getUriInfo().getBaseUri());
         
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://192.168.25.14");
+        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://192.168.25.33");
         responseContext.getHeaders().add("Access-Control-Allow-Headers",
                 "Origin, Access-Control-Allow-Origin, Content-Type, Accept, Authorization");
         responseContext.getHeaders().add("Access-Control-Allow-Methods",
