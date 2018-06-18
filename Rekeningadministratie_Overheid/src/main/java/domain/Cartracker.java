@@ -28,7 +28,7 @@ import javax.persistence.Transient;
             query = "SELECT c FROM Cartracker c")
     ,
     @NamedQuery(name = "Cartracker.findByHardware",
-            query = "SELECT c FROM Cartracker c WHERE hardware LIKE :hardware")
+            query = "SELECT c FROM Cartracker c WHERE c.hardware LIKE :hardware")
 })
 public class Cartracker implements Serializable {
 
