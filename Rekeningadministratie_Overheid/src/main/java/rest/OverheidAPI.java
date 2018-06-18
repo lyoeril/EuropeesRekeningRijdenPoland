@@ -249,7 +249,7 @@ public class OverheidAPI {
         if (!u.isKm_prijs() || u == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
-        
+
         try {
             System.out.println("before kmrate");
             KMRate kmrate = invoiceService.findKMRateByRegion(region);
@@ -282,7 +282,7 @@ public class OverheidAPI {
         if (!u.isKm_prijs() || u == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
-        
+
         try {
             System.out.println("before kmrate");
             KMRate kmrate = invoiceService.findKMRateByRegion(region);
@@ -355,12 +355,12 @@ public class OverheidAPI {
 
         VehicleType vType = null;
         List<Vehicle> vehiclesFromRR = rekeningrijder.getOwnedVehicles();
-        for(Vehicle v : vehiclesFromRR){
-            if(v.getCartracker().getId() == cartrackerId){
+        for (Vehicle v : vehiclesFromRR) {
+            if (v.getCartracker().getId() == cartrackerId) {
                 vType = v.getVehicleType();
             }
         }
-        
+
         Invoice i = ics.calculateInvoice(cartrackerId, month, year, rekeningrijder, rides, vType);
         System.out.println("invoice ending: " + i);
         System.out.println("(0)-(0)");
@@ -480,6 +480,29 @@ public class OverheidAPI {
             return Response.accepted(new DTO_Vehicle(v)).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    @PUT
+    @Path("vehicles/{id}/link")
+    public Response linkVehicle(
+            @PathParam("id") long id,
+            @FormParam("cartrackerUUID") String cartrackerUUID) {
+        Cartracker c = null;
+        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(cartrackerUUID);
+        if (cartrackers.size() >= 1) {
+            c = cartrackers.get(0);
+        } else {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        Vehicle v = registrationService.findVehicleById(id);
+        if (v != null) {
+            v.setCartracker(c);
+            registrationService.updateCartracker(c);
+            return Response.accepted(new DTO_Vehicle(v)).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+
     }
 
     private String getUsernameFromToken(String token) {

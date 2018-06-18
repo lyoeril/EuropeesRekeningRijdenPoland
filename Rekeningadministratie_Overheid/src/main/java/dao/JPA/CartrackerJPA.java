@@ -60,8 +60,10 @@ public class CartrackerJPA implements ICartrackerDAO{
 
     @Override
     public List<Cartracker> findByHardware(String hardware) {
+        System.out.println("Hardware: " + hardware);
         Query q = em.createNamedQuery("Cartracker.findByHardware");
         q.setParameter("hardware", "%" + hardware + "%");
+        System.out.println("q HARDWARE: " + q.toString());
         return (List<Cartracker>) q.getResultList();
     }
 }
