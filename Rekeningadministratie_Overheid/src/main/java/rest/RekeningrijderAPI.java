@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.annotation.HttpConstraint;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -346,6 +347,25 @@ public class RekeningrijderAPI {
 
     @GET
     @Produces(APPLICATION_JSON)
+    @Path("invoices/calculate/{vehicleId}/{year}/{month}")
+    public Response calculateInvoice(
+            @Context HttpHeaders headers,
+            @PathParam("vehicleId") long vehicleId,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        List<Ride> rides = rideService.getRides(vehicleId, month, year);
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
+        
+        VehicleType type = registrationService.findVehicleById(vehicleId).getVehicleType();
+        Invoice i = ics.calculateInvoice(vehicleId, month, year, rekeningrijder, rides, type);
+        System.out.println("invoice ending: " + i);
+        System.out.println("(0)-(0)");
+        return Response.accepted(new DTO_Invoice(i)).build();
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
     @Path("invoicecalc")
     public Response calcInvoice(
             @Context HttpHeaders headers) {
@@ -360,7 +380,7 @@ public class RekeningrijderAPI {
         locations.add(l2);
         r.setLocations(locations);
         rides.add(r);
-        
+
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekrij = this.getRekeningrijderFromToken(token);
         System.out.println("rekrij: " + rekrij.getUsername());
