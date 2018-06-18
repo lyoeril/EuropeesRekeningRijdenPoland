@@ -8,7 +8,6 @@ public class SessionLister {
 
     private static SessionLister sessionLister = null;
 
-    private static Map<String, List<String>> sessionMapVehicles= new HashMap<>();;
     private static Map<String, Thread> sessionMapRunnable= new HashMap<>();;
 
     protected SessionLister() {
@@ -21,9 +20,6 @@ public class SessionLister {
         return sessionLister;
     }
 
-    public Map<String, List<String>> getSessionMapVehicles() {
-        return sessionMapVehicles;
-    }
     public Map<String, Thread> getSessionMapRunnable() {
         return sessionMapRunnable;
     }

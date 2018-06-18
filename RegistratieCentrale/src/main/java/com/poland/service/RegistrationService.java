@@ -8,9 +8,18 @@ package com.poland.service;
 import com.poland.entities.Location;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.geojson.GeoJsonReader;
 
 /**
  *
@@ -24,11 +33,18 @@ public class RegistrationService {
     private RideService rideService;
     private VehicleService vehicleService;
 
+    private GeoJsonReader json;
+    private PolygonService polyService;
+
     @Inject
     public RegistrationService(LocationService locationService, RideService rideService, VehicleService vehicleService) {
         this.locationService = locationService;
         this.rideService = rideService;
         this.vehicleService = vehicleService;
+
+        this.json = new GeoJsonReader();
+
+        this.polyService = new PolygonService(loadGeoJsonFile("/poland.json"));
     }
 
     public RegistrationService() {
@@ -72,10 +88,9 @@ public class RegistrationService {
 
         r = rideService.findOrCreateRideByAutorisationCode(date, v);
 
-        locationService.createLocation(new Location(date, latitude, longitude, r));
+        Location l = locationService.createLocation(new Location(date, latitude, longitude, r));
         r.setEndDate(date);
         rideService.editRide(r);
-
 
         if (v.getLocation() == null) {
             v.setLocation(locationService.createLocation(new Location(date, latitude, longitude, null)));
@@ -85,6 +100,12 @@ public class RegistrationService {
             location.setLatitude(latitude);
             location.setLongitude(longitude);
             v.setLocation(location);
+        }
+
+        if (v.isStolen()) {
+            if (polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude()) == polyService.isInside(v.getLocation().getLatitude(), v.getLocation().getLongitude())) {
+
+            }
         }
         vehicleService.editVehicle(v);
         return true;
@@ -108,6 +129,24 @@ public class RegistrationService {
         } else if (v != null && !v.isForeignCar()) {
             v.changeStolen();
             vehicleService.editVehicle(v);
+        }
+    }
+
+    private Geometry loadGeoJsonFile(String path) {
+        System.out.printf("Loading %s. . .\n", path);
+        try {
+            InputStreamReader in = new InputStreamReader(ClassLoader.class.getResourceAsStream(path));
+            Geometry ret = json.read(in);
+            in.close();
+            return ret;
+        } catch (ParseException ex) {
+            //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.printf("Please verify the integrity of %s.\n", path);
+            System.exit(1);
+            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(RegistrationService.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }

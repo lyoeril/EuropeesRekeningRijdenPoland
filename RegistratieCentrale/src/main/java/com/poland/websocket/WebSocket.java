@@ -19,8 +19,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import javax.ws.rs.PathParam;
 
-@ServerEndpoint("/policeSocket")
+@ServerEndpoint("/policeSocket/{uuid}")
 public class WebSocket {
 
     private RegistrationService registrationService;
@@ -31,8 +32,7 @@ public class WebSocket {
     }
 
     @OnOpen
-    public void onOpen(Session session) {
-        SessionLister.getInstance().getSessionMapVehicles().put(session.getId(), new ArrayList<>());
+    public void onOpen(Session session, @PathParam("uuid") String authenticationCode) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -40,18 +40,19 @@ public class WebSocket {
                 while (run) {
                     try {
                         Thread.sleep((long) 10000);
-                        SessionLister.getInstance().getSessionMapVehicles().get(session).forEach((t) -> {
-                            Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(t);
-                            if (v.isStolen()) {
-                                if (v.isForeignCar()) {
+                        Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(authenticationCode);
+                        if (v != null && v.isStolen()) {
+                            if (v.isForeignCar()) {
 //EUROPE THINGS UPDATE LOCATION FROM EXTERNAL APIs
-                                } else {
-                                    PoliceVehicleDTO vehicleTarget = new PoliceVehicleDTO();
-                                    vehicleTarget.fromVehicleLocation(v.getAuthorisationCode(), v.getLocation());
-                                    session.getAsyncRemote().sendObject(vehicleTarget);
-                                }
+                            } else {
+                                PoliceVehicleDTO vehicleTarget = new PoliceVehicleDTO();
+                                vehicleTarget.fromVehicleLocation(v.getAuthorisationCode(), v.getLocation());
+                                session.getAsyncRemote().sendObject(vehicleTarget);
                             }
-                        });
+                        }else{
+                            run = false;
+                            Thread.currentThread().interrupt();
+                        }
                     } catch (InterruptedException e) {
                         run = false;
                         Thread.currentThread().interrupt();
@@ -65,20 +66,19 @@ public class WebSocket {
 
     @OnClose
     public void onClose(Session session) {
-        SessionLister.getInstance().getSessionMapVehicles().remove(session);
         SessionLister.getInstance().getSessionMapRunnable().get(session).interrupt();
         SessionLister.getInstance().getSessionMapRunnable().remove(session);
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        if (SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).contains(message)) {
-            SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).remove(message);
-        } else {
-            Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(message);
-            if (v != null && v.isStolen()) {
-                SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).add(v.getAuthorisationCode());
-            }
-        }
+//        if (SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).contains(message)) {
+//            SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).remove(message);
+//        } else {
+//            Vehicle v = registrationService.getVehicleService().getVehicleByAuthorisationCode(message);
+//            if (v != null && v.isStolen()) {
+//                SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).add(v.getAuthorisationCode());
+//            }
+//        }
     }
 }
