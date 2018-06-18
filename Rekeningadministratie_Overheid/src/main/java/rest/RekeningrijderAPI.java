@@ -10,11 +10,15 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import domain.Invoice;
+import domain.Location;
 import domain.Rekeningrijder;
+import domain.Ride;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
+import dto.DTO_Location;
 import dto.DTO_Rekeningrijder;
+import dto.DTO_Ride;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
@@ -40,6 +44,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import services.InvoiceService;
 import services.RegistrationService;
+import services.RideService;
 import services.UserService;
 
 /**
@@ -59,6 +64,9 @@ public class RekeningrijderAPI {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private RideService rideService;
 
     //TODO
     //Still need to fix User/Kwetteraar difference; Essential to just need 1 databasecall
@@ -194,7 +202,29 @@ public class RekeningrijderAPI {
 
     @GET
     @Produces(APPLICATION_JSON)
+    @Path("rides/vehicle/{id}/date/{year}/{month}")
+    public Response getRidesOfVehicle(
+            @Context HttpHeaders headers,
+            @PathParam("id") long id,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        List<Ride> rides = rideService.getRides(id, year, month);
+        List<DTO_Ride> dtoRides = new ArrayList<>();
+        for (Ride r : rides) {
+            List<DTO_Location> dtoLocations = new ArrayList<>();
+            for(Location l : r.getLocations()) {
+                dtoLocations.add(new DTO_Location(l.getDate().toString(), l.getId(), l.getLatitude(), l.getLongitude()));
+            }
+            dtoRides.add(new DTO_Ride(r.getId(), r.getStartDate().toString(), r.getEndDate().toString(), dtoLocations));
+            return Response.accepted(dtoRides).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
     @Path("/cars")
+
     public Response getCars(@Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
 
@@ -250,7 +280,7 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        if(r == null){
+        if (r == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
         Vehicle v = new Vehicle(vehicleType, licensePlate);
@@ -270,7 +300,7 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        if(r == null){
+        if (r == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
         List<Vehicle> vehicles = r.getOwnedVehicles();
@@ -294,7 +324,7 @@ public class RekeningrijderAPI {
             @PathParam("carId") long carId) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        if(r == null){
+        if (r == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
         for (Vehicle v : r.getOwnedVehicles()) {

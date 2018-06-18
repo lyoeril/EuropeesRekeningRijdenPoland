@@ -45,7 +45,7 @@ public class RideService {
     public RideService() {
     }
     
-    public void getRides(long vehicleId, int month, int year){
+    public List<Ride> getRides(long vehicleId, int month, int year){
         
         System.out.println("Registrationservice :" + registrationService.toString());
         //Vehicle v = registrationService.findVehicleById(vehicleId);
@@ -107,7 +107,7 @@ public class RideService {
         } catch (IOException e) {
             System.out.println("exception" + e.getMessage());
         }
-
+        return new ArrayList<>();
     }
     
     private boolean RequestConnection(
