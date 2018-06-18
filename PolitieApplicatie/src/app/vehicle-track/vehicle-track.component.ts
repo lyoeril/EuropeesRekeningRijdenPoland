@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../_service/http.service';
 import {AgmPolylinePoint} from '@agm/core';
 import {LatLng} from '../_model/LatLng';
+import {TrackingService} from '../_service/tracking.service';
 
 @Component({
   selector: 'app-vehicle-track',
@@ -42,19 +43,23 @@ export class VehicleTrackComponent implements OnInit {
     {latitude: 53.24707253, longitude: 20.03987768}
   ];
 
-  constructor(private route: ActivatedRoute, private http: HttpService) {
+  constructor(private route: ActivatedRoute,
+              private http: HttpService,
+              private websocket: TrackingService) {
     this.route.params.subscribe(params => this.vehicleId = params['id']);
   }
 
   ngOnInit() {
-    // this.getVehicle(this.vehicleId);
+    this.http.findVehicleById(this.vehicleId)
+      .then(
+        vehicle => {
+          this.vehicle = vehicle;
+          this.subscribeTracking();
+        }
+      );
   }
 
-  getVehicle(vehicleId: number) {
-    this.http.findVehicleById(vehicleId)
-      .then(vehicle => {
-        this.vehicle = vehicle;
-        console.log(this.vehicle);
-      });
+  subscribeTracking() {
+    // this.websocket.subscribe(this.vehicle);
   }
 }

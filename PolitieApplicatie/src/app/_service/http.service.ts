@@ -8,7 +8,7 @@ import { VehicleType } from '../_model/VehicleType';
 
 @Injectable()
 export class HttpService {
-    static administrationUrl = 'http://192.168.25.33:8080/Rekeningadministratie_Overheid/api';
+    static administrationUrl = 'http://192.168.25.35:8080/Rekeningadministratie_Overheid/api';
     constructor(private http: Http) { }
 
     getHeaders(): Headers {
@@ -56,7 +56,7 @@ export class HttpService {
             this.post('/login', usercreds)
                 .subscribe(data => {
                     sessionStorage.setItem('token', data.headers.get('Authorization'));
-                    sessionStorage.setItem('password', usercreds.password);
+                    // sessionStorage.setItem('password', usercreds.password);
                     resolve(true);
                 }, error => {
                     if (error.status === 401) {
