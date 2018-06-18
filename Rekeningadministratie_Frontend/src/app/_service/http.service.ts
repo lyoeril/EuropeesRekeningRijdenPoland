@@ -6,10 +6,11 @@ import { Vehicle } from '../_model/Vehicle';
 import { Invoice } from '../_model/Invoice';
 import { Cartracker } from '../_model/Cartracker';
 import { KmRate } from '../_model/KmRate';
+import { User } from '../_model/User';
 
 @Injectable()
 export class HttpService {
-    static administrationUrl = 'http://192.168.25.14:8080/Rekeningadministratie_Overheid/api';
+    static administrationUrl = 'http://192.168.25.33:8080/Rekeningadministratie_Overheid/api';
     constructor(private http: Http) { }
 
     getHeaders(): Headers {
@@ -50,6 +51,19 @@ export class HttpService {
         return this.http.post(`${HttpService.administrationUrl}${url}`, body, { headers: headers });
     }
 
+    put(url: string, body: any, options?: Headers): Observable<Response> {
+        const headers: Headers = this.getHeaders();
+
+        if (options != null) {
+            for (const key of options.keys()) {
+                headers.append(key, options.get(key));
+            }
+        }
+
+        body = this.convertToUrlEncoded(body);
+        return this.http.put(`${HttpService.administrationUrl}${url}`, body, { headers: headers });
+    }
+
 
     // Users ========================================================================================== Users
     login(usercreds: any, options?: Headers): Promise<boolean | string> {
@@ -60,17 +74,22 @@ export class HttpService {
                     this.get('/overheid')
                         .subscribe(data2 => {
                             if (data2.status === 202) {
+                                sessionStorage.setItem('Authorization', data.headers.get('Authorization'));
                                 resolve(true);
                             } else {
                                 sessionStorage.removeItem('token');
                                 resolve(null);
                             }
                         }, error => {
+                            sessionStorage.removeItem('token');
+                            if (error.status === 401) {
+                                resolve('This account is not authorized to login here');
+                            }
                             this.handleError(error); resolve(null);
                         });
                 }, error => {
                     if (error.status === 401) {
-                        resolve('usernamepasswordnomatch');
+                        resolve('Username and password do not match');
                     }
                     this.handleError(error); resolve(null);
                 });
@@ -84,10 +103,70 @@ export class HttpService {
         });
     }
 
+    getUsersByUsername(username: string, options?: Headers): Promise<User[]> {
+        return new Promise(resolve => {
+            this.get('/overheid/rekeningrijders/username/' + username)
+                .subscribe(data => {
+                    const users = [];
+                    data.json().forEach(u => {
+                        users.push(new User(u.id, u.username));
+                    });
+                    resolve(users);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+
+        });
+    }
+
+    getUser(id: number, options?: Headers): Promise<User> {
+        return new Promise(resolve => {
+            this.get('/overheid/rekeningrijders/' + id)
+                .subscribe(data => {
+                    const user = new User(data.json().id, data.json().username);
+                    resolve(user);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+
     // Cartrackers ============================================================================== Cartrackers
     getCartrackers(options?: Headers): Promise<Cartracker[]> {
         return new Promise(resolve => {
             this.get('/overheid/cartrackers')
+                .subscribe(data => {
+                    const cartrackers = [];
+                    data.json().forEach(c => {
+                        cartrackers.push(new Cartracker(c.id, c.hardware));
+                    });
+                    resolve(cartrackers);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+    getCartracker(id: number, options?: Headers): Promise<Cartracker> {
+        return new Promise(resolve => {
+            if (id !== 0) {
+                this.get('/overheid/cartrackers/' + id)
+                    .subscribe(data => {
+                        const cartracker = new Cartracker(data.json().id, data.json().hardware);
+                        resolve(cartracker);
+                    }, error => {
+                        this.handleError(error); resolve(null);
+                    });
+            } else {
+                resolve(null);
+            }
+        });
+    }
+
+    getCartrackersByHardware(hardware: string, options?: Headers): Promise<Cartracker[]> {
+        return new Promise(resolve => {
+            this.get('/overheid/cartrackers/hardware/' + hardware)
                 .subscribe(data => {
                     const cartrackers = [];
                     data.json().forEach(c => {
@@ -117,6 +196,7 @@ export class HttpService {
             this.get('/overheid/invoices')
                 .subscribe(data => {
                     const invoices = [];
+                    console.log(data.json());
                     data.json().forEach(i => {
                         invoices.push(new Invoice(i.id, new Date(i.year, i.month - 1), i.cartrackerId, i.totalAmount, i.status));
                     });
@@ -147,13 +227,31 @@ export class HttpService {
             this.get('/overheid/vehicles')
                 .subscribe(data => {
                     const vehicles = [];
+                    console.log('Vehicles');
                     console.log(data.json());
                     data.json().forEach(v => {
-                        const newVehicle = new Vehicle(v.id, v.licensePlate, v.vehicleType, v.cartrackerId);
-                        v.ownersHistory.forEach(u => {
-                            newVehicle.ownerHistory.push(u);
-                        });
-                        vehicles.push(newVehicle);
+                        this.getCartracker(v.cartrackerId)
+                            .then(cartracker => {
+                                let newVehicle;
+                                if (cartracker !== null) {
+                                    newVehicle = new Vehicle(v.id, v.licensePlate, v.vehicleType,
+                                        new Cartracker(cartracker.id, cartracker.hardware));
+                                } else {
+                                    newVehicle = new Vehicle(v.id, v.licensePlate, v.vehicleType, null);
+                                }
+
+                                v.ownersHistory.forEach(u => {
+                                    this.getUser(u).then(user => {
+                                        if (user !== null) {
+                                            newVehicle.ownerHistory.push(user);
+                                            if (v.ownersHistory[v.ownersHistory.length - 1] === u) {
+                                                newVehicle.currentOwner = user;
+                                            }
+                                        }
+                                    });
+                                });
+                                vehicles.push(newVehicle);
+                            });
                     });
                     resolve(vehicles);
                 }, error => {
@@ -162,12 +260,14 @@ export class HttpService {
         });
     }
 
-    getUser(options?: Headers): Promise<any> {
+    updateVehicle(vehicle: Vehicle, options?: Headers): Promise<any> {
+        const cartrackerId = vehicle.cartracker !== null ? vehicle.cartracker.id : 0;
+        const body = { licensePlate: vehicle.licensePlate, vehicleType: vehicle.vehicleType, cartrackerId: cartrackerId };
         return new Promise(resolve => {
-            this.get('/overheid')
+            this.put('/overheid/vehicles/' + vehicle.id + '/update', body)
                 .subscribe(data => {
                     console.log(data.json());
-                    resolve(data.json());
+                    resolve(true);
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
@@ -175,9 +275,12 @@ export class HttpService {
     }
 
 
-
     // Other ========================================================================================== Other
     handleError(error) {
+        if (error.status === 401) {
+            sessionStorage.clear();
+            location.reload();
+        }
         const message = 'Http Error: ' + error.status + ' - ' + error.statusText;
         console.log(message);
     }

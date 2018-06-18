@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -55,5 +56,12 @@ public class CartrackerJPA implements ICartrackerDAO{
     @Override
     public List<Cartracker> findAll() {
         return em.createNamedQuery("Cartracker.findAll").getResultList();
+    }
+
+    @Override
+    public List<Cartracker> findByHardware(String hardware) {
+        Query q = em.createNamedQuery("Cartracker.findByHardware");
+        q.setParameter("hardware", "%" + hardware + "%");
+        return (List<Cartracker>) q.getResultList();
     }
 }

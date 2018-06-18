@@ -6,6 +6,7 @@
 package dao.interfaces;
 
 import domain.Rekeningrijder;
+import java.util.List;
 
 /**
  *
@@ -16,4 +17,5 @@ public interface IRekeningrijderDAO {
     void edit(Rekeningrijder rekeningrijder);
     void delete(Rekeningrijder rekeningrijder);
     Rekeningrijder findById(long id);
+    List<Rekeningrijder> findByUsername(String username);
 }
