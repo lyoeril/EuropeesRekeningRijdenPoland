@@ -58,7 +58,6 @@ public class LocationDAOImpl extends BasicDAOImpl<Location> implements LocationD
             query.setParameter("longitude", longitude);
             query.setParameter("authorisationCode", authorisationCode);
             query.execute();
-//            long var = (long) query.getOutputParameterValue("succeeded");
             return true;
         } catch (Exception ise) {
             handleExceptions(ise);
