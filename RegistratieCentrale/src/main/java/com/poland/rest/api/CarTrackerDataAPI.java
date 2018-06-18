@@ -61,15 +61,6 @@ public class CarTrackerDataAPI {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
 
-        //Default data (database empty)
-        Ride r = new Ride(new Date(), new Vehicle());
-        r.setId(1);
-        Location l = new Location(new Date(), 50, 50, r);
-        l.setId(1);
-        r.addLocation(l);
-        rides.add(r);
-        //
-
         List<RideDTO> rideTargetList = new ArrayList<>();
         DTOConverter.toRideDTOList(rides, rideTargetList);
 
