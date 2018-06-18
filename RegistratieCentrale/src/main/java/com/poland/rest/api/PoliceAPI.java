@@ -40,7 +40,7 @@ public class PoliceAPI {
     }
 
     @PUT
-    @Path("/vehicle/{uuid}/reportStolen")
+    @Path("/europe/{uuid}/reportStolen")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
     public Response reportStolenVehicle(String currentLocation, @PathParam("uuid") String uuid) {
@@ -63,7 +63,7 @@ public class PoliceAPI {
     }
 
     @GET
-    @Path("/vehicle/{uuid}/location")
+    @Path("/europe/{uuid}/location")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLocationStolenVehicle(@PathParam("uuid") String uuid) {
         if (uuid != null && !uuid.equals("")) {
