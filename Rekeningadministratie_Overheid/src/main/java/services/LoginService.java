@@ -36,7 +36,7 @@ public class LoginService {
         return password.equals(user.getPassword());
     }
 
-    public String issueToken(String login, HashSet<UserGroup> groups) {
+    public String issueToken(String login, List<UserGroup> groups) {
 
         String[] test = new String[0];
         if (groups != null) {

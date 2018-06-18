@@ -12,20 +12,20 @@ import org.junit.Test;
  */
 public class UserGroupJPATest {
       
-    private static UserJPA userjpa;
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Rekeningadministratie_Overheid_Test");
+    private static CartrackerJPA cartracker;
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Rekeningadministratie_Overheid_test");
     private static EntityManager em;
     
 @Before
 public void setUp() {
-        userjpa = new UserJPA();
+        cartracker = new CartrackerJPA();
         em = emf.createEntityManager();
-        userjpa.setEm(em); 
+        cartracker.setEm(em); 
     }
 
-//@Test
-//public void testSetEm() throws Exception {
-//        System.out.println("");
-//        
-//    }  
+@Test
+public void testSetEm() throws Exception {
+        System.out.println("");
+        
+    }  
 }

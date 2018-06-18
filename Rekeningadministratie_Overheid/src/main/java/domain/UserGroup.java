@@ -2,8 +2,8 @@ package domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,7 +25,7 @@ public class UserGroup implements Serializable {
                     referencedColumnName = "usergroup"),
             inverseJoinColumns = @JoinColumn(name = "username",
                     referencedColumnName = "username"))
-    private Set<User> users = new HashSet<>();
+    private List<User> users = new ArrayList<>();
 
     public String getGroupName() {
         return usergroup;
@@ -36,11 +36,11 @@ public class UserGroup implements Serializable {
     }
 
     @JsonIgnore
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 

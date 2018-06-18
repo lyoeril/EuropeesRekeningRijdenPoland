@@ -7,7 +7,9 @@ package dto;
 
 import domain.User;
 import domain.UserGroup;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
 
 /**
@@ -19,7 +21,7 @@ public class DTO_User {
     private long id;
     private String username;
     private String email;
-    private HashSet<UserGroup> groups =  new HashSet<>();
+    private List<UserGroup> groups =  new ArrayList<>();
     private boolean km_prijs;
 
     public DTO_User(User user) {
@@ -55,11 +57,11 @@ public class DTO_User {
     }
 
     @JsonbTransient
-    public HashSet<UserGroup> getGroups() {
+    public List<UserGroup> getGroups() {
         return groups;
     }
 
-    public void setGroups(HashSet<UserGroup> groups) {
+    public void setGroups(List<UserGroup> groups) {
         this.groups = groups;
     }
 

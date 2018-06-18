@@ -1,7 +1,8 @@
 package domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.inject.Model;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
@@ -37,9 +38,10 @@ public class User implements Serializable{
     private String email;
     private boolean km_prijs;
     
+    
     @ManyToMany(mappedBy = "users", cascade = ALL)
-    private HashSet<UserGroup> groups =  new HashSet<>();
-
+    private List<UserGroup> groups = new ArrayList<>();
+    
     public User() {
     }
 
@@ -66,11 +68,11 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public HashSet<UserGroup> getGroups() {
+    public List<UserGroup> getGroups() {
         return groups;
     }
 
-    public void setGroups(HashSet<UserGroup> groups) {
+    public void setGroups(List<UserGroup> groups) {
         this.groups = groups;
     }
 
