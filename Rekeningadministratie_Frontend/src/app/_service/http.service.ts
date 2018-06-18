@@ -7,10 +7,11 @@ import { Invoice } from '../_model/Invoice';
 import { Cartracker } from '../_model/Cartracker';
 import { KmRate } from '../_model/KmRate';
 import { User } from '../_model/User';
+import { VehicleType } from '../_model/VehicleType';
 
 @Injectable()
 export class HttpService {
-    static administrationUrl = 'http://192.168.25.33:8080/Rekeningadministratie_Overheid/api';
+    static administrationUrl = 'http://192.168.25.35:8080/Rekeningadministratie_Overheid/api';
     constructor(private http: Http) { }
 
     getHeaders(): Headers {
@@ -207,14 +208,34 @@ export class HttpService {
         });
     }
 
-    // Invoices ==================================================================================== Invoices
+    // KmRates ==================================================================================== KmRates
     getKmRates(options?: Headers): Promise<KmRate[]> {
         return new Promise(resolve => {
             this.get('/overheid/kmrates')
                 .subscribe(data => {
                     const kmRates = [];
                     console.log(data.json());
+                    data.json().forEach(k => {
+                        kmRates.push(new KmRate(k.id, k.region, VehicleType.AUTOBUS, k.rates.AUTOBUS));
+                        kmRates.push(new KmRate(k.id, k.region, VehicleType.PASSENGER_CAR, k.rates.PASSENGER_CAR));
+                        kmRates.push(new KmRate(k.id, k.region, VehicleType.TRUCK, k.rates.TRUCK));
+                        kmRates.push(new KmRate(k.id, k.region, VehicleType.UNKNOWN, k.rates.UNKNOWN));
+                        kmRates.push(new KmRate(k.id, k.region, VehicleType.VAN, k.rates.VAN));
+                    });
                     resolve(kmRates);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+    updateKmRate(kmRate: KmRate, options?: Headers): Promise<KmRate> {
+        const body = { rate: kmRate.rate };
+        return new Promise(resolve => {
+            this.put('/overheid/kmrates/' + kmRate.region + '/' + kmRate.vehicleType.toString(), body)
+                .subscribe(data => {
+                    console.log(data.json());
+                    resolve(new KmRate(data.json().id, data.json().region, data.json().vehicleType, data.json().rate));
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
