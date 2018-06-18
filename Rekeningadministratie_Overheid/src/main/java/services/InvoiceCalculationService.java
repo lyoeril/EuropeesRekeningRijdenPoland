@@ -183,7 +183,7 @@ public class InvoiceCalculationService {
             System.out.println("Lau");
            // registrationService.updateRekeningrijder(rekeningrijder);
             System.out.println("rent");
-            
+            System.out.println("rekeningrijder: " + rekeningrijder);
             rekeningrijder.getInvoices().remove(check);
             registrationService.updateRekeningrijder(rekeningrijder);
             

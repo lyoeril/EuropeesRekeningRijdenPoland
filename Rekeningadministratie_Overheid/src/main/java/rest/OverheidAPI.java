@@ -68,13 +68,13 @@ import services.UserService;
 @Stateless
 @Produces(APPLICATION_JSON)
 public class OverheidAPI {
-
+    
     @Inject
     private InvoiceService invoiceService;
-
+    
     @Inject
     private RegistrationService registrationService;
-
+    
     @Inject
     private UserService userService;
     
@@ -98,7 +98,7 @@ public class OverheidAPI {
         if (!isOverheid(securityContext)) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
-
+        
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
         if (u != null) {
@@ -112,7 +112,7 @@ public class OverheidAPI {
 //        }
         return Response.status(Status.FORBIDDEN).build();
     }
-
+    
     @GET
     @Path("rekeningrijders/{id}")
     public Response getRekeningrijderById(
@@ -123,7 +123,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @GET
     @Path("rekeningrijders/username/{username}")
     public Response getRekeningrijderByUsername(
@@ -138,25 +138,25 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @GET
     @Produces(APPLICATION_JSON)
     @Path("cartrackers")
     public Response getCartrackers() {
-
+        
         List<Cartracker> cartrackers = registrationService.findAllCartrackers();
         if (cartrackers != null) {
-
+            
             List<DTO_Cartracker> dtoCartrackers = new ArrayList<>();
             for (Cartracker c : cartrackers) {
                 dtoCartrackers.add(new DTO_Cartracker(c));
             }
-
+            
             return Response.accepted(dtoCartrackers).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @POST
     @Produces(APPLICATION_JSON)
     @Path("cartrackers/new")
@@ -169,20 +169,20 @@ public class OverheidAPI {
             return Response.accepted(new DTO_Cartracker(cartracker)).build();
         }
         return Response.status(Status.BAD_REQUEST).build();
-
+        
     }
-
+    
     @GET
     @Path("cartrackers/{id}")
     public Response getCartrackerById(@PathParam("id") long id) {
         Cartracker c = registrationService.findCartrackerById(id);
-
+        
         if (c != null) {
             return Response.accepted(new DTO_Cartracker(c)).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @GET
     @Path("cartrackers/hardware/{hardware}")
     public Response getCartrackersByHardware(
@@ -197,7 +197,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @PUT
     @Produces(APPLICATION_JSON)
     @Path("cartrackers/{id}/update")
@@ -212,7 +212,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
-
+    
     @GET
     @Path("kmrates")
     public Response getKMRates() {
@@ -221,7 +221,7 @@ public class OverheidAPI {
         System.out.println("2");
         if (kmRates != null) {
             System.out.println("3");
-
+            
             List<DTO_KMRate> rates = new ArrayList<DTO_KMRate>();
             for (KMRate k : kmRates) {
                 rates.add(new DTO_KMRate(k));
@@ -230,7 +230,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.FORBIDDEN).build();
     }
-
+    
     @POST
     @Path("kmrates/new")
     public Response addKMRate(
@@ -238,31 +238,13 @@ public class OverheidAPI {
             @FormParam("region") String region,
             @FormParam("vehicleType") VehicleType vehicleType,
             @FormParam("rate") double rate) {
-
+        
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         User u = this.getUserFromToken(token);
-        if(!u.isKm_prijs() || u == null) {
+        if (!u.isKm_prijs() || u == null) {
             return Response.status(Status.UNAUTHORIZED).build();
-        }       
-
-        KMRate k = new KMRate(region);
-        k.addRatePerVehicleType(vehicleType, rate);
-
-        try {
-            invoiceService.addKMRate(k);
-            return Response.accepted(k).build();
-        } catch (Exception e) {
-            return Response.status(Status.FORBIDDEN).build();
         }
-    }
-
-    @PUT
-    @Produces(APPLICATION_JSON)
-    @Path("kmrates/{region}/{vehicleType}")
-    public Response getKMRateByRegion(
-            @PathParam("region") String region,
-            @PathParam("vehicleType") VehicleType vehicleType,
-            @FormParam("rate") double rate) {
+        
         try {
             KMRate kmrate = invoiceService.findKMRateByRegion(region);
             Map<VehicleType, Double> rates = kmrate.getRatePerVehicleType();
@@ -271,10 +253,41 @@ public class OverheidAPI {
             }
             rates.put(vehicleType, rate);
             kmrate.setRatePerVehicleType(rates);
-
+            
             invoiceService.updateKMRate(kmrate);
-            return Response.accepted(kmrate).build();
-
+            return Response.accepted(new DTO_KMRate(kmrate)).build();
+            
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Produces(APPLICATION_JSON)
+    @Path("kmrates/{region}/{vehicleType}")
+    public Response setKMRateByRegionVehicleType(
+            @Context HttpHeaders headers,
+            @PathParam("region") String region,
+            @PathParam("vehicleType") VehicleType vehicleType,
+            @FormParam("rate") double rate) {
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        User u = this.getUserFromToken(token);
+        if (!u.isKm_prijs() || u == null) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+        
+        try {
+            KMRate kmrate = invoiceService.findKMRateByRegion(region);
+            Map<VehicleType, Double> rates = kmrate.getRatePerVehicleType();
+            if (rates.containsKey(vehicleType)) {
+                rates.remove(vehicleType);
+            }
+            rates.put(vehicleType, rate);
+            kmrate.setRatePerVehicleType(rates);
+            
+            invoiceService.updateKMRate(kmrate);
+            return Response.accepted(new DTO_KMRate(kmrate)).build();
+            
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST).build();
         }
@@ -317,25 +330,28 @@ public class OverheidAPI {
 //    public Response reCalculateInvoice(){
 //        
 //    }
-    
     @GET
     @Produces(APPLICATION_JSON)
     @Path("invoices/{rekeningrijderId}/{vehicleId}/{year}/{month}")
     public Response calculateInvoice(
-            @PathParam("rekengingrijderId") long rekeningrijderId,
+            @PathParam("rekeningrijderId") long rekeningrijderId,
             @PathParam("vehicleId") long vehicleId,
             @PathParam("year") int year,
             @PathParam("month") int month) {
         List<Ride> rides = rideService.getRides(vehicleId, month, year);
         Rekeningrijder rekeningrijder = registrationService.findRekeningrijderById(rekeningrijderId);
+        if(rekeningrijder == null){
+            return Response.status(Status.BAD_REQUEST).build();
+        }
         
         VehicleType type = registrationService.findVehicleById(vehicleId).getVehicleType();
         Invoice i = ics.calculateInvoice(vehicleId, month, year, rekeningrijder, rides, type);
         System.out.println("invoice ending: " + i);
         System.out.println("(0)-(0)");
+        
         return Response.accepted(new DTO_Invoice(i)).build();
     }
-
+    
     @GET
     @Path("invoices/{id}")
     public Response getInvoiceById(
@@ -346,7 +362,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @PUT
     @Path("invoices/{id}/update")
     public Response updateInvoice(
@@ -360,7 +376,7 @@ public class OverheidAPI {
         }
         return Response.notModified("Couldn't update invoice").build();
     }
-
+    
     @GET
     @Path("invoices/cartracker/{cartrackerId}/{year}/{month}")
     public Response getInvoicesByCartrackerYearMonth(
@@ -373,7 +389,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.FORBIDDEN).build();
     }
-
+    
     @GET
     @Path("invoices/rekeningrijder/{id}")
     public Response getInvoicesByRekeningrijder(
@@ -386,7 +402,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
-
+    
     @GET
     @Path("invoices/invoicestatus/{status}")
     public Response getInvoicesByStatus(
@@ -398,7 +414,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
-
+    
     @GET
     @Path("vehicles")
     public Response getVehicles() {
@@ -412,7 +428,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_ACCEPTABLE).build();
     }
-
+    
     @GET
     @Path("vehicles/{id}")
     public Response getVehicleById(
@@ -423,7 +439,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
-
+    
     @PUT
     @Path("vehicles/{id}/update")
     public Response updateVehicle(
@@ -440,7 +456,7 @@ public class OverheidAPI {
             if (vehicleType != null) {
                 v.setVehicleType(vehicleType);
             }
-
+            
             if (c != null) {
                 v.setCartracker(c);
             }
@@ -449,7 +465,7 @@ public class OverheidAPI {
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
-
+    
     private String getUsernameFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512("supersecret");
@@ -464,32 +480,32 @@ public class OverheidAPI {
         }
         return null;
     }
-
+    
     private Rekeningrijder getRekeningrijderFromUsername(String username) {
         User u = userService.findByUsername(username).get(0);
-
+        
         if (u == null) {
             return null;
         }
         Rekeningrijder rekeningrijder = registrationService.findRekeningrijderById(u.getId());
         return rekeningrijder;
     }
-
+    
     private User getUserFromUsername(String username) {
         User u = userService.findByUsername(username).get(0);
         return u;
     }
-
+    
     private User getUserFromToken(String token) {
         String username = this.getUsernameFromToken(token);
         return this.getUserFromUsername(username);
     }
-
+    
     private Rekeningrijder getRekeningrijderFromToken(String token) {
         String username = this.getUsernameFromToken(token);
         return this.getRekeningrijderFromUsername(username);
     }
-
+    
     private boolean isOverheid(SecurityContext context) {
         System.out.println(context.isUserInRole("OVERHEID"));
         if (context.isUserInRole("OVERHEID")) {
@@ -497,7 +513,7 @@ public class OverheidAPI {
         }
         return false;
     }
-
+    
     private List<DTO_Invoice> toDTOInvoiceList(List<Invoice> invoices) {
         List<DTO_Invoice> dtoInvoices = new ArrayList<>();
         for (Invoice i : invoices) {
