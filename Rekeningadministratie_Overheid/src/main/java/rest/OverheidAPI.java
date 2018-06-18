@@ -482,29 +482,6 @@ public class OverheidAPI {
         return Response.status(Status.BAD_REQUEST).build();
     }
 
-    @PUT
-    @Path("vehicles/{id}/link")
-    public Response linkVehicle(
-            @PathParam("id") long id,
-            @FormParam("cartrackerUUID") String cartrackerUUID) {
-        Cartracker c = null;
-        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(cartrackerUUID);
-        if (cartrackers.size() >= 1) {
-            c = cartrackers.get(0);
-        } else {
-            return Response.status(Status.BAD_REQUEST).build();
-        }
-
-        Vehicle v = registrationService.findVehicleById(id);
-        if (v != null) {
-            v.setCartracker(c);
-            registrationService.updateCartracker(c);
-            return Response.accepted(new DTO_Vehicle(v)).build();
-        }
-        return Response.status(Status.BAD_REQUEST).build();
-
-    }
-
     private String getUsernameFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512("supersecret");
@@ -518,6 +495,30 @@ public class OverheidAPI {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @PUT
+    @Path("vehicles/{id}/link")
+    public Response linkVehicle(
+            @PathParam("id") long id,
+            @FormParam("cartrackerUUID") String cartrackerUUID) {
+        Cartracker c = null;
+        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(cartrackerUUID);
+        if (cartrackers.size() >= 1) {
+            c = cartrackers.get(0);
+        } else {
+            registrationService.addCartracker(new Cartracker(cartrackerUUID));
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        Vehicle v = registrationService.findVehicleById(id);
+        if (v != null) {
+            v.setCartracker(c);
+            registrationService.updateCartracker(c);
+            return Response.accepted(new DTO_Vehicle(v)).build();
+        } 
+        return Response.status(Status.BAD_REQUEST).build();
+
     }
 
     private Rekeningrijder getRekeningrijderFromUsername(String username) {
