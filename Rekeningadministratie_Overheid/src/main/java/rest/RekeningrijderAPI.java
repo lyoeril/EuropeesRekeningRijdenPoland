@@ -10,7 +10,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import domain.Invoice;
+import domain.Location;
 import domain.Rekeningrijder;
+import domain.Ride;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
@@ -38,6 +40,7 @@ import javax.ws.rs.core.HttpHeaders;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import services.InvoiceCalculationService;
 import services.InvoiceService;
 import services.RegistrationService;
 import services.UserService;
@@ -59,6 +62,9 @@ public class RekeningrijderAPI {
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private InvoiceCalculationService ics;
 
     //TODO
     //Still need to fix User/Kwetteraar difference; Essential to just need 1 databasecall
@@ -74,7 +80,7 @@ public class RekeningrijderAPI {
         if (username != null) {
             User u = userService.findByUsername(username).get(0);
             Rekeningrijder r = registrationService.findRekeningrijderById(u.getId());
-
+            System.out.println("Rekeningrijder ->> " + r);
             DTO_Rekeningrijder dto = new DTO_Rekeningrijder(r);
             return Response.accepted(dto).build();
         }
@@ -305,6 +311,26 @@ public class RekeningrijderAPI {
             }
         }
         return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("invoicecalc")
+    public Response calcInvoice(){
+        Calendar c1 = new GregorianCalendar(2018, 01, 01);
+        Location l1 = new Location(1L, c1, 52.40533, 19.27417);
+        Location l2 = new Location(2L, c1, 52.23478, 19.17059);
+        
+        List<Ride> rides = new ArrayList<Ride>();
+        Ride r = new Ride(1L, c1, c1);
+        List<Location> locations = new ArrayList<>();
+        locations.add(l1);
+        locations.add(l2);
+        r.setLocations(locations);
+        rides.add(r);
+        
+        Invoice returnable = ics.calculateInvoice(3L, 1, 2018, new Rekeningrijder(), rides, VehicleType.VAN);
+        return Response.accepted(returnable).build();
     }
 
     private String getUsernameFromToken(String token) {
