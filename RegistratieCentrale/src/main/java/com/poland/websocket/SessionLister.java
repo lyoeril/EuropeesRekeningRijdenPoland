@@ -1,7 +1,5 @@
 package com.poland.websocket;
 
-import javax.websocket.Session;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

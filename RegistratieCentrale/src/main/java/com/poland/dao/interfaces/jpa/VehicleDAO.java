@@ -22,11 +22,7 @@ public interface VehicleDAO extends BasicDAO<Vehicle> {
 
     List<Ride> getRidesByDate(Date startDate, Date endDate, long id);
 
-    void addRide(Ride ride);
-
-    void removeRide(long id);
-
     Vehicle getVehicleByAuthorisationCode(String authorisationCode);
-    
+
     List<Vehicle> getVehiclesIfStolen();
 }

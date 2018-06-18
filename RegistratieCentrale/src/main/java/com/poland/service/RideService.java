@@ -10,8 +10,6 @@ import com.poland.dao.interfaces.jpa.RideDAO;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -49,19 +47,6 @@ public class RideService {
         }
     }
 
-//    public boolean addLocation(long rideId, long locationId) {
-//        if (rideId != 0L && locationId > 0L) {
-//            return rideDAO.addLocation(rideId, locationId);
-//        }
-//        return false;
-//    }
-//
-//    public boolean removeLocation(long rideId, long locationId) {
-//        if (rideId != 0L && locationId > 0L) {
-//            return rideDAO.removeLocation(rideId, locationId);
-//        }
-//        return false;
-//    }
     public Ride createRide(Ride ride) {
         try {
             if (rideDAO.find(ride.getId()) == null) {

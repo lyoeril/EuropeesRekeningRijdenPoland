@@ -38,24 +38,6 @@ public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO 
     }
 
     @Override
-    public void addRide(Ride ride) {
-        try {
-            em.persist(ride);
-        } catch (IllegalStateException ise) {
-            handleExceptions(ise);
-        }
-    }
-
-    @Override
-    public void removeRide(long id) {
-        try {
-            em.remove(id);
-        } catch (IllegalStateException ise) {
-            handleExceptions(ise);
-        }
-    }
-
-    @Override
     public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
         Vehicle vehicle = null;
         try {

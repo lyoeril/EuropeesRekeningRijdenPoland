@@ -6,7 +6,6 @@
 package com.poland.dto.entities;
 
 import com.poland.entities.Location;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**

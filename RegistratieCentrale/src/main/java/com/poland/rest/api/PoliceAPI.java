@@ -5,7 +5,6 @@
  */
 package com.poland.rest.api;
 
-import com.poland.dto.entities.BasicLocationDTO;
 import com.poland.dto.entities.DTOConverter;
 import com.poland.dto.entities.PoliceVehicleDTO;
 import com.poland.entities.Location;
@@ -55,6 +54,7 @@ public class PoliceAPI {
 
                 l = new Location(new Date(), lat, lon, null);
             } catch (JSONException ex) {
+                //Continues report
             }
             this.registrationService.reportStolenVehicle(uuid, l);
             return Response.ok().build();

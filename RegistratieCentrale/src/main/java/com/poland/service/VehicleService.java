@@ -50,19 +50,10 @@ public class VehicleService {
         vehicleDAO.remove(vehicle);
     }
 
-//    public void addRide(Ride ride) {
-//        Vehicle vehicle = vehicleDAO.find(ride.getVehicle().getId());
-//        vehicle.getRides().add(ride);
-//
-//        vehicleDAO.edit(vehicle);
-//    }
     public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
         return vehicleDAO.getVehicleByAuthorisationCode(authorisationCode);
     }
 
-//    public void removeRide(long id) {
-//        vehicleDAO.removeRide(id);
-//    }
     public List<Ride> getAllRidesByVehicle(long id) {
         return vehicleDAO.getAllRidesByVehicleId(id);
     }
