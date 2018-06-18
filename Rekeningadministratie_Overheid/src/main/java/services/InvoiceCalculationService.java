@@ -148,10 +148,10 @@ public class InvoiceCalculationService {
                 System.out.println("Total Price: " + totalPrice);
 
                 Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
+                System.out.println("New Invoice adding...");
                 invoiceService.addInvoice(invoice);
                 return invoice;
                 
-//            invoiceService.addInvoice(i);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -3,6 +3,8 @@
 //import domain.Cartracker;
 //import java.util.List;
 //import javax.persistence.EntityManager;
+//import javax.persistence.EntityManagerFactory;
+//import javax.persistence.Persistence;
 //import org.junit.After;
 //import org.junit.Before;
 //import org.junit.Test;
@@ -13,39 +15,36 @@
 // * @author Laurent
 // */
 //public class CartrackerJPATest {
-//    
-//    public CartrackerJPATest() {
-//    }
-//    
+//
+//    private static CartrackerJPA cartracker;
+//    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Rekeningadministratie_Overheid_test");
+//    private static EntityManager em;
+//
 //    @Before
 //    public void setUp() {
+//        cartracker = new CartrackerJPA();
+//        em = emf.createEntityManager();
+//        cartracker.setEm(em);
 //    }
+//
+//    @Test
+//    public void testSetEm() throws Exception {
 //    
-//    @After
-//    public void tearDown() {
+//
 //    }
 //
 //    /**
-//     * Test of setEm method, of class CartrackerJPA.
+//     * Test of create method, of class CartrackerJPA.
 //     */
 //    @Test
-//    public void testSetEm() throws Exception {
-//        System.out.println("testTestTEST_");
-//        
+//    public void testCreate() throws Exception {
+//    System.out.println("create");
+//        Cartracker c = new Cartracker("test");
+//        c.setId(1L);
+//        cartracker.create(c);
+//        Cartracker result = cartracker.findById(1L);
+//        System.out.println("result :  + " + result.getHardware());
 //    }
-//
-////    /**
-////     * Test of create method, of class CartrackerJPA.
-////     */
-////    @Test
-////    public void testCreate() throws Exception {
-////        System.out.println("create");
-////        Cartracker cartracker = null;
-////        CartrackerJPA instance = new CartrackerJPA();
-////        instance.create(cartracker);
-////        // TODO review the generated test code and remove the default call to fail.
-////        fail("The test case is a prototype.");
-////    }
 ////
 ////    /**
 ////     * Test of edit method, of class CartrackerJPA.
@@ -101,5 +100,4 @@
 ////        // TODO review the generated test code and remove the default call to fail.
 ////        fail("The test case is a prototype.");
 ////    }
-//    
 //}

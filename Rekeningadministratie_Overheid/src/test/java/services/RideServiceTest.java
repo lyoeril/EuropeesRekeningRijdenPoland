@@ -48,7 +48,7 @@ public class RideServiceTest {
     @Test
     public void testGetRides() {
         System.out.println("isRideSErviceNull? " + rideService);
-        rideService.getRides(1L, 05, 2018);
+//        rideService.getRides(1L, 05, 2018);
     }
 
 }

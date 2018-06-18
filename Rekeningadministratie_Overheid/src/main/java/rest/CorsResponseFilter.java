@@ -18,9 +18,12 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class CorsResponseFilter implements ContainerResponseFilter{
-
+    
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+        
+        System.out.println("URL " + requestContext.getUriInfo().getBaseUri());
+        
         responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://192.168.25.14");
         responseContext.getHeaders().add("Access-Control-Allow-Headers",
                 "Origin, Access-Control-Allow-Origin, Content-Type, Accept, Authorization");
