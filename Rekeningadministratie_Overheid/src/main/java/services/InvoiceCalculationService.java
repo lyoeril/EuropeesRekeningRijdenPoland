@@ -13,9 +13,12 @@ import domain.Rekeningrijder;
 import domain.Ride;
 import enums.VehicleType;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.locationtech.jts.algorithm.distance.DistanceToPoint;
@@ -39,6 +42,12 @@ public class InvoiceCalculationService {
 
     @Inject
     private InvoiceService invoiceService;
+
+    @Inject
+    private RegistrationService registrationService;
+
+    @Inject
+    private LoadGeoJSONFiles loadGeoJSONFiles;
 
     public InvoiceCalculationService() {
         this.json = new GeoJsonReader();
@@ -78,10 +87,18 @@ public class InvoiceCalculationService {
         Location lastLocation = null;
 
         double totalPrice = 0.0;
-        
+
         /**
          * Looping through every ride in Month
          */
+        Map<String, Geometry> regionsGeometry = new HashMap<>();
+        regionsGeometry = loadGeoJSONFiles.getRegions();
+
+        System.out.println("RegionsGEOMETRY TESTING: " + regionsGeometry);
+        for (Map.Entry<String, Geometry> entry : regionsGeometry.entrySet()) {
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+
         for (Ride ride : rides) {
             List<Location> locations = ride.getLocations();
             try {
@@ -93,13 +110,12 @@ public class InvoiceCalculationService {
                     double latitude = l.getLatitude();
                     double longitude = l.getLongitude();
 
-                    //System.out.println("Found latitude: " + latitude + " AND longitude: " + longitude);
                     String pointRegion = "";
-                    for (String region : jsonfiles) {
-                        this.polyService = new PolygonService(loadGeoJsonFile(region));
+                    for (Map.Entry<String, Geometry> entry : regionsGeometry.entrySet()) {
+                        this.polyService = new PolygonService(entry.getValue());
                         boolean isInside = this.polyService.isInside(longitude, latitude);
                         if (isInside) {
-                            pointRegion = region;
+                            pointRegion = entry.getKey();
                         }
                     }
 
@@ -149,9 +165,21 @@ public class InvoiceCalculationService {
 
                 Invoice invoice = new Invoice(cartrackerId, totalPrice, year, month, rekeningrijder);
                 System.out.println("New Invoice adding...");
+
+                Invoice check = invoiceService.findInvoiceByCartrackerYearMonth(cartrackerId, year, month);
+                if (check != null) {
+                    invoiceService.updateInvoice(invoice);
+                    rekeningrijder.getInvoices().remove(check);
+                    rekeningrijder.getInvoices().add(invoice);
+                    registrationService.updateRekeningrijder(rekeningrijder);
+                    return invoice;
+                }
+
                 invoiceService.addInvoice(invoice);
+                rekeningrijder.getInvoices().add(invoice);
+                registrationService.updateRekeningrijder(rekeningrijder);
                 return invoice;
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,6 +192,9 @@ public class InvoiceCalculationService {
     private Geometry loadGeoJsonFile(String path) {
 //        System.out.printf("Loading %s. . .\n", path);
         try {
+            System.out.println("path: " + path);
+            InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+            System.out.println("is: " + is);
             InputStreamReader in = new InputStreamReader(ClassLoader.class.getResourceAsStream(path));
             Geometry ret = json.read(in);
             in.close();
