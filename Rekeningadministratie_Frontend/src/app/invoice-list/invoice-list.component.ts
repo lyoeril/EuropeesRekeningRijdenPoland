@@ -72,6 +72,9 @@ export class InvoiceListComponent implements OnInit {
     }
 
     recalculateInvoice(invoice: Invoice) {
-        console.log('Recalculating...');
+        this.http.recalculateInvoice(invoice)
+            .then(response => {
+                console.log(response);
+            });
     }
 }

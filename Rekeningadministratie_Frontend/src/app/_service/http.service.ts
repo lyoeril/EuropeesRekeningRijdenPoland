@@ -197,11 +197,29 @@ export class HttpService {
             this.get('/overheid/invoices')
                 .subscribe(data => {
                     const invoices = [];
-                    console.log(data.json());
                     data.json().forEach(i => {
-                        invoices.push(new Invoice(i.id, new Date(i.year, i.month - 1), i.cartrackerId, i.totalAmount, i.status));
+                        this.getUser(i.rekeningrijderId)
+                            .then(user => {
+                                invoices.push(new Invoice(i.id, new Date(i.year, i.month - 1),
+                                    i.cartrackerId, i.totalAmount, i.status, user));
+                            });
                     });
                     resolve(invoices);
+                }, error => {
+                    this.handleError(error); resolve(null);
+                });
+        });
+    }
+
+    recalculateInvoice(invoice: Invoice, options?: Headers): Promise<Invoice> {
+        const body = {};
+        const year = invoice.date.getFullYear();
+        const month = invoice.date.getMonth() - 1;
+        return new Promise(resolve => {
+            this.post('/overheid/invoices/' + invoice.user.id + '/' + invoice.cartrackerId + '/' + year + '/' + month, body)
+                .subscribe(data => {
+                    console.log(data);
+                    resolve(null);
                 }, error => {
                     this.handleError(error); resolve(null);
                 });

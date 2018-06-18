@@ -39,6 +39,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Date</th>
+                <th scope="col">User</th>
                 <th scope="col">Cartracker</th>
                 <th scope="col">Total Sum</th>
                 <th scope="col">Status</th>
@@ -49,6 +50,7 @@
             <tr *ngFor="let invoice of filteredInvoices; let i=index">
                 <th *ngIf="i < listLimit" scope="row">{{invoice.id}}</th>
                 <td *ngIf="i < listLimit">{{invoice.dateToString()}}</td>
+                <td *ngIf="i < listLimit">{{invoice.user.username}}</td>
                 <td *ngIf="i < listLimit">{{invoice.cartrackerId}}</td>
                 <td *ngIf="i < listLimit">{{invoice.totalSumToString()}}</td>
                 <td *ngIf="i < listLimit">{{invoice.status}}</td>
