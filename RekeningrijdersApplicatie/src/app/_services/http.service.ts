@@ -157,7 +157,7 @@ export class HttpService {
         const year = invoice.date.getFullYear();
         const month = invoice.date.getMonth() - 1;
         return new Promise(resolve => {
-            this.get('/rides/cartracker/' + invoice.cartrackerId + '/date/' + year + '/' + month)
+            this.get('/rekeningrijder/rides/cartracker/' + invoice.cartrackerId + '/date/' + year + '/' + month)
                 .subscribe(data => {
                     console.log(data.json());
                 });
