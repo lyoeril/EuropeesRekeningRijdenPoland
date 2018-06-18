@@ -67,14 +67,19 @@ export class InvoiceComponent implements OnInit {
             .then(invoice => {
                 this.invoice = invoice;
 
-                console.log(this.invoice);
-                console.log(this.invoice.status.toLowerCase());
-                console.log(Status.OPEN);
+                this.getRides();
                 if (!this.didPaypalScriptLoad && this.invoice.status.toLowerCase() === Status.OPEN) {
                     this.loadPaypalScript().then(() => {
                         paypal.Button.render(this.paypalConfig, '#paypal-button');
                     });
                 }
+            });
+    }
+
+    getRides() {
+        this.http.getRidesOfInvoice(this.invoice)
+            .then(response => {
+                this.invoice.rides = response;
             });
     }
 

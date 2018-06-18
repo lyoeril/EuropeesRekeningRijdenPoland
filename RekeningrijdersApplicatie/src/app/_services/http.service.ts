@@ -145,54 +145,24 @@ export class HttpService {
         return new Promise(resolve => {
             this.get('/rekeningrijder/invoices/' + id)
                 .subscribe(data => {
-                    console.log(data);
                     resolve(new Invoice(data.json().id, data.json().cartrackerId, data.json().totalAmount, data.json().status,
                         new Date(data.json().year, data.json().month)));
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
-            // switch (invoiceId) {
-            //     case 1:
-            //         const invoice = new Invoice(1, 120, true, new Date(2018, 4));
-            //         const movements = [];
-            //         movements.push(new Movement(1, new Date(2018, 0, 2, 12, 30), new Date(2018, 0, 2, 13, 30),
-            //             new LatLng(51.12345, 7.12345), new LatLng(51.22345, 8.12345), new Vehicle(1, '12-AB-34', VehicleType.Car)));
-            //         movements.push(new Movement(1, new Date(2018, 0, 2, 15, 30), new Date(2018, 0, 2, 16, 30),
-            //             new LatLng(51.12345, 7.12345), new LatLng(51.22345, 8.12345), new Vehicle(1, '12-AB-34', VehicleType.Car)));
-            //         movements.push(new Movement(1, new Date(2018, 0, 15, 12, 30), new Date(2018, 0, 15, 13, 30),
-            //             new LatLng(51.12345, 7.12345), new LatLng(51.22345, 8.12345), new Vehicle(1, '12-AB-34', VehicleType.Car)));
-            //         movements.push(new Movement(1, new Date(2018, 0, 24, 12, 30), new Date(2018, 0, 24, 13, 30),
-            // tslint:disable-next-line:max-line-length
-            //             new LatLng(51.12345, 7.12345), new LatLng(51.22345, 8.12345), new Vehicle(1, '34-CD-56', VehicleType.Motorcycle)));
-            //         invoice.movements = movements;
-            //         resolve(invoice);
-            //         break;
-            //     case 2:
-            //         resolve(new Invoice(2, 150.50, true, new Date(2018, 3)));
-            //         break;
-            //     case 3:
-            //         resolve(new Invoice(3, 200, true, new Date(2018, 2)));
-            //         break;
-            //     case 4:
-            //         resolve(new Invoice(4, 220.30, true, new Date(2018, 1)));
-            //         break;
-            //     case 5:
-            //         resolve(new Invoice(5, 122.63, false, new Date(2018, 0)));
-            //         break;
-            //     default:
-            //         resolve(null);
-            //         break;
-            // }
         });
     }
 
-    // getRidesOfInvoice(vehicles: Vehicle[], options?: Headers): Promise<Ride[]> {
-    //     return new Promise(resolve => {
-    //         vehicles.forEach(v => {
-    //             this
-    //         })
-    //     })
-    // }
+    getRidesOfInvoice(invoice: Invoice, options?: Headers): Promise<Ride[]> {
+        const year = invoice.date.getFullYear();
+        const month = invoice.date.getMonth() - 1;
+        return new Promise(resolve => {
+            this.get('/rides/cartracker/' + invoice.cartrackerId + '/date/' + year + '/' + month)
+                .subscribe(data => {
+                    console.log(data.json());
+                });
+        });
+    }
 
     getUserInvoices(options?: Headers): Promise<Invoice[]> {
         return new Promise(resolve => {
