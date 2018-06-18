@@ -195,10 +195,9 @@ public class RekeningrijderAPI {
     @PUT
     @Path("invoices/{id}")
     public Response payInvoice(
-            @Context HttpHeaders headers,
             @PathParam("id") long id) {
-        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+//        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+//        Rekeningrijder r = this.getRekeningrijderFromToken(token);
         Invoice toReturn = invoiceService.findInvoiceById(id);
         if (toReturn != null) {
             toReturn.setStatus(InvoiceStatus.PAID);

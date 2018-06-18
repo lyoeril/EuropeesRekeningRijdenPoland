@@ -21,10 +21,7 @@ public interface IInvoiceDAO {
     void edit(Invoice invoice);
     void delete(Invoice invoice);
     Invoice findById(long id);
-    List<Invoice> findByRekeningrijder(Rekeningrijder rekeningrijder);
     List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month);
-    List<Invoice> findByVehicle(Rekeningrijder rekeningrijder);
-    List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle);
     List<Invoice> findAllInvoices();
 
     Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month);
