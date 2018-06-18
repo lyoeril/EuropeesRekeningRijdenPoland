@@ -9,6 +9,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import domain.Cartracker;
 import domain.Invoice;
 import domain.Location;
 import domain.Rekeningrijder;
@@ -356,7 +357,7 @@ public class RekeningrijderAPI {
         List<Ride> rides = rideService.getRides(vehicleId, month, year);
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
-        
+
         VehicleType type = registrationService.findVehicleById(vehicleId).getVehicleType();
         Invoice i = ics.calculateInvoice(vehicleId, month, year, rekeningrijder, rides, type);
         System.out.println("invoice ending: " + i);
@@ -387,6 +388,30 @@ public class RekeningrijderAPI {
 
         Invoice returnable = ics.calculateInvoice(99, 1, 2018, rekrij, rides, VehicleType.VAN);
         return Response.accepted(returnable).build();
+    }
+
+    @PUT
+    @Path("vehicles/{id}/link")
+    public Response linkVehicle(
+            @PathParam("id") long id,
+            @FormParam("cartrackerUUID") String cartrackerUUID) {
+        Cartracker c = null;
+        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(cartrackerUUID);
+        if (cartrackers.size() >= 1) {
+            c = cartrackers.get(0);
+        } else {
+            registrationService.addCartracker(new Cartracker(cartrackerUUID));
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        Vehicle v = registrationService.findVehicleById(id);
+        if (v != null) {
+            v.setCartracker(c);
+            registrationService.updateCartracker(c);
+            return Response.accepted(new DTO_Vehicle(v)).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+
     }
 
     private String getUsernameFromToken(String token) {
