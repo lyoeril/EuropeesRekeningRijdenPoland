@@ -63,6 +63,10 @@ public class RegistrationService {
     public Rekeningrijder findRekeningrijderById(long id) {
         return iRekeningrijderDAO.findById(id);
     }
+    
+    public List<Rekeningrijder> findRekeningrijderByUsername(String username) {
+        return iRekeningrijderDAO.findByUsername(username);
+    }
 
     //Cartracker management
     public void addCartracker(Cartracker cartracker) {
@@ -83,6 +87,10 @@ public class RegistrationService {
 
     public List<Cartracker> findAllCartrackers() {
         return iCartrackerDAO.findAll();
+    }
+    
+    public List<Cartracker> findCartrackersByHardware(String hardware) {
+        return iCartrackerDAO.findByHardware(hardware);
     }
 
     //UserGroup

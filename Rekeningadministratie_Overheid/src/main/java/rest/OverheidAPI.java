@@ -115,6 +115,21 @@ public class OverheidAPI {
         }
         return Response.status(Status.NOT_FOUND).build();
     }
+    
+    @GET
+    @Path("rekeningrijders/username/{username}")
+    public Response getRekeningrijderByUsername(
+    @PathParam("username") String username) {
+        List<Rekeningrijder> rekeningrijders = registrationService.findRekeningrijderByUsername(username);
+        if (rekeningrijders != null) {
+            List<DTO_Rekeningrijder> dtoRekeningrijders = new ArrayList<>();
+            for(Rekeningrijder r : rekeningrijders) {
+                dtoRekeningrijders.add(new DTO_Rekeningrijder(r));
+            }
+            return Response.accepted(dtoRekeningrijders).build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
 
     @GET
     @Produces(APPLICATION_JSON)
@@ -156,6 +171,21 @@ public class OverheidAPI {
 
         if (c != null) {
             return Response.accepted(new DTO_Cartracker(c)).build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    @GET
+    @Path("cartrackers/hardware/{hardware}")
+    public Response getCartrackersByHardware(
+    @PathParam("hardware") String hardware) {
+        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(hardware);
+        if (cartrackers != null) {
+            List<DTO_Cartracker> dtoCatrackers = new ArrayList<>();
+            for(Cartracker c : cartrackers) {
+                dtoCatrackers.add(new DTO_Cartracker(c));
+            }
+            return Response.accepted(dtoCatrackers).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
