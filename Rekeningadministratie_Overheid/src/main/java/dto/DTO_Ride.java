@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import domain.Location;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -19,14 +20,14 @@ public class DTO_Ride {
     private long id;
     private String startDate;
     private String endDate;
-    private DTO_Location[] locations;
+    private List<DTO_Location> locations;
     
     @JsonCreator
     public DTO_Ride(
             @JsonProperty("id")long id, 
             @JsonProperty("startDate")String startDate, 
             @JsonProperty("endDate")String endDate,
-            @JsonProperty("locations")DTO_Location[] locations){
+            @JsonProperty("locations")List<DTO_Location> locations){
         
         this.id = id;
         this.startDate = startDate;
@@ -58,11 +59,11 @@ public class DTO_Ride {
         this.endDate = endDate;
     }
 
-    public DTO_Location[] getLocations() {
+    public List<DTO_Location> getLocations() {
         return locations;
     }
 
-    public void setLocations(DTO_Location[] locations) {
+    public void setLocations(List<DTO_Location> locations) {
         this.locations = locations;
     }
     
