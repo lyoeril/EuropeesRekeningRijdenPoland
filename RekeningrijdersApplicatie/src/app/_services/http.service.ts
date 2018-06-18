@@ -6,7 +6,7 @@ import { User } from '../_model/User';
 import { Invoice } from '../_model/Invoice';
 import { Vehicle } from '../_model/Vehicle';
 import { VehicleType } from '../_model/VehicleType';
-import { Movement } from '../_model/Movement';
+import { Ride } from '../_model/Ride';
 import { LatLng } from '../_model/LatLng';
 
 @Injectable()
@@ -141,13 +141,12 @@ export class HttpService {
     }
 
     // Invoices ==================================================================================== Invoices
-    getInvoice(year: number, month: number, options?: Headers): Promise<Invoice> {
-        month -= 1;
+    getInvoice(id: number, options?: Headers): Promise<Invoice> {
         return new Promise(resolve => {
-            this.get('/rekeningrijder/invoices/' + year + '/' + month)
+            this.get('/rekeningrijder/invoices/' + id)
                 .subscribe(data => {
                     console.log(data);
-                    resolve(new Invoice(data.json().id, data.json().totalAmount, data.json().status,
+                    resolve(new Invoice(data.json().id, data.json().cartrackerId, data.json().totalAmount, data.json().status,
                         new Date(data.json().year, data.json().month)));
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -187,13 +186,21 @@ export class HttpService {
         });
     }
 
+    // getRidesOfInvoice(vehicles: Vehicle[], options?: Headers): Promise<Ride[]> {
+    //     return new Promise(resolve => {
+    //         vehicles.forEach(v => {
+    //             this
+    //         })
+    //     })
+    // }
+
     getUserInvoices(options?: Headers): Promise<Invoice[]> {
         return new Promise(resolve => {
             this.get('/rekeningrijder/invoices')
                 .subscribe(data => {
                     const invoices = [];
                     data.json().forEach(i => {
-                        invoices.push(new Invoice(i.id, i.totalAmount, i.status, new Date(i.year, i.month)));
+                        invoices.push(new Invoice(i.id, i.cartrackerId, i.totalAmount, i.status, new Date(i.year, i.month)));
                     });
                     resolve(invoices);
                 }, error => {
@@ -202,11 +209,10 @@ export class HttpService {
         });
     }
 
-    payInvoice(year: number, month: number, options?: Headers): Promise<any> {
+    payInvoice(id: number, options?: Headers): Promise<any> {
         const body = {};
-        month -= 1;
         return new Promise(resolve => {
-            this.put('/rekeningrijder/invoices/' + year + '/' + month, body)
+            this.put('/rekeningrijder/invoices/' + id, body)
                 .subscribe(data => {
                     resolve(true);
                 }, error => {

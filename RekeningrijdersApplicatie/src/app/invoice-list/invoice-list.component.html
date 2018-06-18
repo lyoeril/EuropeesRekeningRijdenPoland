@@ -6,6 +6,7 @@
         <thead>
             <tr>
                 <th scope="col">{{ "date" | translate }}</th>
+                <th scope="col">{{ "cartracker" | translate }}</th>
                 <th scope="col">{{ "totalsum" | translate }}</th>
                 <th scope="col">{{ "status" | translate }}</th>
             </tr>
@@ -13,6 +14,7 @@
         <tbody>
             <tr *ngFor="let invoice of invoices" class="invoice" (click)="goToInvoice(invoice)">
                 <td>{{invoice.dateToString()}}</td>
+                <td>{{invoice.cartrackerId}}</td>
                 <td>{{invoice.totalSumToString()}}</td>
                 <td>{{ invoice.status.toLowerCase() | translate }}</td>
             </tr>

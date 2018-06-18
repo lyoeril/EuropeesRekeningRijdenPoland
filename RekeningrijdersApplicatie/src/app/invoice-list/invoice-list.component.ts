@@ -19,7 +19,7 @@ export class InvoiceListComponent implements OnInit {
     ngOnInit() { }
 
     goToInvoice(invoice: Invoice) {
-        const link = ['/invoice', invoice.date.getFullYear(), invoice.date.getMonth() + 1];
+        const link = ['/invoice', invoice.id];
         this.router.navigate(link);
     }
 }

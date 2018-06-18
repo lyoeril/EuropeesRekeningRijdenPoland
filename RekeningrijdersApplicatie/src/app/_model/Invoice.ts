@@ -1,20 +1,24 @@
-import { Movement } from './Movement';
+import { Ride } from './Ride';
 import { Status } from './Status';
 import * as moment from 'moment';
 
 export class Invoice {
     id: number;
+    cartrackerId: number;
     totalSum: number;
     status: Status;
     date: Date;
 
-    movements: Movement[];
+    rides: Ride[];
 
-    constructor(_id: number, _totalSum: number, _status: Status, _date: Date) {
+    constructor(_id: number, _cartrackerId: number, _totalSum: number, _status: Status, _date: Date) {
         this.id = _id;
+        this.cartrackerId = _cartrackerId;
         this.totalSum = _totalSum;
         this.status = _status;
         this.date = _date;
+
+        this.rides = [];
     }
 
     dateToString(): string {

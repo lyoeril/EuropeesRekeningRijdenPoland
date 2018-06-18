@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Invoice } from '../_model/Invoice';
-import { Movement } from '../_model/Movement';
+import { Ride } from '../_model/Ride';
 import { Status } from '../_model/Status';
 import { LatLng } from '../_model/LatLng';
 import { Vehicle } from '../_model/Vehicle';
@@ -19,8 +19,7 @@ declare let paypal: any;
 })
 
 export class InvoiceComponent implements OnInit {
-    year: number;
-    month: number;
+    id: number;
     invoice: Invoice = null;
 
     didPaypalScriptLoad = false;
@@ -44,7 +43,7 @@ export class InvoiceComponent implements OnInit {
         },
         onAuthorize: (data, actions) => {
             return actions.payment.execute().then((payment) => {
-                this.payInvoice(this.year, this.month);
+                this.payInvoice(this.id);
             });
         }
     };
@@ -55,17 +54,16 @@ export class InvoiceComponent implements OnInit {
         private route: ActivatedRoute) {
         this.route.params
             .subscribe((params: Params) => {
-                this.year = +params['year'];
-                this.month = +params['month'];
+                this.id = +params['id'];
             });
     }
 
     ngOnInit() {
-        this.getInvoice(this.year, this.month);
+        this.getInvoice(this.id);
     }
 
-    getInvoice(year: number, month: number) {
-        this.http.getInvoice(year, month)
+    getInvoice(year: number) {
+        this.http.getInvoice(year)
             .then(invoice => {
                 this.invoice = invoice;
 
@@ -80,8 +78,8 @@ export class InvoiceComponent implements OnInit {
             });
     }
 
-    payInvoice(year: number, month: number) {
-        this.http.payInvoice(year, month)
+    payInvoice(id: number) {
+        this.http.payInvoice(id)
             .then(response => {
                 if (response === true) {
                     this.invoice.status = Status.PAID;
