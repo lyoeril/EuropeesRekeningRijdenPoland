@@ -12,7 +12,7 @@ import { LatLng } from '../_model/LatLng';
 @Injectable()
 export class HttpService {
 
-    static administrationUrl = 'http://192.168.25.33:8080/Rekeningadministratie_Overheid/api';
+    static administrationUrl = 'http://192.168.25.35:8080/Rekeningadministratie_Overheid/api';
     constructor(private http: Http) { }
 
     getHeaders(): Headers {
