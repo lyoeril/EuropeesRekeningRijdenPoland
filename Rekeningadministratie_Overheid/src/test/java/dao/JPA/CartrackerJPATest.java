@@ -16,20 +16,19 @@
 // */
 //public class CartrackerJPATest {
 //
-//    private static CartrackerJPA cartracker;
+//    private static CartrackerJPA cartrackerJPA;
 //    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Rekeningadministratie_Overheid_test");
 //    private static EntityManager em;
 //
 //    @Before
 //    public void setUp() {
-//        cartracker = new CartrackerJPA();
+//        cartrackerJPA = new CartrackerJPA();
 //        em = emf.createEntityManager();
-//        cartracker.setEm(em);
+//        cartrackerJPA.setEm(em);
 //    }
 //
 //    @Test
 //    public void testSetEm() throws Exception {
-//    
 //
 //    }
 //
@@ -38,66 +37,69 @@
 //     */
 //    @Test
 //    public void testCreate() throws Exception {
-//    System.out.println("create");
+//        System.out.println("create");
 //        Cartracker c = new Cartracker("test");
 //        c.setId(1L);
-//        cartracker.create(c);
-//        Cartracker result = cartracker.findById(1L);
-//        System.out.println("result :  + " + result.getHardware());
+//        cartrackerJPA.create(c);
+//        Cartracker result = cartrackerJPA.findById(1L);
+//        assertEquals(c, result);
 //    }
-////
-////    /**
-////     * Test of edit method, of class CartrackerJPA.
-////     */
-////    @Test
-////    public void testEdit() throws Exception {
-////        System.out.println("edit");
-////        Cartracker cartracker = null;
-////        CartrackerJPA instance = new CartrackerJPA();
-////        instance.edit(cartracker);
-////        // TODO review the generated test code and remove the default call to fail.
-////        fail("The test case is a prototype.");
-////    }
-////
-////    /**
-////     * Test of delete method, of class CartrackerJPA.
-////     */
-////    @Test
-////    public void testDelete() throws Exception {
-////        System.out.println("delete");
-////        Cartracker cartracker = null;
-////        CartrackerJPA instance = new CartrackerJPA();
-////        instance.delete(cartracker);
-////        // TODO review the generated test code and remove the default call to fail.
-////        fail("The test case is a prototype.");
-////    }
-////
-////    /**
-////     * Test of findById method, of class CartrackerJPA.
-////     */
-////    @Test
-////    public void testFindById() throws Exception {
-////        System.out.println("findById");
-////        long id = 0L;
-////        CartrackerJPA instance = new CartrackerJPA();
-////        Cartracker expResult = null;
-////        Cartracker result = instance.findById(id);
-////        assertEquals(expResult, result);
-////        // TODO review the generated test code and remove the default call to fail.
-////        fail("The test case is a prototype.");
-////    }
-////
-////    /**
-////     * Test of findAll method, of class CartrackerJPA.
-////     */
-////    @Test
-////    public void testFindAll() throws Exception {
-////        System.out.println("findAll");
-////        CartrackerJPA instance = new CartrackerJPA();
-////        List<Cartracker> expResult = null;
-////        List<Cartracker> result = instance.findAll();
-////        assertEquals(expResult, result);
-////        // TODO review the generated test code and remove the default call to fail.
-////        fail("The test case is a prototype.");
-////    }
+//
+//    /**
+//     * Test of edit method, of class CartrackerJPA.
+//     */
+//    @Test
+//    public void testEdit() throws Exception {
+//        System.out.println("edit");
+//        Cartracker c = new Cartracker("test");
+//        c.setId(1L);
+//        cartrackerJPA.create(c);
+//        Cartracker result = cartrackerJPA.findById(1L);
+//        Cartracker edited = result;
+//        edited.setId(99L);
+//        cartrackerJPA.edit(edited);
+//        result = cartrackerJPA.findById(99L);
+//        assertEquals(edited, result);
+//    }
+//
+//    /**
+//     * Test of delete method, of class CartrackerJPA.
+//     */
+//    @Test
+//    public void testDelete() throws Exception {
+//        System.out.println("delete");
+//        Cartracker c = new Cartracker("test");
+//        c.setId(1L);
+//        cartrackerJPA.create(c);
+//        cartrackerJPA.delete(c);
+//        Cartracker result = cartrackerJPA.findById(1L);
+//        assertNull(result);
+//    }
+//
+//    /**
+//     * Test of findById method, of class CartrackerJPA.
+//     */
+//    @Test
+//    public void testFindById() throws Exception {
+//        System.out.println("findById");
+//        Cartracker c = new Cartracker("test");
+//        c.setId(1L);
+//        cartrackerJPA.create(c);
+//        Cartracker result = cartrackerJPA.findById(1L);
+//    }
+//
+//    /**
+//     * Test of findAll method, of class CartrackerJPA.
+//     */
+//    @Test
+//    public void testFindAll() throws Exception {
+//        System.out.println("findAll");
+//        Cartracker c = new Cartracker("test");
+//        Cartracker c2 = new Cartracker("test2");
+//        cartrackerJPA.create(c);
+//        cartrackerJPA.create(c2);
+//        
+//        List<Cartracker> result = cartrackerJPA.findAll();
+//        assertEquals(2, result.size());
+//    }
 //}
