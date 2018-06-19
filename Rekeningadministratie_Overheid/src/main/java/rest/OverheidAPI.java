@@ -347,8 +347,12 @@ public class OverheidAPI {
             @PathParam("cartrackerId") long cartrackerId,
             @PathParam("year") int year,
             @PathParam("month") int month) {
+        System.out.println("year: " + year);
+        System.out.println("month: " + month);
         List<Ride> rides = rideService.getRides(cartrackerId, month, year);
+        System.out.println("ridesSize: " + rides.size());
         Rekeningrijder rekeningrijder = registrationService.findRekeningrijderById(rekeningrijderId);
+        System.out.println("Rekeningrijder: " + rekeningrijder);
         if (rekeningrijder == null) {
             return Response.status(Status.BAD_REQUEST).build();
         }
@@ -356,8 +360,10 @@ public class OverheidAPI {
         VehicleType vType = null;
         List<Vehicle> vehiclesFromRR = rekeningrijder.getOwnedVehicles();
         for (Vehicle v : vehiclesFromRR) {
+            System.out.println("Own vehicle: " + v.getId());
             if (v.getCartracker().getId() == cartrackerId) {
                 vType = v.getVehicleType();
+                System.out.println("VehicleType: " + vType);
             }
         }
         if(vType == null){
