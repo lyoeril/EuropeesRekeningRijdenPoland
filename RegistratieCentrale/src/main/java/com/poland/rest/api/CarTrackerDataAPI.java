@@ -66,4 +66,22 @@ public class CarTrackerDataAPI {
 
         return Response.status(Response.Status.OK).entity(rideTargetList).build();
     }
+
+    @GET
+    @Path("/get/RidesByCode/{authenticationCode}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRidesByAuthenticationCode(@PathParam("authenticationCode") String authenticationCode) {
+        List<Ride> rides = new ArrayList<>();
+
+        if (authenticationCode != null && !authenticationCode.equals("")) {
+            rides = registrationService.getRideService().getRidesByAuthenticationCode(authenticationCode);
+        } else {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
+
+        List<RideDTO> rideTargetList = new ArrayList<>();
+        DTOConverter.toRideDTOList(rides, rideTargetList);
+
+        return Response.status(Response.Status.OK).entity(rideTargetList).build();
+    }
 }

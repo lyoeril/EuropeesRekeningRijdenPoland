@@ -51,4 +51,18 @@ public class RideDAOImpl extends BasicDAOImpl<Ride> implements RideDAO {
         }
         return ride;
     }
+
+    @Override
+    public List<Ride> getRidesByAuthenticationCode(String authenticationCode) {
+        List<Ride> ride = null;
+        try {
+            Query q = em.createQuery("select r from Ride r where r.vehicle = (select v from Vehicle v where v.authorisationCode = :authenticationCode)");
+            q.setParameter("authenticationCode", authenticationCode);
+
+            ride = (List<Ride>) q.getResultList();
+        } catch (Exception ise) {
+            handleExceptions(ise);
+        }
+        return ride;
+    }
 }

@@ -87,4 +87,13 @@ public class RideService {
             return new ArrayList<>();
         }
     }
+
+    public List<Ride> getRidesByAuthenticationCode(String authenticationCode) {
+        if (authenticationCode != null && !authenticationCode.equals("")) {
+            List<Ride> rides = rideDAO.getRidesByAuthenticationCode(authenticationCode);
+            return rides;
+        } else {
+            return new ArrayList<>();
+        }
+    }
 }
