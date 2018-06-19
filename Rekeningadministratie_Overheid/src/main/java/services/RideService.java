@@ -63,6 +63,9 @@ public class RideService {
         List<DTO_Ride> rides;
         List<Ride> realRides = new ArrayList<>();
         Cartracker cartracker = registrationService.findCartrackerById(cartrackerId);
+        if(cartracker == null){
+            return null;
+        }
         System.out.println("getRides: id + " + cartracker.getHardware());
 
         int endMonth = month + 1;
@@ -81,9 +84,11 @@ public class RideService {
 //            String endDate = "15-" + "06" + "-" + year;
 //        String UUID = cartracker.getHardware();
         String cID = "PL-00ac0adf40";
-//        if(cartracker != null){
-//            cID = cartracker.getHardware();
-//        }
+        if(cartracker != null){
+            cID = cartracker.getHardware();
+        }
+        
+        System.out.println("Cartracker Hardware: " + cID);
 
         try {
             URL url = new URL(

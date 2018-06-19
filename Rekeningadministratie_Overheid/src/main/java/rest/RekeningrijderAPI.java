@@ -220,15 +220,17 @@ public class RekeningrijderAPI {
         List<Ride> rides = rideService.getRides(id, month, year);
         System.out.println("rides: " + rides);
         List<DTO_Ride> dtoRides = new ArrayList<>();
+        if(rides == null){
+            return Response.status(Status.EXPECTATION_FAILED).build();
+        }
         for (Ride r : rides) {
             List<DTO_Location> dtoLocations = new ArrayList<>();
             for (Location l : r.getLocations()) {
                 dtoLocations.add(new DTO_Location(l.getDate().toString(), l.getId(), l.getLatitude(), l.getLongitude()));
             }
             dtoRides.add(new DTO_Ride(r.getId(), r.getStartDate().toString(), r.getEndDate().toString(), dtoLocations));
-            if (rides != null) {
                 return Response.accepted(dtoRides).build();
-            }
+            
 
         }
         return Response.status(Status.BAD_REQUEST).build();
