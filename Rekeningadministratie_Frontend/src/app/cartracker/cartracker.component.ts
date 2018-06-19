@@ -17,7 +17,6 @@ export class CartrackerComponent implements OnInit {
     ngOnInit() { }
 
     onNewCartracker(cartracker: Cartracker) {
-        console.log(this.cartrackerList);
         if (this.cartrackerList !== null) {
             this.cartrackerList.addCartracker(cartracker);
         }

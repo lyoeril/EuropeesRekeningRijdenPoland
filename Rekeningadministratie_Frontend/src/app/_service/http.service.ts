@@ -213,7 +213,7 @@ export class HttpService {
 
     recalculateInvoice(invoice: Invoice, options?: Headers): Promise<Invoice> {
         const year = invoice.date.getFullYear();
-        const month = invoice.date.getMonth() - 1;
+        const month = invoice.date.getMonth();
         return new Promise(resolve => {
             this.get('/overheid/invoices/' + invoice.user.id + '/' + invoice.cartrackerId + '/' + year + '/' + month)
                 .subscribe(data => {
