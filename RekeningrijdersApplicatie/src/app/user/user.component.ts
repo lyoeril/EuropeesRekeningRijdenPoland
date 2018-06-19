@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
         const updatedUser = { email: this.userData.email, address: this.userData.address, password: this.userData.newPassword };
         this.http.updateUser(updatedUser)
             .then(data => {
-                this.common.setPassword(updatedUser.password);
+                this.common.password = updatedUser.password;
                 location.reload();
             });
     }
@@ -57,7 +57,7 @@ export class UserComponent implements OnInit {
         if (this.userData.oldPassword === '' && this.userData.newPassword === '' && this.userData.repNewPassword === '') {
             return true;
         } else if (this.userData.oldPassword !== '' && this.userData.newPassword !== '' && this.userData.repNewPassword !== '') {
-            if (this.userData.oldPassword === this.common.getPassword()) {
+            if (this.userData.oldPassword === this.common.password) {
                 if (this.userData.oldPassword !== this.userData.newPassword) {
                     if (this.userData.newPassword === this.userData.repNewPassword) {
                         return true;

@@ -92,8 +92,8 @@ export class HttpService {
                 .subscribe(data => {
                     sessionStorage.setItem('token', data.headers.get('Authorization'));
 
-                    this.common.setUsername(usercreds.username);
-                    this.common.setPassword(usercreds.password);
+                    this.common.username = usercreds.username;
+                    this.common.password = usercreds.password;
                     resolve(true);
                 }, error => {
                     if (error.status === 401) {
@@ -129,7 +129,7 @@ export class HttpService {
         return new Promise(resolve => {
             this.get('/rekeningrijder')
                 .subscribe(data => {
-                    this.common.setRekeningrijderId(data.json().id);
+                    this.common.rekeningrijderId = data.json().id;
                     resolve(new User(data.json().id, data.json().username, data.json().email, data.json().address));
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -171,8 +171,8 @@ export class HttpService {
                     console.log(data.json());
                     const rides = [];
                     data.json().forEach(r => {
-                        const ride = new Ride(r.id, moment(r.startDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(), 
-                        moment(r.endDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(), invoice.cartrackerId);
+                        const ride = new Ride(r.id, moment(r.startDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(),
+                            moment(r.endDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(), invoice.cartrackerId);
                         const locations = [];
                         r.locations.forEach(l => {
                             locations.push(new LatLng(l.latitude, l.longitude, moment(l.date, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate()));

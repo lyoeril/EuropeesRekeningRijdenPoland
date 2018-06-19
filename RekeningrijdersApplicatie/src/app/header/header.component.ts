@@ -30,7 +30,11 @@ export class HeaderComponent implements OnInit {
     loginAlerts = [];
     registerAlerts = [];
 
-    constructor(public translate: TranslateService, private http: HttpService) {
+    constructor(
+        public translate: TranslateService,
+        private http: HttpService,
+        private router: Router
+    ) {
         translate.addLangs(['pl', 'en', 'nl']);
         translate.setDefaultLang('pl');
 
@@ -86,6 +90,7 @@ export class HeaderComponent implements OnInit {
 
     logout() {
         this.http.logout();
+        this.router.navigate(['/']);
     }
 
     goToProfile() {

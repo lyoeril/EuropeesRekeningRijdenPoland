@@ -16,7 +16,7 @@
                 <th scope="row">{{ "status" | translate }}</th>
                 <td>{{ invoice.status.toLowerCase() | translate }}</td>
             </tr>
-            <tr *ngIf="invoice.status.toLowerCase() !== 'paid'">
+            <tr *ngIf="invoice.status.toLowerCase() !== 'paid' && invoice.totalsum > 0">
                 <th>{{ "pay" | translate }}</th>
                 <td>
                     <div id="paypal-button"></div>

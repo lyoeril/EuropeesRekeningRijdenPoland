@@ -66,7 +66,7 @@ export class InvoiceComponent implements OnInit {
     }
 
     checkUser() {
-        if (this.invoice.rekeningrijderId !== this.common.getRekeningrijderId()) {
+        if (this.invoice.rekeningrijderId !== this.common.rekeningrijderId) {
             this.router.navigate(['/']);
         }
     }
