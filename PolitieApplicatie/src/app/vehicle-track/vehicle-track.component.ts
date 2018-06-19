@@ -15,7 +15,7 @@ import {TrackingService} from '../_service/tracking.service';
 export class VehicleTrackComponent implements OnInit {
 
   vehicleId: number;
-  vehicle: Vehicle = new Vehicle(0, '', VehicleType.UNKNOWN);
+  vehicle: Vehicle = new Vehicle(0, '', '', VehicleType.UNKNOWN);
 
   // google maps initZoom level
   initZoom = 8;
@@ -60,6 +60,11 @@ export class VehicleTrackComponent implements OnInit {
   }
 
   subscribeTracking() {
-    // this.websocket.subscribe(this.vehicle);
+    this.websocket.subscribe(this.vehicle.cartrackerHardware);
+    this.websocket.messages.subscribe(
+      msg => {
+        this.points.unshift(msg.location);
+      }
+    );
   }
 }

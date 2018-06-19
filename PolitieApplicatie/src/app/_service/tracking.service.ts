@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {WebsocketService} from './websocket.service';
 import {LocationTimed} from '../_model/LocationTimed';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TrackingService {

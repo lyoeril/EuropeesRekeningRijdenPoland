@@ -5,12 +5,14 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Details | {{vehicle.licensePlate}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Here you can follow the selected car ofzo... blabla</h6>
-          <p class="card-text">BLALALALALLALA</p>
+          <h6 class="card-subtitle mb-2 text-muted">Information on this vehicle</h6>
+          <p class="card-text">TODO</p>
           <ul class="card-text list-unstyled">
-            <li>Vehicle id : {{vehicle.id}}</li>
-            <li>license plate :{{vehicle.licensePlate}}</li>
-            <li>vehicle type : {{vehicle.vehicleType}}</li>
+            <li>Vehicle ID : {{vehicle.id}}</li>
+            <li>License Plate : {{vehicle.licensePlate}}</li>
+            <li>Vehicle Type : {{vehicle.vehicleType}}</li>
+            <li>Tracker ID : {{vehicle.cartrackerHardware}}</li>
+            <li>Is Stolen : {{vehicle.isStolen}}</li>
           </ul>
         </div>
       </div>
@@ -22,7 +24,8 @@
         <div class="card-body">
           <span class="card-title">
             <h5 style="display:inline">Car history</h5>
-            <button class="btn btn-primary float-right" routerLink="track">Track</button>
+            <button class="btn btn-primary float-right" (click)="onBtnReport()">Report</button>
+            <button class="btn btn-primary float-right" *ngIf="vehicle.isStolen" routerLink="track">Track</button>
           </span>
         </div>
       </div>

@@ -18,6 +18,9 @@ import { HttpService } from './_service/http.service';
 import { AuthService } from './_service/auth.service';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { VehicleTrackComponent } from './vehicle-track/vehicle-track.component';
+import {PoliceService} from './_service/police.service';
+import {TrackingService} from './_service/tracking.service';
+import {WebsocketService} from './_service/websocket.service';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { VehicleTrackComponent } from './vehicle-track/vehicle-track.component';
   ],
   providers: [
     HttpService,
+    PoliceService,
+    TrackingService,
+    WebsocketService,
     AuthService
   ],
   bootstrap: [AppComponent]

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from '../_service/http.service';
 import {Vehicle} from '../_model/Vehicle';
 import {Router} from '@angular/router';
+import {PoliceService} from '../_service/police.service';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -12,23 +13,31 @@ export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[] = [];
   filteredVehicles: Vehicle[] = [];
 
-  constructor(private http: HttpService,
+  constructor(private httpService: HttpService,
+              private policeService: PoliceService,
               private router: Router) {
   }
 
   ngOnInit() {
     this.getVehicles();
-  
   }
 
   getVehicles() {
-    this.http.getVehicles()
-      .then(response => {
-        this.vehicles = response;
-        this.filteredVehicles = response;
+    this.httpService.getVehicles()
+      .then(vehicles => {
+        this.policeService.getStolenVehicles()
+          .subscribe(stolenVehicles => {
+            stolenVehicles.forEach(stolenVehicle => {
+              const stolen = vehicles.find(v => v.cartrackerHardware === stolenVehicle.uuid);
+              stolen.isStolen = true;
+              stolen.currentLocation = stolenVehicle.currentLocation;
+            });
+          });
+        this.vehicles = vehicles;
+        this.filteredVehicles = vehicles;
       });
 
-    this.http.getCartrackers();
+    // this.httpService.getCartrackers();
   }
 
   filterVehicles(filter: string) {
