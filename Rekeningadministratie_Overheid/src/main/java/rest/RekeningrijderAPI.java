@@ -217,7 +217,7 @@ public class RekeningrijderAPI {
             @PathParam("id") long id,
             @PathParam("year") int year,
             @PathParam("month") int month) {
-        List<Ride> rides = rideService.getRides(id, year, month);
+        List<Ride> rides = rideService.getRides(id, month, year);
         System.out.println("rides: " + rides);
         List<DTO_Ride> dtoRides = new ArrayList<>();
         for (Ride r : rides) {

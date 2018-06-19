@@ -144,6 +144,7 @@ public class InvoiceCalculationService {
                         } else {
                             for (KMRate tmpKMRate : kmrates) {
                                 if (tmpKMRate.getRegion().equals(stringPointRegion)) {
+                                    System.out.println("VehicleType: " + vehicleType);
                                     rate = tmpKMRate.getRateFromVehicleType(vehicleType);
                                     System.out.println("rate: " + rate);
                                 }

@@ -51,6 +51,8 @@ public class RideService {
     }
 
     public List<Ride> getRides(long cartrackerId, int month, int year) {
+        System.out.println("month: " + month);
+        System.out.println("year: " + year);
 
         System.out.println("Registrationservice :" + registrationService.toString());
         //Vehicle v = registrationService.findVehicleById(vehicleId);
@@ -73,6 +75,8 @@ public class RideService {
         String startDate = "01-" + month + "-" + year;
         String endDate = "01-" + endMonth + "-" + year;
 
+        System.out.println("start: " +  startDate);
+        System.out.println("end: " +  endDate);
 //            String startDate = "16-" + "05" + "-" + year;
 //            String endDate = "15-" + "06" + "-" + year;
 //        String UUID = cartracker.getHardware();

@@ -360,6 +360,9 @@ public class OverheidAPI {
                 vType = v.getVehicleType();
             }
         }
+        if(vType == null){
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
         Invoice i = ics.calculateInvoice(cartrackerId, month, year, rekeningrijder, rides, vType);
         System.out.println("invoice ending: " + i);
