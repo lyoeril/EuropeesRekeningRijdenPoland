@@ -1,0 +1,49 @@
+<div class="main">
+  Tracking
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Details | {{vehicle.licensePlate}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Information on this vehicle</h6>
+          <p class="card-text">TODO</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <span class="card-title">
+            <h5>Live Tracking</h5>
+          </span>
+          <span class="card-text">
+            <agm-map
+              [latitude]="points[0].latitude"
+              [longitude]="points[0].longitude"
+              [zoom]="initZoom"
+              [disableDefaultUI]="false"
+              [zoomControl]="false">
+              <agm-marker
+                [latitude]="points[0].latitude"
+                [longitude]="points[0].longitude">
+                <agm-info-window>
+                  <strong>InfoWindow content</strong>
+                </agm-info-window>
+              </agm-marker>
+              <agm-polyline
+                [strokeColor]="strokeColor">
+                <agm-polyline-point
+                  *ngFor="let p of points; let i = index"
+                  [latitude]="p.latitude"
+                  [longitude]="p.longitude">
+                </agm-polyline-point>
+              </agm-polyline>
+            </agm-map>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

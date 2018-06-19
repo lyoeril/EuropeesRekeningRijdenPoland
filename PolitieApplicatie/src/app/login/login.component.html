@@ -1,0 +1,32 @@
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pr-wrap">
+                <div class="pass-reset">
+                    <input type="email" placeholder="Email" />
+                    <input type="submit" value="Submit" class="pass-reset-submit btn btn-success btn-sm" />
+                </div>
+            </div>
+            <div class="wrap">
+                <p class="form-title">
+                    Sign in</p>
+                <form class="login">
+                <input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="usercreds.username">
+                <input name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="usercreds.password">
+                <button class="btn btn-outline-light float-right mt-1" (click)="login()"  data-toggle="tooltip" data-placement="bottom" title="login">Login</button>
+                <div class="remember-forgot">
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="error.length > 0">{{error}}
+                            </div>
+        </div>
+    </div>
+</div>
+</body>

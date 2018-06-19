@@ -1,0 +1,5 @@
+#wrapper{padding:90px 15px;}
+.card{margin-bottom: 15px; border-radius:0; box-shadow: 0 3px 5px rgba(0,0,0,.1); }
+agm-map {
+  height: 600px;
+}
