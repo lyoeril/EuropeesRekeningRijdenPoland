@@ -36,7 +36,7 @@ public class Main {
                             + "You were able to enter a command, did you really expect anything else?");
                     break;
                 case "spawn":
-                    System.out.println("Please enter a number of simulations to spawn (leave empty for one): ");
+                    System.out.println("Please enter a number of simulations to spawn: ");
                     int sims = sc.nextInt();
                     // skip the rest of this line
                     sc.nextLine();
