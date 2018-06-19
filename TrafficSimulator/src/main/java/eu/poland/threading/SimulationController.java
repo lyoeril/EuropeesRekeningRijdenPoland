@@ -77,7 +77,7 @@ public class SimulationController {
         Random r = new Random();
         String trackerId = "INVALID";
         while (true) {
-            trackerId = String.format("%010x", r.nextInt());
+            trackerId = "PL-" + String.format("%010x", r.nextInt());
             if (!simulations.containsKey(trackerId)) {
                 break;
             } else if (simulations.get(trackerId).isDone()) {
