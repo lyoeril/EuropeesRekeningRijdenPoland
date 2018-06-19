@@ -22,17 +22,18 @@ public class DTO_Vehicle {
     private String licensePlate;
     private VehicleType vehicleType;
     private List<Long> ownersHistory;
+    private String cartrackerHardware;
 
     public DTO_Vehicle(Vehicle v) {
         this.id = v.getId();
         this.licensePlate = v.getLicensePlate();
         this.vehicleType = v.getVehicleType();
+        this.cartrackerHardware = v.getCartracker().getHardware();
         
         if(v.getCartracker() != null){
             this.cartrackerId = v.getCartracker().getId();
         }
         
-
         if (v.getOwnersHistory() != null) {
             ownersHistory = new ArrayList<>();
             for (Rekeningrijder r : v.getOwnersHistory()) {
@@ -81,6 +82,15 @@ public class DTO_Vehicle {
     public void setCartrackerId(long cartrackerId) {
         this.cartrackerId = cartrackerId;
     }
+
+    public String getCartrackerHardware() {
+        return cartrackerHardware;
+    }
+
+    public void setCartrackerHardware(String cartrackerHardware) {
+        this.cartrackerHardware = cartrackerHardware;
+    }
+    
     
     
 

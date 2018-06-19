@@ -91,7 +91,7 @@ public class InvoiceCalculationService {
         /**
          * Looping through every ride in Month
          */
-        Map<String, Geometry> regionsGeometry = new HashMap<>();
+        Map<String, Geometry> regionsGeometry;
         regionsGeometry = loadGeoJSONFiles.getRegions();
 
         //System.out.println("RegionsGEOMETRY TESTING: " + regionsGeometry);

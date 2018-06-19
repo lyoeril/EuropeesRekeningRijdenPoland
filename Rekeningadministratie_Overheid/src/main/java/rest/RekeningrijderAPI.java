@@ -218,6 +218,7 @@ public class RekeningrijderAPI {
             @PathParam("year") int year,
             @PathParam("month") int month) {
         List<Ride> rides = rideService.getRides(id, year, month);
+        System.out.println("rides: " + rides);
         List<DTO_Ride> dtoRides = new ArrayList<>();
         for (Ride r : rides) {
             List<DTO_Location> dtoLocations = new ArrayList<>();
@@ -225,7 +226,10 @@ public class RekeningrijderAPI {
                 dtoLocations.add(new DTO_Location(l.getDate().toString(), l.getId(), l.getLatitude(), l.getLongitude()));
             }
             dtoRides.add(new DTO_Ride(r.getId(), r.getStartDate().toString(), r.getEndDate().toString(), dtoLocations));
-            return Response.accepted(dtoRides).build();
+            if (rides != null) {
+                return Response.accepted(dtoRides).build();
+            }
+
         }
         return Response.status(Status.BAD_REQUEST).build();
     }
@@ -263,11 +267,14 @@ public class RekeningrijderAPI {
                 System.out.println("TOKIETOKIE: " + token);
                 String username = this.getUsernameFromToken(token);
 
-                List<Vehicle> vehicles = this.getRekeningrijderFromUsername(username).getOwnedVehicles();
-                if (vehicles != null) {
-                    for (Vehicle vehicle : vehicles) {
-                        if (vehicle.getId() == carId) {
-                            return Response.ok(new DTO_Vehicle(vehicle)).build();
+                Rekeningrijder r = this.getRekeningrijderFromUsername(username);
+                if (r != null) {
+                    List<Vehicle> vehicles = r.getOwnedVehicles();
+                    if (vehicles != null) {
+                        for (Vehicle vehicle : vehicles) {
+                            if (vehicle.getId() == carId) {
+                                return Response.ok(new DTO_Vehicle(vehicle)).build();
+                            }
                         }
                     }
                 }
@@ -384,6 +391,9 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekrij = this.getRekeningrijderFromToken(token);
+        if(rekrij == null){
+            return Response.status(Status.BAD_REQUEST).build();
+        }
         System.out.println("rekrij: " + rekrij.getUsername());
 
         Invoice returnable = ics.calculateInvoice(99, 1, 2018, rekrij, rides, VehicleType.VAN);

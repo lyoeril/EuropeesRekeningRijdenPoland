@@ -58,9 +58,10 @@ public class RideService {
         //long cartrackerId = v.getCartracker().getId();
         //Cartracker c = registrationService.findCartrackerById(cartrackerId);
 
-        List<DTO_Ride> rides = new ArrayList<DTO_Ride>();
+        List<DTO_Ride> rides;
         List<Ride> realRides = new ArrayList<>();
         Cartracker cartracker = registrationService.findCartrackerById(cartrackerId);
+        System.out.println("getRides: id + " + cartracker.getHardware());
 
         int endMonth = month + 1;
         if (month >= 13) {
@@ -74,8 +75,11 @@ public class RideService {
 
 //            String startDate = "16-" + "05" + "-" + year;
 //            String endDate = "15-" + "06" + "-" + year;
-        String UUID = cartracker.getHardware();
+//        String UUID = cartracker.getHardware();
         String cID = "PL-00ac0adf40";
+//        if(cartracker != null){
+//            cID = cartracker.getHardware();
+//        }
 
         try {
             URL url = new URL(
@@ -121,7 +125,7 @@ public class RideService {
 
             rides = (Arrays.asList(ridesArray));
 
-            List<Location> locations = new ArrayList<>();
+            List<Location> locations;
             for (DTO_Ride dtoRides : rides) {
                 locations = new ArrayList<>();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
