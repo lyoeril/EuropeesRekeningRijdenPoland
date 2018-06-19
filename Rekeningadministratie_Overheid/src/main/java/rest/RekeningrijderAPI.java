@@ -18,8 +18,10 @@ import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
 import dto.DTO_Location;
+import dto.DTO_Location_JSON;
 import dto.DTO_Rekeningrijder;
 import dto.DTO_Ride;
+import dto.DTO_Ride_JSON;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
@@ -219,18 +221,17 @@ public class RekeningrijderAPI {
             @PathParam("month") int month) {
         List<Ride> rides = rideService.getRides(id, month, year);
         System.out.println("rides: " + rides);
-        List<DTO_Ride> dtoRides = new ArrayList<>();
-        if(rides == null){
+        List<DTO_Ride_JSON> dtoRides = new ArrayList<>();
+        if (rides == null) {
             return Response.status(Status.EXPECTATION_FAILED).build();
         }
         for (Ride r : rides) {
-            List<DTO_Location> dtoLocations = new ArrayList<>();
+            List<DTO_Location_JSON> dtoLocations = new ArrayList<>();
             for (Location l : r.getLocations()) {
-                dtoLocations.add(new DTO_Location(l.getDate().toString(), l.getId(), l.getLatitude(), l.getLongitude()));
+                dtoLocations.add(new DTO_Location_JSON(l.getDate(), l.getId(), l.getLatitude(), l.getLongitude()));
             }
-            dtoRides.add(new DTO_Ride(r.getId(), r.getStartDate().toString(), r.getEndDate().toString(), dtoLocations));
-                return Response.accepted(dtoRides).build();
-            
+            dtoRides.add(new DTO_Ride_JSON(r.getId(), r.getStartDate(), r.getEndDate(), dtoLocations));
+            return Response.accepted(dtoRides).build();
 
         }
         return Response.status(Status.BAD_REQUEST).build();
@@ -393,7 +394,7 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekrij = this.getRekeningrijderFromToken(token);
-        if(rekrij == null){
+        if (rekrij == null) {
             return Response.status(Status.BAD_REQUEST).build();
         }
         System.out.println("rekrij: " + rekrij.getUsername());
