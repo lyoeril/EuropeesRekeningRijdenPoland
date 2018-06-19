@@ -16,7 +16,7 @@ export class TrackingService {
     this.messages = <Subject<LocationTimed>>this.websocketService
       .connect(this.wsUrl + uuid)
       .map((response: MessageEvent): LocationTimed => {
-        console.log(response);
+        // console.log(response);
         const data = JSON.parse(response.data);
         return data as LocationTimed;
       });

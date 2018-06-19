@@ -6,7 +6,6 @@
         <div class="card-body">
           <h5 class="card-title">Details | {{vehicle.licensePlate}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">Information on this vehicle</h6>
-          <p class="card-text">TODO</p>
           <ul class="card-text list-unstyled">
             <li>Vehicle ID : {{vehicle.id}}</li>
             <li>License Plate : {{vehicle.licensePlate}}</li>
@@ -22,11 +21,29 @@
     <div class="col">
       <div class="card">
         <div class="card-body">
+          <p>
           <span class="card-title">
-            <h5 style="display:inline">Car history</h5>
+            <h5 style="display:inline">Ride History</h5>
             <button class="btn btn-primary float-right" (click)="onBtnReport()">Report</button>
             <button class="btn btn-primary float-right" *ngIf="vehicle.isStolen" routerLink="track">Track</button>
           </span>
+          </p>
+          <table class="card-text table table-hover">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+            </tr>
+            </thead>
+            <tbody class="vehicles">
+            <tr *ngFor="let ride of rides">
+              <th scope="row">{{ride.id}}</th>
+              <td>{{ride.startDate}}</td>
+              <td>{{ride.endDate}}</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import {HttpService} from '../_service/http.service';
 import {Vehicle} from '../_model/Vehicle';
 import {VehicleType} from '../_model/VehicleType';
 import {PoliceService} from '../_service/police.service';
+import {Ride} from '../_model/Ride';
 
 @Component({
   selector: 'app-vehicle',
@@ -17,6 +18,7 @@ export class VehicleComponent implements OnInit {
   vehicleId: number;
 // vehicle = {};
   vehicle: Vehicle = new Vehicle(0, '', '', VehicleType.UNKNOWN);
+  rides: Ride[] = [];
 
 // historyVehicles: HistoryVehicles[];
 
@@ -41,10 +43,18 @@ export class VehicleComponent implements OnInit {
                 vehicle.currentLocation = stolen.currentLocation;
               }
             }, error => {
-              // nothing, HTTP 400 expected
+              // nothing, HTTP 400 expected if not stolen
             });
         this.vehicle = vehicle;
-        console.log(this.vehicle);
+        this.getVehicleRides(vehicle.cartrackerHardware);
+        // console.log(this.vehicle);
+      });
+  }
+
+  getVehicleRides(trackerId: string) {
+    this.policeService.getVehicleRides(trackerId)
+      .subscribe(rides => {
+        this.rides = rides;
       });
   }
 

@@ -36,7 +36,7 @@ import {WebsocketService} from './_service/websocket.service';
     BrowserModule,
     FormsModule,
     // TODO: insert valid Google Maps JavaScript API key
-    AgmCoreModule.forRoot({apiKey: ''}),
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyD_BmYEJ2Ma40WMi_KIQ7nCorSVo3eeVL8'}),
     HttpClientModule,
     HttpModule,
     routing
