@@ -8,12 +8,17 @@ import { Vehicle } from '../_model/Vehicle';
 import { VehicleType } from '../_model/VehicleType';
 import { Ride } from '../_model/Ride';
 import { LatLng } from '../_model/LatLng';
+import { CommonService } from './common.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class HttpService {
 
     static administrationUrl = 'http://192.168.25.35:8080/Rekeningadministratie_Overheid/api';
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        public common: CommonService
+    ) { }
 
     getHeaders(): Headers {
         if (sessionStorage.getItem('token') !== null) {
@@ -86,7 +91,9 @@ export class HttpService {
             this.post('/login', usercreds, options)
                 .subscribe(data => {
                     sessionStorage.setItem('token', data.headers.get('Authorization'));
-                    sessionStorage.setItem('password', usercreds.password);
+
+                    this.common.setUsername(usercreds.username);
+                    this.common.setPassword(usercreds.password);
                     resolve(true);
                 }, error => {
                     if (error.status === 401) {
@@ -122,6 +129,7 @@ export class HttpService {
         return new Promise(resolve => {
             this.get('/rekeningrijder')
                 .subscribe(data => {
+                    this.common.setRekeningrijderId(data.json().id);
                     resolve(new User(data.json().id, data.json().username, data.json().email, data.json().address));
                 }, error => {
                     this.handleError(error); resolve(null);
@@ -145,8 +153,9 @@ export class HttpService {
         return new Promise(resolve => {
             this.get('/rekeningrijder/invoices/' + id)
                 .subscribe(data => {
-                    resolve(new Invoice(data.json().id, data.json().cartrackerId, data.json().totalAmount, data.json().status,
-                        new Date(data.json().year, data.json().month)));
+                    const i = data.json();
+                    resolve(new Invoice(i.id, i.cartrackerId, i.rekeningrijderId, i.totalAmount, i.status,
+                        new Date(i.year, i.month)));
                 }, error => {
                     this.handleError(error); resolve(null);
                 });
@@ -155,11 +164,25 @@ export class HttpService {
 
     getRidesOfInvoice(invoice: Invoice, options?: Headers): Promise<Ride[]> {
         const year = invoice.date.getFullYear();
-        const month = invoice.date.getMonth() - 1;
+        const month = invoice.date.getMonth();
         return new Promise(resolve => {
             this.get('/rekeningrijder/rides/cartracker/' + invoice.cartrackerId + '/date/' + year + '/' + month)
                 .subscribe(data => {
                     console.log(data.json());
+                    const rides = [];
+                    data.json().forEach(r => {
+                        const ride = new Ride(r.id, moment(r.startDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(), 
+                        moment(r.endDate, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate(), invoice.cartrackerId);
+                        const locations = [];
+                        r.locations.forEach(l => {
+                            locations.push(new LatLng(l.latitude, l.longitude, moment(l.date, 'YYYY-MM-DDTHH:mm:ssZ[Etc/UTC]').toDate()));
+                        });
+                        ride.locations = locations;
+                        rides.push(ride);
+                    });
+                    resolve(rides);
+                }, error => {
+                    this.handleError(error); resolve(null);
                 });
         });
     }
@@ -170,7 +193,8 @@ export class HttpService {
                 .subscribe(data => {
                     const invoices = [];
                     data.json().forEach(i => {
-                        invoices.push(new Invoice(i.id, i.cartrackerId, i.totalAmount, i.status, new Date(i.year, i.month)));
+                        invoices.push(new Invoice(i.id, i.cartrackerId, i.rekeningrijderId,
+                            i.totalAmount, i.status, new Date(i.year, i.month)));
                     });
                     resolve(invoices);
                 }, error => {
@@ -212,7 +236,6 @@ export class HttpService {
         return new Promise(resolve => {
             this.delete('/rekeningrijder/cars/' + vehicleId, body)
                 .subscribe(data => {
-                    console.log(data);
                     resolve(true);
                 }, error => {
                     this.handleError(error); resolve(null);

@@ -32,20 +32,27 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">{{ "datestart" | translate }}</th>
-                <th scope="col">{{ "dateend" | translate }}</th>
-                <th scope="col">{{ "locationstart" | translate }}</th>
-                <th scope="col">{{ "locationend" | translate }}</th>
-                <th scope="col">{{ "vehicle" | translate }}</th>
+                <th scope="col">{{ "date" | translate }}</th>
+                <th scope="col">{{ "latitude" | translate }}</th>
+                <th scope="col">{{ "longitude" | translate }}</th>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let movement of invoice.movements">
-                <td>{{dateToString(movement.startDate)}}</td>
-                <td>{{dateToString(movement.endDate)}}</td>
-                <td>{{movement.startLocation.latitude}}, {{movement.startLocation.longitude}}</td>
-                <td>{{movement.endLocation.latitude}}, {{movement.endLocation.longitude}}</td>
-                <td>{{movement.vehicle.licensePlate}}</td>
+        <tbody *ngFor="let ride of invoice.rides">
+            <!-- <tr>
+                    <td>
+                        <strong>{{ride.vehicle.licensePlate}}</strong>
+                    </td>
+                    <td>
+                        <strong>{{dateToString(ride.startDate)}}</strong>
+                    </td>
+                    <td>
+                        <strong>{{dateToString(ride.endDate)}}</strong>
+                    </td>
+                </tr> -->
+            <tr *ngFor="let loc of ride.locations">
+                <td>{{dateToString(loc.date)}}</td>
+                <td>{{loc.latitude}}</td>
+                <td>{{loc.longitude}}</td>
             </tr>
         </tbody>
     </table>

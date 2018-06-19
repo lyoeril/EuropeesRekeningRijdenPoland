@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../_model/User';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpService } from '../_services/http.service';
+import { CommonService } from '../_services/common.service';
 
 @Component({
     selector: 'app-user',
@@ -24,7 +25,9 @@ export class UserComponent implements OnInit {
 
     constructor(
         public translate: TranslateService,
-        private http: HttpService) {
+        private http: HttpService,
+        public common: CommonService
+    ) {
     }
 
     ngOnInit() {
@@ -45,8 +48,7 @@ export class UserComponent implements OnInit {
         const updatedUser = { email: this.userData.email, address: this.userData.address, password: this.userData.newPassword };
         this.http.updateUser(updatedUser)
             .then(data => {
-                console.log(data);
-                sessionStorage.setItem('password', updatedUser.password);
+                this.common.setPassword(updatedUser.password);
                 location.reload();
             });
     }
@@ -55,7 +57,7 @@ export class UserComponent implements OnInit {
         if (this.userData.oldPassword === '' && this.userData.newPassword === '' && this.userData.repNewPassword === '') {
             return true;
         } else if (this.userData.oldPassword !== '' && this.userData.newPassword !== '' && this.userData.repNewPassword !== '') {
-            if (this.userData.oldPassword === sessionStorage.getItem('password')) {
+            if (this.userData.oldPassword === this.common.getPassword()) {
                 if (this.userData.oldPassword !== this.userData.newPassword) {
                     if (this.userData.newPassword === this.userData.repNewPassword) {
                         return true;

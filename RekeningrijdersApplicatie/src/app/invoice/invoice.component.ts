@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Invoice } from '../_model/Invoice';
 import { Ride } from '../_model/Ride';
 import { Status } from '../_model/Status';
@@ -9,6 +9,7 @@ import { VehicleType } from '../_model/VehicleType';
 import * as moment from 'moment';
 import { HttpService } from '../_services/http.service';
 import { TranslateService } from '@ngx-translate/core';
+import { CommonService } from '../_services/common.service';
 
 declare let paypal: any;
 
@@ -51,7 +52,9 @@ export class InvoiceComponent implements OnInit {
     constructor(
         public translate: TranslateService,
         private http: HttpService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private router: Router,
+        public common: CommonService) {
         this.route.params
             .subscribe((params: Params) => {
                 this.id = +params['id'];
@@ -62,11 +65,17 @@ export class InvoiceComponent implements OnInit {
         this.getInvoice(this.id);
     }
 
+    checkUser() {
+        if (this.invoice.rekeningrijderId !== this.common.getRekeningrijderId()) {
+            this.router.navigate(['/']);
+        }
+    }
+
     getInvoice(year: number) {
         this.http.getInvoice(year)
             .then(invoice => {
                 this.invoice = invoice;
-
+                this.checkUser();
                 this.getRides();
                 if (!this.didPaypalScriptLoad && this.invoice.status.toLowerCase() === Status.OPEN) {
                     this.loadPaypalScript().then(() => {
@@ -79,6 +88,7 @@ export class InvoiceComponent implements OnInit {
     getRides() {
         this.http.getRidesOfInvoice(this.invoice)
             .then(response => {
+                console.log(response);
                 this.invoice.rides = response;
             });
     }

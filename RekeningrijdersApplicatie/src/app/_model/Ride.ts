@@ -6,15 +6,14 @@ export class Ride {
     startDate: Date;
     endDate: Date;
     locations: LatLng[];
+    cartrackerId: number;
 
-    vehicle: Vehicle;
-
-    constructor(_id: number, _startDate: Date, _endDate: Date, _vehicle: Vehicle) {
+    constructor(_id: number, _startDate: Date, _endDate: Date, _cartrackerId: number) {
         this.id = _id;
         this.startDate = _startDate;
         this.endDate = _endDate;
 
-        this.vehicle = _vehicle;
+        this.cartrackerId = _cartrackerId;
         this.locations = [];
     }
 }

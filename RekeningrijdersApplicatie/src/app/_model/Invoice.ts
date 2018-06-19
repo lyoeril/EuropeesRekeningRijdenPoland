@@ -5,16 +5,18 @@ import * as moment from 'moment';
 export class Invoice {
     id: number;
     cartrackerId: number;
+    rekeningrijderId: number;
     totalSum: number;
     status: Status;
     date: Date;
 
     rides: Ride[];
 
-    constructor(_id: number, _cartrackerId: number, _totalSum: number, _status: Status, _date: Date) {
+    constructor(_id: number, _cartrackerId: number, _rekeningrijderId: number, _totalSum: number, _status: Status, _date: Date) {
         this.id = _id;
         this.cartrackerId = _cartrackerId;
-        this.totalSum = _totalSum;
+        this.rekeningrijderId = _rekeningrijderId;
+        this.totalSum = +_totalSum.toFixed(2);
         this.status = _status;
         this.date = _date;
 

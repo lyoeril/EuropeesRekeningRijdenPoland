@@ -22,6 +22,8 @@ import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 
 // Services
 import { HttpService } from './_services/http.service';
+import { CommonService } from './_services/common.service';
+
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EqualValidator } from './_directives/equal-validator.directive';
 
@@ -55,7 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
       }
     })
   ],
-  providers: [HttpService],
+  providers: [HttpService, CommonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
