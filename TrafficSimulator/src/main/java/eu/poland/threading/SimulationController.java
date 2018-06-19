@@ -72,6 +72,20 @@ public class SimulationController {
             Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void startNewSim(String trackerId) {
+        DirectionsRoute route = null;
+        try {
+            route = routeService.getRandomRoute();
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, aioobe);
+            System.out.println("Unable to start this simulation thread, try again. (cars can't swim)");
+            return;
+        }
+        Ride ride = new Ride(trackerId, route);
+        Thread t = new Thread(new SimRunnable(msgQueueProducer, ride));
+        simulations.put(trackerId, pool.submit(t));
+    }
 
     public void startNewSim() {
         Random r = new Random();
@@ -84,16 +98,6 @@ public class SimulationController {
                 break;
             }
         }
-        DirectionsRoute route = null;
-        try {
-            route = routeService.getRandomRoute();
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
-            //Logger.getLogger(SimulationController.class.getName()).log(Level.SEVERE, null, aioobe);
-            System.out.println("Unable to start this simulation thread, try again. (cars can't swim)");
-            return;
-        }
-        Ride ride = new Ride(trackerId, route);
-        Thread t = new Thread(new SimRunnable(msgQueueProducer, ride));
-        simulations.put(trackerId, pool.submit(t));
+        startNewSim(trackerId);
     }
 }
