@@ -35,7 +35,6 @@ export class KmRateListComponent implements OnInit {
                     this.kmRates = response;
                     this.filteredKmRates = response;
                     this.isLoading = false;
-                    console.log(this.isLoading);
                 }
             });
     }
@@ -54,7 +53,6 @@ export class KmRateListComponent implements OnInit {
     }
 
     setTypeFilter(type) {
-        console.log(type);
         this.filteredType = type;
         this.filterKmRates();
     }
