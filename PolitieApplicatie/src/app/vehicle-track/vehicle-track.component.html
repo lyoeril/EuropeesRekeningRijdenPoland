@@ -20,14 +20,14 @@
           </span>
           <span class="card-text">
             <agm-map
-              [latitude]="points[0].latitude"
-              [longitude]="points[0].longitude"
+              [latitude]="points[0].lat"
+              [longitude]="points[0].lng"
               [zoom]="initZoom"
               [disableDefaultUI]="false"
               [zoomControl]="false">
               <agm-marker
-                [latitude]="points[0].latitude"
-                [longitude]="points[0].longitude">
+                [latitude]="points[0].lat"
+                [longitude]="points[0].lng">
                 <agm-info-window>
                   <strong>InfoWindow content</strong>
                 </agm-info-window>
@@ -36,8 +36,8 @@
                 [strokeColor]="strokeColor">
                 <agm-polyline-point
                   *ngFor="let p of points; let i = index"
-                  [latitude]="p.latitude"
-                  [longitude]="p.longitude">
+                  [latitude]="p.lat"
+                  [longitude]="p.lng">
                 </agm-polyline-point>
               </agm-polyline>
             </agm-map>
