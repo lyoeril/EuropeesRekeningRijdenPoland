@@ -18,8 +18,8 @@ import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import javax.ws.rs.PathParam;
 
 @ServerEndpoint("/policeSocket/{uuid}")
 public class WebSocket {
@@ -51,7 +51,7 @@ public class WebSocket {
     }
     
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("uuid") String uuid) {
+    public void onMessage(String message, Session session, @PathParam("uuid") String authenticationCode) {
 //        if (SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).contains(message)) {
 //            SessionLister.getInstance().getSessionMapVehicles().get(session.getId()).remove(message);
 //        } else {
