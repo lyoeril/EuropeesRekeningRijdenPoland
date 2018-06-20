@@ -5,7 +5,9 @@
  */
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
@@ -64,8 +66,8 @@ public class UserGroupTest {
     public void testGetUsers() {
         System.out.println("getUsers");
         UserGroup instance = ug1;
-        Set<User> expResult = new HashSet<>();
-        Set<User> result = instance.getUsers();
+        List<User> expResult = new ArrayList<>();
+        List<User> result = instance.getUsers();
         assertEquals(expResult, result);
     }
 
@@ -75,7 +77,7 @@ public class UserGroupTest {
     @Test
     public void testSetUsers() {
         System.out.println("setUsers");
-        Set<User> users = new HashSet<>();
+        List<User> users = new ArrayList<>();
         users.add(u1);
         UserGroup instance = ug1;
         instance.setUsers(users);  

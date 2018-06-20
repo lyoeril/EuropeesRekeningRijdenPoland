@@ -121,7 +121,7 @@ public class KMRateTest {
         km1.addRatePerVehicleType(vehicleType, 22.0);
         double expResult = 22.0;
         double result = instance.getRateFromVehicleType(vehicleType);
-        assertEquals(expResult, result, 0.0);
+        assertEquals(expResult, result, 0.0); 
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package dto;
 
+import domain.Cartracker;
 import domain.Vehicle;
 import enums.VehicleType;
 import java.util.ArrayList;
@@ -31,16 +32,18 @@ public class DTO_VehicleTest {
     private String licensePlate;
     private List<Long> ownersHistory;
     
-    
+    private Cartracker c;
     
     @Before
     public void setUp() {
+        c = new Cartracker("hardware");
         id = 1L;
         vehicleType = VehicleType.AUTOBUS;
         licensePlate = "licensePlate";        
         ownersHistory = new ArrayList<>();
         vehicle = new Vehicle(vehicleType, licensePlate);
         vehicle.setId(id);
+        vehicle.setCartracker(c);
         
         dtoVehicle = new DTO_Vehicle(vehicle);
     }

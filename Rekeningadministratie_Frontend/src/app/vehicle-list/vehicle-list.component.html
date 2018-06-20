@@ -49,6 +49,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">License Plate</th>
+                <th scope="col">Current Owner</th>
                 <th scope="col">Type</th>
                 <th scope="col">Cartracker</th>
                 <th scope="col">Manage</th>
@@ -58,14 +59,92 @@
             <tr *ngFor="let vehicle of filteredVehicles; let i=index">
                 <th *ngIf="i < listLimit" scope="row">{{vehicle.id}}</th>
                 <td *ngIf="i < listLimit">{{vehicle.licensePlate}}</td>
+                <td *ngIf="i < listLimit && vehicle.currentOwner !== null">{{vehicle.currentOwner.username}}</td>                
+                <td *ngIf="i < listLimit && vehicle.currentOwner === null">No Owner</td>
                 <td *ngIf="i < listLimit">{{vehicle.vehicleType}}</td>
-                <td *ngIf="i < listLimit">{{vehicle.cartrackerId}}</td>
+                <td *ngIf="i < listLimit && vehicle.cartracker !== null">{{vehicle.cartracker.hardware}}</td>
+                <td *ngIf="i < listLimit && vehicle.cartracker === null">No Cartracker</td>
                 <td *ngIf="i < listLimit">
-                    <a (click)="edit(vehicle)" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                    <a (click)="edit(vehicle)" data-toggle="modal" data-target="#editModal" title="Edit">
                         <span class="fas fa-edit"></span>
+                    </a>
+                    <a (click)="link(vehicle)" data-toggle="modal" data-target="#cartrackerModal" title="Link Cartracker">
+                        <span class="fas fa-location-arrow"></span>
                     </a>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <div *ngIf="isLoading" >
+        <span class="fas fa-spinner fa-pulse mx-auto" style="width: 100%"></span>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog bg-dark" role="document">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="editModalLabel">Edit Vehicle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bg-dark">
+                <form *ngIf="editVehicle !== null">
+                    <div class="form-group">
+                        <label for="licensePlate" class="col-form-label">License Plate:</label>
+                        <input name="licensePlate" type="text" class="form-control" id="licensePlate" [(ngModel)]="editVehicle.licensePlate">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Type:</label>
+                        <div class="dropdown mr-sm-3">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                {{editVehicle.vehicleType}}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a *ngFor="let type of types()" class="dropdown-item" (click)="setEditVehicleType(type)">{{type}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-light" (click)="updateVehicle()" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cartrackerModal" tabindex="-1" role="dialog" aria-labelledby="cartrackerModal" aria-hidden="true">
+    <div class="modal-dialog bg-dark" role="document">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="cartrackerModalLabel">Link Cartracker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bg-dark">
+                <form *ngIf="editVehicle !== null">
+                    <div class="form-group">
+                        <label for="cartracker" class="col-form-label">Cartracker:</label>
+                        <input name="cartracker" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Search Cartracker" aria-label="Search"
+                            aria-describedby="basic-addon2" [(ngModel)]="cartrackerQuery" (keyup)="searchCartracker()">
+                        <div class="dropdown-menu" [hidden]="cartrackerResults.length === 0">
+                            <a *ngFor="let result of cartrackerResults" class="dropdown-item" (click)="setCartracker(result)">
+                                {{result.hardware}}
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-light" (click)="linkVehicle()" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
 </div>

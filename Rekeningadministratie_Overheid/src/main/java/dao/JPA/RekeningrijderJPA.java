@@ -7,10 +7,12 @@ package dao.JPA;
 
 import dao.interfaces.IRekeningrijderDAO;
 import domain.Rekeningrijder;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -54,5 +56,12 @@ public class RekeningrijderJPA implements IRekeningrijderDAO{
     @Override
     public Rekeningrijder findById(long id) {
         return em.find(Rekeningrijder.class, id);
+    }
+
+    @Override
+    public List<Rekeningrijder> findByUsername(String username) {
+        Query q = em.createNamedQuery("Rekeningrijder.findByUsername");
+        q.setParameter("username", "%" + username + "%");
+        return (List<Rekeningrijder>) q.getResultList();
     }
 }

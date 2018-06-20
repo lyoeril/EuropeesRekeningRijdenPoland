@@ -63,31 +63,16 @@ public class InvoiceJPA implements IInvoiceDAO {
     }
 
     @Override
-    public List<Invoice> findByRekeningrijder(Rekeningrijder rekeningrijder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Invoice findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
+    public List<Invoice> findByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month) {
         try {
             Query q = em.createNamedQuery("Invoice.findByRekeningrijderMonth");
             q.setParameter("id", rekeningrijder.getId());
             q.setParameter("year", year);
             q.setParameter("month", month);
-            return (Invoice) q.getSingleResult();
+            return q.getResultList();
         } catch (NoResultException e) {
             return null;
         }
-    }
-
-    @Override
-    public List<Invoice> findByVehicle(Rekeningrijder rekeningrijder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Invoice> findByVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -97,11 +82,13 @@ public class InvoiceJPA implements IInvoiceDAO {
 
     @Override
     public Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month) {
+        System.out.println("info inside jpa: \n" + cartrackerId + "\n" + year + "\n" + month);
          try {
             Query q = em.createNamedQuery("Invoice.findByCartrackerYearMonth");
             q.setParameter("cartrackerid", cartrackerId);
             q.setParameter("year", year);
             q.setParameter("month", month);
+             System.out.println("query to start: " + q.toString());
             return (Invoice)q.getSingleResult();
         } catch (NoResultException e) {
             return null;

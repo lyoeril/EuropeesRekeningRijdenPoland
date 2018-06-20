@@ -14,6 +14,7 @@ export class InvoiceListComponent implements OnInit {
     searchProperty = 'ID';
 
     listLimit = 50;
+    private isLoading = true;
 
     constructor(private http: HttpService) { }
 
@@ -28,6 +29,7 @@ export class InvoiceListComponent implements OnInit {
                     this.invoices = response;
                     this.filteredInvoices = response;
                 }
+                this.isLoading = false;
             });
     }
 
@@ -70,6 +72,11 @@ export class InvoiceListComponent implements OnInit {
     }
 
     recalculateInvoice(invoice: Invoice) {
-        console.log('Recalculating...');
+        this.http.recalculateInvoice(invoice)
+            .then(response => {
+                if (response !== null) {
+                    location.reload();
+                }
+            });
     }
 }

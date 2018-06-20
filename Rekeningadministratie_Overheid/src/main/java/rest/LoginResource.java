@@ -61,7 +61,7 @@ public class LoginResource {
             List<User> u = userService.findByUsername(username);
             User user = u.get(0);
             
-            HashSet<UserGroup> groups = user.getGroups();
+            List<UserGroup> groups = user.getGroups();
             
             
             String token = ls.issueToken(username, groups);

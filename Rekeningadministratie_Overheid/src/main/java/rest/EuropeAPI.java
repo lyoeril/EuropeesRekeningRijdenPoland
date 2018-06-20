@@ -5,6 +5,8 @@
  */
 package rest;
 
+import domain.Cartracker;
+import dto.DTO_EuropeCalculatePriceApi;
 import java.util.Date;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -23,13 +25,15 @@ public class EuropeAPI {
     @Path("/vehicle/{uuid}/calculatePricing")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    public Response registerLocation(@PathParam("uuid") String uuid, JSONObject jsonObject) {
+    public Response registerLocation(@PathParam("uuid") String uuid, String currentLocation) {
         if (uuid != null && !uuid.equals("")) {
-            JSONObject json = new JSONObject();
-            json.put("uuid", uuid);
-            json.put("tripTotalKM", 50.12);
-            json.put("tripPrice", 13.4);
-            return Response.ok().entity(json).build();
+//            JSONObject json = new JSONObject();
+//            json.put("uuid", uuid);
+//            json.put("tripTotalKM", 50.12);
+//            json.put("tripPrice", 13.4);
+
+            DTO_EuropeCalculatePriceApi dto_ecpa = new DTO_EuropeCalculatePriceApi(new Cartracker("auto"));
+            return Response.ok().entity(dto_ecpa).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }

@@ -18,6 +18,7 @@ public interface ICartrackerDAO {
     void edit(Cartracker cartracker);
     void delete(Cartracker cartracker);
     Cartracker findById(long id);
+    List<Cartracker> findByHardware(String hardware);
 
     List<Cartracker> findAll();
 }

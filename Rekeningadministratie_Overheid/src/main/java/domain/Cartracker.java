@@ -21,30 +21,33 @@ import javax.persistence.Transient;
  *
  * @author Laurent
  */
-
 @Entity
 @Model
 @NamedQueries({
     @NamedQuery(name = "Cartracker.findAll",
             query = "SELECT c FROM Cartracker c")
+    ,
+    @NamedQuery(name = "Cartracker.findByHardware",
+            query = "SELECT c FROM Cartracker c WHERE c.hardware LIKE :hardware")
 })
-public class Cartracker implements Serializable{
-    
+public class Cartracker implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String hardware;
-    
+
+    @Transient
     private List<Ride> rides;
-    
+
     //JPA
-    public Cartracker(){
-        
+    public Cartracker() {
+
     }
 
     public Cartracker(String hardware) {
         this.hardware = hardware;
-        this.rides = new ArrayList<>(); 
+        this.rides = new ArrayList<>();
     }
 
     public long getId() {
@@ -70,7 +73,5 @@ public class Cartracker implements Serializable{
     public void setRides(List<Ride> rides) {
         this.rides = rides;
     }
-    
-    
-    
+
 }

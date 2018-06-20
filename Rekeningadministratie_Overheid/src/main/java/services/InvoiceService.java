@@ -54,17 +54,10 @@ public class InvoiceService {
         return invoiceDAO.findById(id);
     }
     
-    public List<Invoice> findInvoicesByRekeningrijder(Rekeningrijder rekeningrijder){
-        return invoiceDAO.findByRekeningrijder(rekeningrijder);
-    }
-    
-    public Invoice findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month){
+    public List<Invoice> findInvoiceByRekeningrijderMonth(Rekeningrijder rekeningrijder, int year, int month){
         return invoiceDAO.findByRekeningrijderMonth(rekeningrijder, year, month);
     }
     
-    public List<Invoice> findInvoiceVehicleMonth(Rekeningrijder rekeningrijder, Calendar date, Vehicle vehicle){
-        return invoiceDAO.findByVehicleMonth(rekeningrijder, date, vehicle);
-    }
     
     public Invoice findInvoiceByCartrackerYearMonth(long cartrackerId, int year, int month){
         return invoiceDAO.findInvoiceByCartrackerYearMonth(cartrackerId, year, month);

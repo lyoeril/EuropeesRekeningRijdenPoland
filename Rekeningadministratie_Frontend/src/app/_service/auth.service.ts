@@ -8,7 +8,9 @@ export class AuthService implements CanActivate {
     constructor(private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-        if (sessionStorage.getItem('token') !== null) {
+        if (sessionStorage.getItem('token') !== null &&
+            sessionStorage.getItem('Authorization') !== null &&
+            sessionStorage.getItem('token') === sessionStorage.getItem('Authorization')) {
             return true;
         }
         this.router.navigate(['login']);

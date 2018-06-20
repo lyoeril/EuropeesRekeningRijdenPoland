@@ -9,12 +9,19 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import domain.Cartracker;
 import domain.Invoice;
+import domain.Location;
 import domain.Rekeningrijder;
+import domain.Ride;
 import domain.User;
 import domain.Vehicle;
 import dto.DTO_Invoice;
+import dto.DTO_Location;
+import dto.DTO_Location_JSON;
 import dto.DTO_Rekeningrijder;
+import dto.DTO_Ride;
+import dto.DTO_Ride_JSON;
 import dto.DTO_Vehicle;
 import enums.InvoiceStatus;
 import enums.VehicleType;
@@ -25,6 +32,7 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.annotation.HttpConstraint;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -38,8 +46,10 @@ import javax.ws.rs.core.HttpHeaders;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import services.InvoiceCalculationService;
 import services.InvoiceService;
 import services.RegistrationService;
+import services.RideService;
 import services.UserService;
 
 /**
@@ -60,6 +70,12 @@ public class RekeningrijderAPI {
     @Inject
     private UserService userService;
 
+    @Inject
+    private InvoiceCalculationService ics;
+
+    @Inject
+    private RideService rideService;
+
     //TODO
     //Still need to fix User/Kwetteraar difference; Essential to just need 1 databasecall
     //TODO
@@ -74,7 +90,7 @@ public class RekeningrijderAPI {
         if (username != null) {
             User u = userService.findByUsername(username).get(0);
             Rekeningrijder r = registrationService.findRekeningrijderById(u.getId());
-
+            System.out.println("Rekeningrijder ->> " + r);
             DTO_Rekeningrijder dto = new DTO_Rekeningrijder(r);
             return Response.accepted(dto).build();
         }
@@ -89,7 +105,7 @@ public class RekeningrijderAPI {
             @Context HttpHeaders headers,
             @FormParam("email") String email,
             @FormParam("address") String address,
-            @FormParam("password") String password){
+            @FormParam("password") String password) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
@@ -111,6 +127,9 @@ public class RekeningrijderAPI {
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
         Invoice i = new Invoice(1, 20.00, 2017, 1, rekeningrijder);
+        if (rekeningrijder == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
         rekeningrijder.getInvoices().add(i);
         registrationService.updateRekeningrijder(rekeningrijder);
         invoiceService.addInvoice(i);
@@ -123,14 +142,17 @@ public class RekeningrijderAPI {
     public Response getInvoices(@Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
+        if (rekeningrijder == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
 
         List<Invoice> invoices = rekeningrijder.getInvoices();
         if (invoices != null) {
             List<DTO_Invoice> dto_invoices = new ArrayList<>();
-            for(Invoice i : invoices){
+            for (Invoice i : invoices) {
                 dto_invoices.add(new DTO_Invoice(i));
-            }            
-            
+            }
+
             return Response.accepted(dto_invoices).build();
         }
         return Response.status(Status.NOT_FOUND).build();
@@ -143,7 +165,7 @@ public class RekeningrijderAPI {
         try {
             Invoice i = invoiceService.findInvoiceById(id);
             if (i != null) {
-                return Response.ok(i).build();
+                return Response.ok(new DTO_Invoice(i)).build();
             }
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -161,23 +183,26 @@ public class RekeningrijderAPI {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
 
-        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
-        if(toReturn != null){
-            return Response.accepted(new DTO_Invoice(toReturn)).build();
+        List<Invoice> invoices = invoiceService.findInvoiceByRekeningrijderMonth(rekeningrijder, year, month);
+        List<DTO_Invoice> dtoInvoices = new ArrayList<>();
+        for (Invoice i : invoices) {
+            dtoInvoices.add(new DTO_Invoice(i));
+        }
+
+        if (dtoInvoices != null) {
+            return Response.accepted(dtoInvoices).build();
         }
         return Response.status(Status.NOT_FOUND).build();
     }
 
     //TODO
     @PUT
-    @Path("invoices/{year}/{month}/")
+    @Path("invoices/{id}")
     public Response payInvoice(
-            @Context HttpHeaders headers,
-            @PathParam("year") int year,
-            @PathParam("month") int month) {
-        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-        Rekeningrijder r = this.getRekeningrijderFromToken(token);
-        Invoice toReturn = invoiceService.findInvoiceByRekeningrijderMonth(r, year, month);
+            @PathParam("id") long id) {
+//        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+//        Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        Invoice toReturn = invoiceService.findInvoiceById(id);
         if (toReturn != null) {
             toReturn.setStatus(InvoiceStatus.PAID);
             invoiceService.updateInvoice(toReturn);
@@ -188,7 +213,34 @@ public class RekeningrijderAPI {
 
     @GET
     @Produces(APPLICATION_JSON)
+    @Path("rides/cartracker/{id}/date/{year}/{month}")
+    public Response getRidesOfVehicle(
+            @Context HttpHeaders headers,
+            @PathParam("id") long id,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        List<Ride> rides = rideService.getRides(id, month, year);
+        System.out.println("rides: " + rides);
+        List<DTO_Ride_JSON> dtoRides = new ArrayList<>();
+        if (rides == null) {
+            return Response.status(Status.EXPECTATION_FAILED).build();
+        }
+        for (Ride r : rides) {
+            List<DTO_Location_JSON> dtoLocations = new ArrayList<>();
+            for (Location l : r.getLocations()) {
+                dtoLocations.add(new DTO_Location_JSON(l.getDate(), l.getId(), l.getLatitude(), l.getLongitude()));
+            }
+            dtoRides.add(new DTO_Ride_JSON(r.getId(), r.getStartDate(), r.getEndDate(), dtoLocations));
+            return Response.accepted(dtoRides).build();
+
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
     @Path("/cars")
+
     public Response getCars(@Context HttpHeaders headers) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
 
@@ -197,7 +249,7 @@ public class RekeningrijderAPI {
         if (r != null) {
             List<Vehicle> vehicles = r.getOwnedVehicles();
             List<DTO_Vehicle> vehicleNames = new ArrayList<>();
-            for(Vehicle v: vehicles){
+            for (Vehicle v : vehicles) {
                 DTO_Vehicle vehicle = new DTO_Vehicle(v);
                 vehicleNames.add(vehicle);
             }
@@ -218,13 +270,18 @@ public class RekeningrijderAPI {
                 System.out.println("TOKIETOKIE: " + token);
                 String username = this.getUsernameFromToken(token);
 
-                List<Vehicle> vehicles = this.getRekeningrijderFromUsername(username).getOwnedVehicles();
-
-                for (Vehicle vehicle : vehicles) {
-                    if (vehicle.getId() == carId) {
-                        return Response.ok(vehicle).build();
+                Rekeningrijder r = this.getRekeningrijderFromUsername(username);
+                if (r != null) {
+                    List<Vehicle> vehicles = r.getOwnedVehicles();
+                    if (vehicles != null) {
+                        for (Vehicle vehicle : vehicles) {
+                            if (vehicle.getId() == carId) {
+                                return Response.ok(new DTO_Vehicle(vehicle)).build();
+                            }
+                        }
                     }
                 }
+
             } catch (Exception e) {
                 return Response.status(Status.NOT_FOUND).build();
             }
@@ -242,13 +299,16 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if (r == null) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         Vehicle v = new Vehicle(vehicleType, licensePlate);
         v.getOwnersHistory().add(r);
         r.getOwnedVehicles().add(v);
         registrationService.updateRekeningrijder(r);
         return Response.accepted().build();
     }
-    
+
     @PUT
     @Produces(APPLICATION_JSON)
     @Path("cars/{carId}/update")
@@ -259,16 +319,19 @@ public class RekeningrijderAPI {
 
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if (r == null) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         List<Vehicle> vehicles = r.getOwnedVehicles();
         Vehicle old = new Vehicle(vehicleType, licensePlate);
-        for(Vehicle v: vehicles){
-            if(v.getLicensePlate() == licensePlate){
+        for (Vehicle v : vehicles) {
+            if (v.getLicensePlate() == licensePlate) {
                 r.getOwnedVehicles().remove(v);
                 old.setVehicleType(vehicleType);
                 r.getOwnedVehicles().add(v);
                 registrationService.updateRekeningrijder(r);
             }
-        }        
+        }
         return Response.accepted().build();
     }
 
@@ -280,6 +343,9 @@ public class RekeningrijderAPI {
             @PathParam("carId") long carId) {
         String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
         Rekeningrijder r = this.getRekeningrijderFromToken(token);
+        if (r == null) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         for (Vehicle v : r.getOwnedVehicles()) {
             if (v.getId() == carId) {
                 r.getOwnedVehicles().remove(v);
@@ -288,6 +354,77 @@ public class RekeningrijderAPI {
             }
         }
         return Response.status(Status.FORBIDDEN).build();
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("invoices/calculate/{vehicleId}/{year}/{month}")
+    public Response calculateInvoice(
+            @Context HttpHeaders headers,
+            @PathParam("vehicleId") long vehicleId,
+            @PathParam("year") int year,
+            @PathParam("month") int month) {
+        List<Ride> rides = rideService.getRides(vehicleId, month, year);
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder rekeningrijder = this.getRekeningrijderFromToken(token);
+
+        VehicleType type = registrationService.findVehicleById(vehicleId).getVehicleType();
+        Invoice i = ics.calculateInvoice(vehicleId, month, year, rekeningrijder, rides, type);
+        System.out.println("invoice ending: " + i);
+        System.out.println("(0)-(0)");
+        return Response.accepted(new DTO_Invoice(i)).build();
+    }
+
+    @GET
+    @Produces(APPLICATION_JSON)
+    @Path("invoicecalc")
+    public Response calcInvoice(
+            @Context HttpHeaders headers) {
+        Calendar c1 = new GregorianCalendar(2018, 01, 01);
+        Location l1 = new Location(1L, c1, 52.40533, 19.27417);
+        Location l2 = new Location(2L, c1, 52.23478, 19.17059);
+
+        List<Ride> rides = new ArrayList<Ride>();
+        Ride r = new Ride(1L, c1, c1);
+        List<Location> locations = new ArrayList<>();
+        locations.add(l1);
+        locations.add(l2);
+        r.setLocations(locations);
+        rides.add(r);
+
+        String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+        Rekeningrijder rekrij = this.getRekeningrijderFromToken(token);
+        if (rekrij == null) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+        System.out.println("rekrij: " + rekrij.getUsername());
+
+        Invoice returnable = ics.calculateInvoice(99, 1, 2018, rekrij, rides, VehicleType.VAN);
+        return Response.accepted(returnable).build();
+    }
+
+    @PUT
+    @Path("vehicles/{id}/link")
+    public Response linkVehicle(
+            @PathParam("id") long id,
+            @FormParam("cartrackerUUID") String cartrackerUUID) {
+        Cartracker c = null;
+        List<Cartracker> cartrackers = registrationService.findCartrackersByHardware(cartrackerUUID);
+        if (cartrackers.size() >= 1) {
+            c = cartrackers.get(0);
+        } else {
+            registrationService.addCartracker(new Cartracker(cartrackerUUID));
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        Vehicle v = registrationService.findVehicleById(id);
+        if (v != null) {
+            v.setCartracker(c);
+            registrationService.updateCartracker(c);
+            return Response.accepted(new DTO_Vehicle(v)).build();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+
     }
 
     private String getUsernameFromToken(String token) {
