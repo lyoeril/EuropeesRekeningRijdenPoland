@@ -4,7 +4,7 @@
     
     <groupId>com.poland</groupId>
     <artifactId>RegistratieCentrale</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>war</packaging>
     
     <name>RegistratieCentrale</name>
@@ -73,6 +73,12 @@
             <version>6.0.6</version>
         </dependency>
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>8.0</version>
@@ -91,9 +97,24 @@
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>2.12.3</version>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.15.3</version>
+        </dependency>        
+        <dependency> 
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.jts.io</groupId>
+            <artifactId>jts-io-common</artifactId>
+            <version>1.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.2.7</version>
         </dependency>
     </dependencies>
     

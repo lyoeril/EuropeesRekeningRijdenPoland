@@ -11,12 +11,15 @@ import com.poland.entities.Ride;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
+import javax.persistence.Query;
 
 /**
  *
  * @author PC-YOERI
  */
 @Stateless
+@Default
 public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO {
 
     @Override
@@ -35,17 +38,28 @@ public class VehicleDAOImpl extends BasicDAOImpl<Vehicle> implements VehicleDAO 
     }
 
     @Override
-    public void addRide(Ride ride) {
+    public Vehicle getVehicleByAuthorisationCode(String authorisationCode) {
+        Vehicle vehicle = null;
         try {
-            em.persist(ride);
-        } catch (IllegalStateException ise) {
+            Query q = em.createQuery("SELECT v FROM Vehicle v WHERE v.authorisationCode = :authorisationCode");
+            q.setParameter("authorisationCode", authorisationCode);
+            vehicle = (Vehicle) q.getSingleResult();
+        } catch (Exception ise) {
             handleExceptions(ise);
         }
+        return vehicle;
     }
 
     @Override
-    public void removeRide(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Vehicle> getVehiclesIfStolen() {
+        List<Vehicle> vehicles = null;
+        try {
+            Query q = em.createQuery("SELECT v FROM Vehicle v WHERE v.stolen = :stolen");
+            q.setParameter("stolen", true);
+            vehicles = (List<Vehicle>) q.getResultList();
+        } catch (Exception ise) {
+            handleExceptions(ise);
+        }
+        return vehicles;
     }
-
 }

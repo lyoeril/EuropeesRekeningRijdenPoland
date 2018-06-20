@@ -1,0 +1,32 @@
+body {
+    background-color: #1d1d1d;
+    color: white;
+    /* background-image: url("../images/warschau.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed; */
+}
+
+a :hover {
+    cursor: pointer;
+}
+
+.main {
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.shadow {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)!important;
+}
+
+.ng-valid[required], .ng-valid.required {
+    border-left: 5px solid #42A948;
+    /* green */
+}
+
+.ng-invalid:not(form) {
+    border-left: 5px solid #a94442;
+    /* red */
+}

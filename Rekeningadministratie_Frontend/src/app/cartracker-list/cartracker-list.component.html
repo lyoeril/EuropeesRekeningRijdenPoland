@@ -1,0 +1,46 @@
+<form class="form-inline my-2 float-left">
+    <p class="mr-sm-2 my-0 align-self-center">List limit: </p>
+    <div class="dropdown mr-sm-3">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            {{listLimit}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="setListLimit(1)">1</a>
+            <a class="dropdown-item" (click)="setListLimit(5)">5</a>
+            <a class="dropdown-item" (click)="setListLimit(10)">10</a>
+            <a class="dropdown-item" (click)="setListLimit(15)">15</a>
+            <a class="dropdown-item" (click)="setListLimit(25)">25</a>
+            <a class="dropdown-item" (click)="setListLimit(50)">50</a>
+            <a class="dropdown-item" (click)="setListLimit(100)">100</a>
+        </div>
+    </div>
+</form>
+<form class="form-inline my-2 float-right">
+    <p class="mr-sm-2 my-0 align-self-center">Search on: </p>
+    <div class="dropdown mr-sm-3">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            {{searchProperty}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="setSearch('ID')">ID</a>
+            <a class="dropdown-item" (click)="setSearch('Hardware')">Hardware</a>
+        </div>
+    </div>
+    <input name="filter" class="form-control" type="search" placeholder="Search..." aria-label="Search" [(ngModel)]="search" (keyup)="filterCartrackers()">
+</form>
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Hardware</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let cartracker of filteredCartrackers; let i=index">
+            <th *ngIf="i < listLimit" scope="row">{{cartracker.id}}</th>
+            <td *ngIf="i < listLimit">{{cartracker.hardware}}</td>
+        </tr>
+    </tbody>
+</table>

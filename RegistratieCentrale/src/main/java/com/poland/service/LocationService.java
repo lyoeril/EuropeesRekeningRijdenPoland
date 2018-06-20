@@ -7,6 +7,7 @@ package com.poland.service;
 
 import com.poland.dao.interfaces.jpa.LocationDAO;
 import com.poland.entities.Location;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,8 +28,7 @@ public class LocationService {
 
     public LocationService() {
     }
-    
-    
+
     public List<Location> getLocationsByRideId(long id) {
         return locationDAO.findLocationsByRideId(id);
     }
@@ -51,7 +51,6 @@ public class LocationService {
     public boolean deleteLocation(long id) {
         try {
             Location location = locationDAO.find(id);
-        
 
             locationDAO.edit(location);
             locationDAO.remove(locationDAO.find(id));
@@ -60,5 +59,38 @@ public class LocationService {
             return false;
         }
     }
-    
+
+    public Location getLocatieById(long id) {
+        try {
+            if (id != 0L && id > 0L) {
+                return locationDAO.find(id);
+            } else {
+                return null;
+            }
+        } catch (NullPointerException x) {
+            return null;
+        }
+
+    }
+
+    public Location findLastLocationByAuthenticationCode(String authenticationCode) {
+        try {
+            if (authenticationCode != null && !authenticationCode.equals("")) {
+                return locationDAO.findLastLocationByAuthenticationCode(authenticationCode);
+            } else {
+                return null;
+            }
+        } catch (NullPointerException x) {
+            return null;
+        }
+
+    }
+
+    public boolean insertLocationStoreProcedure(Date date, Double latitude, Double longitude, String authorisationCode) {
+        if (date == null || latitude >= 90 || latitude <= -90 || longitude >= 180 || longitude <= -180 || authorisationCode == null || authorisationCode.equals("")) {
+            return false;
+        } else {
+            return locationDAO.insertLocationStoreProcedure(date, latitude, longitude, authorisationCode);
+        }
+    }
 }

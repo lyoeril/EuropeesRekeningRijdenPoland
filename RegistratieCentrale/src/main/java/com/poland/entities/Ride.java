@@ -16,15 +16,13 @@ import javax.persistence.*;
  * @author PC-YOERI
  */
 @Entity
+@Table(name = "t_ride")
 public class Ride implements Serializable {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "serialNumber", unique = true, nullable = false)
-    private String serialNumber;
 
     @Column(name = "startDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,23 +32,26 @@ public class Ride implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
-    @ManyToOne
+    @Column(name = "missedMeasurement")
+    private boolean missedMeasurement;
+
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "id")
     @JoinColumn(name = "vehicleId", nullable = false)
     private Vehicle vehicle;
 
-    @ElementCollection
+    @Transient
     private List<Location> locations;
 
     public Ride() {
         locations = new ArrayList<>();
     }
 
-    public Ride(Date startDate, String serialNumber, Vehicle vehicle) {
+    public Ride(Date startDate, Vehicle vehicle) {
         locations = new ArrayList<>();
         setStartDate(startDate);
-        setSerialNumber(serialNumber);
+        setEndDate(startDate);
         setVehicle(vehicle);
-
+        missedMeasurement = false;
     }
 
     public long getId() {
@@ -77,6 +78,14 @@ public class Ride implements Serializable {
         this.endDate = endDate;
     }
 
+    public boolean isMissedMeasurement() {
+        return missedMeasurement;
+    }
+
+    public void setMissedMeasurement(boolean missedMeasurement) {
+        this.missedMeasurement = missedMeasurement;
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -87,14 +96,6 @@ public class Ride implements Serializable {
 
     public List<Location> getLocations() {
         return locations;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
     }
 
     public void setLocations(List<Location> locations) {

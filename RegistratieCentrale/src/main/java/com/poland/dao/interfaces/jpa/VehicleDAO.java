@@ -5,7 +5,6 @@
  */
 package com.poland.dao.interfaces.jpa;
 
-import com.poland.entities.Location;
 import com.poland.entities.Ride;
 import com.poland.entities.Vehicle;
 import java.util.Date;
@@ -23,7 +22,7 @@ public interface VehicleDAO extends BasicDAO<Vehicle> {
 
     List<Ride> getRidesByDate(Date startDate, Date endDate, long id);
 
-    void addRide(Ride ride);
+    Vehicle getVehicleByAuthorisationCode(String authorisationCode);
 
-    void removeRide(long id);
+    List<Vehicle> getVehiclesIfStolen();
 }

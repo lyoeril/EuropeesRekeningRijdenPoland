@@ -7,7 +7,8 @@ package com.poland.dao.implementations;
 
 import com.poland.dao.interfaces.jpa.BasicDAO;
 import java.lang.reflect.ParameterizedType;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -22,6 +23,8 @@ import javax.persistence.RollbackException;
  */
 public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
+    private static final Logger LOGGER = Logger.getLogger(BasicDAOImpl.class.getName());
+
     @PersistenceContext(unitName = "com.poland_RegistratiePU")
     protected EntityManager em;
 
@@ -33,12 +36,14 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
     @Override
     public T create(T entity) {
+        T newEntity = null;
         try {
             em.persist(entity);
+            newEntity = em.merge(entity);
         } catch (Exception ise) {
             handleExceptions(ise);
         }
-        return entity;
+        return newEntity;
     }
 
     @Override
@@ -88,19 +93,16 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
     public void handleExceptions(Exception ex) {
         if (ex instanceof IllegalStateException) {
             // If isActive() is false
-            System.out.println("The EntityManager is not active. ");
-            // TODO handle exception
+            LOGGER.log(Level.WARNING, "The EntityManager is not active. ");
         } else if (ex instanceof RollbackException) {
             // If the commit fails
-            System.out.println("The commit failed due to an unknown error. ");
-            // TODO handle exception
+            LOGGER.log(Level.WARNING, "The commit failed due to an unknown error. ");
         } else if (ex instanceof QueryTimeoutException) {
             // If the statement execution exceeds the query timeout value
-            System.out.println("The query took too long to be executed. ");
+            LOGGER.log(Level.WARNING, "The query took too long to be executed. ");
         } else if (ex instanceof IllegalArgumentException) {
-            System.out.println("Entity type is not valid");
+            LOGGER.log(Level.WARNING, "Illegal Argument Exception");
         } else if (ex instanceof NoResultException) {
-            System.out.println("Entity type is not valid");
         }
     }
 
@@ -112,12 +114,8 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
         try {
             String entityName = em.getMetamodel().entity(type).getName();
             em.createQuery("delete from " + entityName).executeUpdate();
-        } catch (IllegalStateException ise) {
+        } catch (Exception ise) {
             handleExceptions(ise);
-        } catch (RollbackException rbe) {
-            handleExceptions(rbe);
-        } catch (QueryTimeoutException qte) {
-            handleExceptions(qte);
         }
     }
 

@@ -7,7 +7,6 @@ package com.poland.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
@@ -23,10 +22,19 @@ public class Vehicle implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "authorisationCode")
+    @Column(name = "authorisationCode", unique = true)
     private String authorisationCode;
 
-    @OneToMany(mappedBy = "vehicleId", cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @Column(name = "stolen", nullable = false)
+    private boolean stolen;
+
+    @Column(name = "foreignCar", nullable = false)
+    private boolean foreignCar;
+
+    @JoinColumn(name = "locationId")
+    private Location lastLocation;
+
+    @Transient
     private List<Ride> rides;
 
     public Vehicle() {
@@ -36,6 +44,15 @@ public class Vehicle implements Serializable {
     public Vehicle(String authorisationCode) {
         rides = new ArrayList<>();
         setAuthorisationCode(authorisationCode);
+        setStolen(false);
+        setForeignCar(false);
+    }
+
+    public Vehicle(String authorisationCode, boolean stolen, boolean foreignCar) {
+        rides = new ArrayList<>();
+        setAuthorisationCode(authorisationCode);
+        setStolen(stolen);
+        setForeignCar(foreignCar);
     }
 
     public long getId() {
@@ -54,6 +71,38 @@ public class Vehicle implements Serializable {
         this.authorisationCode = authorisationCode;
     }
 
+    public boolean isStolen() {
+        return stolen;
+    }
+
+    public void setStolen(boolean stolen) {
+        this.stolen = stolen;
+    }
+
+    public void changeStolen() {
+        if (this.stolen) {
+            this.stolen = false;
+        } else {
+            this.stolen = true;
+        }
+    }
+
+    public boolean isForeignCar() {
+        return foreignCar;
+    }
+
+    public void setForeignCar(boolean foreignCar) {
+        this.foreignCar = foreignCar;
+    }
+
+    public Location getLocation() {
+        return lastLocation;
+    }
+
+    public void setLocation(Location location) {
+        this.lastLocation = location;
+    }
+
     public List<Ride> getRides() {
         return rides;
     }
@@ -62,4 +111,15 @@ public class Vehicle implements Serializable {
         this.rides = rides;
     }
 
+    public void addRide(Ride ride) {
+        if (ride != null && !rides.contains(ride)) {
+            rides.add(ride);
+        }
+    }
+
+    public void removeRide(Ride ride) {
+        if (ride != null && rides.contains(ride)) {
+            rides.remove(ride);
+        }
+    }
 }

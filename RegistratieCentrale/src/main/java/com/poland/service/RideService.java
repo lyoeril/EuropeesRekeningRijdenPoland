@@ -5,12 +5,15 @@
  */
 package com.poland.service;
 
+import com.poland.dao.interfaces.jpa.LocationDAO;
 import com.poland.dao.interfaces.jpa.RideDAO;
-import com.poland.entities.Location;
 import com.poland.entities.Ride;
+import com.poland.entities.Vehicle;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -19,29 +22,78 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 @Stateless
 public class RideService {
 
+    public static final long HOUR = 3600L * 1000L;
     private RideDAO rideDAO;
+    private LocationDAO locationDAO;
 
     @Inject
-    public RideService(RideDAO rideDAO) {
+    public RideService(RideDAO rideDAO, LocationDAO locationDAO) {
         this.rideDAO = rideDAO;
+        this.locationDAO = locationDAO;
     }
 
     public RideService() {
     }
 
-    public Ride findRideBySerialnumber(String serialNumber) {
-        if (serialNumber != null || serialNumber.equals("")) {
-            return rideDAO.findRideBySerialNumber(serialNumber);
+    public Ride findOrCreateRideByAutorisationCode(Date date, Vehicle vehicle) {
+        if (vehicle != null) {
+            Ride r = rideDAO.findRideByAuthorisationCodeAndDate(date, new Date(date.getTime() - HOUR), vehicle);
+            if (r == null) {
+                r = rideDAO.create(new Ride(date, vehicle));
+            }
+            return r;
         } else {
             return null;
         }
     }
 
-    public void addLocation(Location location) {
-        throw new NotImplementedException();
+    public Ride createRide(Ride ride) {
+        try {
+            if (rideDAO.find(ride.getId()) == null) {
+                return rideDAO.create(ride);
+            }
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+        return null;
     }
 
-    public void removeLocation(long id) {
-        throw new NotImplementedException();
+    public Ride editRide(Ride ride) {
+        return rideDAO.edit(ride);
+    }
+
+    public boolean deleteRide(long id) {
+        try {
+            Ride ride = rideDAO.find(id);
+
+            ride.setVehicle(null);
+
+            ride = rideDAO.edit(ride);
+            rideDAO.remove(ride);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+    }
+
+    public List<Ride> getRidesOnDate(String authenticationCode, Date start, Date end) {
+        if (authenticationCode != null && !authenticationCode.equals("") && start != null && end != null) {
+            List<Ride> rides = rideDAO.getRideByAuthorisationCodeAndDate(authenticationCode, start, end);
+            for (Ride ride : rides) {
+                ride.setLocations(locationDAO.findLocationsByRideId(ride.getId()));
+            }
+            return rides;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Ride> getRidesByAuthenticationCode(String authenticationCode) {
+        if (authenticationCode != null && !authenticationCode.equals("")) {
+            List<Ride> rides = rideDAO.getRidesByAuthenticationCode(authenticationCode);
+            return rides;
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

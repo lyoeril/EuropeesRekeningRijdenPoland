@@ -12,7 +12,12 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 Simulator/target/
 RegistratieCentrale/target/
+RegistratieCentrale/nbproject/
+Rekeningadministratie_Overheid/target/
+TrafficSimulator/src/main/resources/config.properties
+/Rekeningadministratie_Overheid/nbproject/
 /RegistratieCentrale/nbproject/
 TrafficSimulator/src/main/resources/config.properties
 PolitieApplicatie/
 Rekeningadministratie_Frontend/node_modules/
+RekeningrijdersApplicatie/
