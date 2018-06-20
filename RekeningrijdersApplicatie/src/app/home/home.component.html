@@ -1,0 +1,12 @@
+<div *ngIf="session.getItem('token') !== null && user !== null" class="container">
+    <div class="row">
+        <div class="col-6">
+            <app-user [user]="user"></app-user>
+            <br />
+            <app-vehicle-list [vehicles]="user.vehicles"></app-vehicle-list>
+        </div>
+        <div class="col-6">
+            <app-invoice-list [invoices]="user.invoices"></app-invoice-list>
+        </div>
+    </div>
+</div>

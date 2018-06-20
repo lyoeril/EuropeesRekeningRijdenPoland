@@ -1,0 +1,59 @@
+<div class="container shadow">
+    <h2>{{ "invoice" | translate }}</h2>
+</div>
+<div *ngIf="invoice !== null && (invoice.status.toLowerCase() !== 'open' || !loading)" class="container shadow">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">{{ "date" | translate }}</th>
+                <td>{{invoice.dateToString()}}</td>
+            </tr>
+            <tr>
+                <th scope="row">{{ "totalsum" | translate }}</th>
+                <td>{{invoice.totalSumToString()}}</td>
+            </tr>
+            <tr>
+                <th scope="row">{{ "status" | translate }}</th>
+                <td>{{ invoice.status.toLowerCase() | translate }}</td>
+            </tr>
+            <tr *ngIf="invoice.status.toLowerCase() !== 'paid'">
+                <th>{{ "pay" | translate }}</th>
+                <td>
+                    <div id="paypal-button"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container shadow">
+    <h2>{{ "movements" | translate }}</h2>
+</div>
+<div *ngIf="invoice !== null" class="container shadow">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">{{ "date" | translate }}</th>
+                <th scope="col">{{ "latitude" | translate }}</th>
+                <th scope="col">{{ "longitude" | translate }}</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let ride of invoice.rides">
+            <!-- <tr>
+                    <td>
+                        <strong>{{ride.vehicle.licensePlate}}</strong>
+                    </td>
+                    <td>
+                        <strong>{{dateToString(ride.startDate)}}</strong>
+                    </td>
+                    <td>
+                        <strong>{{dateToString(ride.endDate)}}</strong>
+                    </td>
+                </tr> -->
+            <tr *ngFor="let loc of ride.locations">
+                <td>{{dateToString(loc.date)}}</td>
+                <td>{{loc.latitude}}</td>
+                <td>{{loc.longitude}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
